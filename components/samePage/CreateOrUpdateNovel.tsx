@@ -46,7 +46,7 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
         title: novelData.title,
         author: novelData.author._id,
         category: novelData.category._id,
-        chapCount: novelData.chapCount,
+        // chapCount: novelData.chapCount,
         description: novelData.description,
         image: novelData.image
     };

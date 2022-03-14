@@ -5,16 +5,26 @@ import MainHome from '../components/MainHome/MainHome'
 import styles from '../styles/Home.module.css'
 import { Novel, SerVerNovel } from '../interface/_Novel'
 import { useEffect, useState } from 'react'
-import { getModVote, getNovelNewest } from '../libs/api/novelAPI'
+import { getHasNewChaps, getModVote, getMostFollows, getMostLikes, getMostViews, getNewNovels, getNovelNewest } from '../libs/api/novelAPI'
 import { useRouter } from 'next/router'
+import HasNewChaps from '../components/Newupdate/HasNewChaps'
+import EditorRecomened from '../components/Editorecomend/EditorRecomened'
+import TopNovels from '../components/TopNovels/TopNovels'
+import FourCols from '../components/FourColsLayout/FourCols'
 
 interface serverProps{
   errorFetch?:boolean,
-  newest?: SerVerNovel[]
-  modvote?: SerVerNovel[]
+  newestList?: SerVerNovel[],
+  modVotesList?: SerVerNovel[],
+  hasNewList?: SerVerNovel[],
+  newNovelsList?: SerVerNovel[],
+  mostLikesList?: SerVerNovel[],
+  mostViewsList?: SerVerNovel[],
+  mostFollowsList?: SerVerNovel[],
+
 }
 
-const Home: NextPage<serverProps> = ({errorFetch,newest,modvote}:serverProps) => {
+const Home: NextPage<serverProps> = ({errorFetch,newestList,modVotesList,hasNewList,newNovelsList,mostLikesList,mostViewsList,mostFollowsList}:serverProps) => {
   const [show,setShow] = useState(0);
   const router = useRouter();
   useEffect(()=>{
@@ -24,13 +34,13 @@ const Home: NextPage<serverProps> = ({errorFetch,newest,modvote}:serverProps) =>
     return (()=>clearTimeout(to0));
   },[show])
   
-  if(errorFetch || !newest || !modvote){
+  if(errorFetch){
     return <div>trang chủ đang bảo trì, vui lòng quay lại sau</div>
   }
   return (
     <div className=" mt-[-84px] z-10" >
       {
-        newest.map((item,index)=>{
+        newestList?.map((item,index)=>{
           if (show === index) {
 
             return <div key={index} className="w-full min-h-[600px] flex relative">
@@ -40,7 +50,7 @@ const Home: NextPage<serverProps> = ({errorFetch,newest,modvote}:serverProps) =>
             <div className="p-12 w-1/2">
               <ul className="flex mb-4">
                 {
-                  newest.map((it,i)=>(<li key={i} onClick={()=>setShow(i)} className={`${ show === i ? 'bg-yellow-500' : 'bg-gray-300'} w-10 h-[3px] cursor-pointer`}></li>))
+                  newestList.map((it,i)=>(<li key={i} onClick={()=>setShow(i)} className={`${ show === i ? 'bg-yellow-500' : 'bg-gray-300'} w-10 h-[3px] cursor-pointer`}></li>))
                 }
                
               </ul>
@@ -60,7 +70,21 @@ const Home: NextPage<serverProps> = ({errorFetch,newest,modvote}:serverProps) =>
         })
       }
       
-      <MainHome data = {modvote}/>
+    <div className='container block z-30 min-h-screen'>
+    <EditorRecomened data={modVotesList || []}/>
+    <HasNewChaps newnovels={newNovelsList || []} hasnews={hasNewList || []}/>
+    <TopNovels/>
+    <FourCols 
+      mostLikes = {mostLikesList || []}
+      mostViews= {mostViewsList || []}
+      mostFollows = {mostFollowsList || []}
+    />
+    <TopNovels/>
+
+    {/* <Recomened/> */}
+    {/* <Banner link='#' imgs='/images/banner1.jpg'/> */}
+    {/* <NewNovels/> */}
+  </div>
       
 
     </div>
@@ -69,12 +93,22 @@ const Home: NextPage<serverProps> = ({errorFetch,newest,modvote}:serverProps) =>
 export const getStaticProps = async () => {
  
  try {
-  const newest = await getNovelNewest();
-  const modvote = await getModVote();
+  const newestList = await getNovelNewest();
+  const modVotesList = await getModVote();
+  const hasNewList = await getHasNewChaps();
+  const newNovelsList = await getNewNovels();
+  const mostLikesList = await getMostLikes();
+  const mostViewsList = await getMostViews();
+  const mostFollowsList = await getMostFollows();
   return {
     props: {
-      newest,
-      modvote
+      newestList,
+      modVotesList,
+      hasNewList,
+      newNovelsList,
+      mostLikesList,
+      mostViewsList,
+      mostFollowsList
     }
   }
  } catch (error) {

@@ -18,7 +18,7 @@ export const addnewNovel = async (novel: Novel<string,string>) => {
     return res;
 }
 export const updateNovel = async (novel_id: string,novel: Novel<string,string>) => {
-    const res = await API.put<Novel<Author,Category>[]>(`/novels/update/${novel_id}`,novel);
+    const res = await API.put<SerVerNovel[]>(`/novels/update/${novel_id}`,novel);
     return res;
 }
 export const addNewChap = async (chap: Chap<string,string>) => {
@@ -34,7 +34,11 @@ export const getChaps = async (novel: string, page:number ) => {
     return res.data;
 }
 export const getNovel = async (slug:string) => {
-    const res = await API.get<Novel<Author,Category>>(`/novels/${slug}`);
+    const res = await API.get<SerVerNovel[]>(`/novels/${slug}`);
+    return res.data;
+}
+export const getNewNovels = async () => {
+    const res = await API.get<SerVerNovel[]>(`/novels/newnovels`);
     return res.data;
 }
 export const getNovelNewest = async () => {
@@ -45,4 +49,19 @@ export const getModVote = async () => {
     const res = await API.get<SerVerNovel[]>(`/novels/modvote`);
     return res.data;
 }
-
+export const getHasNewChaps = async () => {
+    const res = await API.get<SerVerNovel[]>(`/novels/hasnewchap`);
+    return res.data; 
+}
+export const getMostViews = async () => {
+    const res = await API.get<SerVerNovel[]>(`/novels/mostviews`);
+    return res.data;
+}
+export const getMostLikes = async () => {
+    const res = await API.get<SerVerNovel[]>(`/novels/mostlikes`);
+    return res.data;
+}
+export const getMostFollows = async () => {
+    const res = await API.get<SerVerNovel[]>(`/novels/mostfollow`);
+    return res.data;
+}

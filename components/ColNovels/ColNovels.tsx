@@ -1,8 +1,8 @@
 import React from 'react';
-import { Novel } from '../../interface/_Novel';
+import { Novel, SerVerNovel } from '../../interface/_Novel';
 type ColNovelsProps = {
     Coltitle: string,
-    Coldata: Novel[]
+    Coldata: SerVerNovel[] | Novel[]
 }
 
 
@@ -14,7 +14,7 @@ const ColNovels:React.FC<ColNovelsProps> = ({Coltitle,Coldata}: ColNovelsProps) 
             Coldata.map((item,index)=>{
                 return <li key={index} className="flex py-1 w-full">
                     <span className="w-[calc(100%_-_40px)] text-sm truncate text-gray-700">{item.title}</span>
-                    <span className="w-[40px] text-xs truncate text-gray-400">{`C.${item.chap}`}</span>
+                    <span className="w-[40px] text-xs truncate text-gray-400">{`C.${item.chapCount}`}</span>
                 </li>
             })
         }

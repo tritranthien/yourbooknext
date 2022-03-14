@@ -7,10 +7,14 @@ export interface Novel<TAuthor,TCate>{
     title: string,
     description: string,
     image: string,
-    chapCount: number,
     category: TCate
 }
 export interface SerVerNovel extends Novel<Author,Category>{
     _id: string,
-    slug:string
+    slug:string,
+    likes: number,
+    Views: number,
+    chapCount: number,
+    createdAt: string,
+    updatedAt: string
 }
