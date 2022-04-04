@@ -34,7 +34,7 @@ const EditorRecomened:React.FC<Maincomponent> = ({data}:Maincomponent) => {
         // onSwiper={(swiper) => console.log(swiper)}
         onSlideChange={(swiper) => setShow(swiper.realIndex)}
         loop={true}
-        pagination={true}
+        // pagination={true}
         modules={[Autoplay,EffectCube, Pagination]}
         className="w-[220px] h-[220px]"
         >

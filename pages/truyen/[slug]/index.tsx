@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import MainNovels from '../../../components/truyen/MainNovels';
 import Titlebanner from '../../../components/truyen/Titlebanner';
 import { Novel, SerVerNovel } from '../../../interface/_Novel';
-import { getNovel } from '../../../libs/api/novelAPI';
+import { checkMyFollow } from '../../../libs/api/authAPI';
+import { getNovel, rated } from '../../../libs/api/novelAPI';
 
 interface contextProps{ 
 	params : { 
@@ -14,9 +16,24 @@ interface NovelProps{
 }
 
 const Novel: React.FC<NovelProps> = ({novel}:NovelProps) => {
+  const  [isLoged, setLoged] = useState(false);
+  useEffect(()=>{
+    if( localStorage && localStorage.getItem('userInfo') ){
+      setLoged(true);
+    }
+  },[])
   return <>
     <Titlebanner novel={novel}/>
     <MainNovels novel={novel}/>
+    <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              rtl={false}
+              draggable
+              pauseOnFocusLoss={false}
+        />
   </>
 };
 

@@ -1,10 +1,16 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { FiSearch,FiPhoneCall } from 'react-icons/fi'
-import { MdDarkMode } from 'react-icons/md'
+import { FiSearch } from 'react-icons/fi';
+import { MdDarkMode } from 'react-icons/md';
+import { useGetAllCates } from '../../customHooks/reactQuery/Categoris';
+import { useGetme } from '../../customHooks/reactQuery/Getme';
 const Navigation: React.FC = () => {
 const [currentPage,setCurrentPage] = useState(0);
+// const [userName, setname] = useState('');
 const route = useRouter();
+const { data, isSuccess, error } = useGetme();
+const allCates = useGetAllCates();
 const listmap = [
     'truyện chữ',
     'truyện tranh',
@@ -19,31 +25,7 @@ const listMenu = [
     'mới cập nhật'
     
 ]
-const Typeslist = [
-    'manhua',
-    'manga',
-    'anime',
-    'trinh thám',
-    'ngôn tình',
-    'đam mỹ',
-    'đồng nhân',
-    'kinh dị',
-    'lịch sử',
-    'khoa huyễn',
-    'huyền huyễn',
-    'linh dị',
-    'dị giới',
-    'thể thao',
-    'cổ đại',
-    'kỳ huyễn',
-    'quan trường',
-    'hậu cung',
-    'mạt thế',
-    'ma pháp',
-    'phương tây',
-    'sắc hiệp',
-    'comedy'
-]
+
  return (
   <div className="w-full sticky z-30">
       <div className={`container ${ route.pathname == '/' ? 'flex flex-nowrap justify-between' : 'hidden'}  mx-auto w-full h-14`}>
@@ -77,20 +59,20 @@ const Typeslist = [
                         return <li key={index} className="group leading-7 h-full relative hover: px-2 first-letter:uppercase">{item}
                             <ul className="absolute invisible group-hover:visible hover:visible top-7 py-3 px-4 flex w-[700px] flex-wrap list-none bg-gray-800 text-slate-200">
                                 {
-                                    Typeslist.map((item: string, index: number)=>{
-                                        return <li key={index} className="px-2 py-1 w-3/12 first-letter:uppercase">{item}</li>
+                                    allCates.isSuccess && allCates.data.map((item,index)=>{
+                                        return <li key={index} className="px-2 py-1 w-3/12 first-letter:uppercase hover:text-yellow-500"><Link passHref href={`/tonghop/${item.slug}`}><a>{item.cate}</a></Link></li>
                                     })
                                 }
                             </ul>
                         </li>
                     }
-                    return <li key={index} className="px-2 leading-7 first-letter:uppercase"><a href='#'>{item}</a></li>
+                    return <li key={index} className="px-2 leading-7 first-letter:uppercase hover:text-yellow-500"><Link passHref href={`#`}><a>{item}</a></Link></li>
                 })
             }
             </ul>
             
                 <div className="flex items-center text-black">
-                    <span className='text-blue-400 ml-3 p-3 text-sm'><a href='/user'>Đăng nhập</a> | <a href='#'>Đăng ký</a></span>
+                    <span className='text-blue-400 ml-3 p-3 text-sm'>{ isSuccess ? <a href="/user/account">{data.data.username}</a> : <a href='/login'>Đăng nhập</a>}</span>
                     <span className='ml-4 text-xl text-blue-200'><MdDarkMode/></span>
                 </div>
                 

@@ -1,24 +1,46 @@
-import React from 'react'
-import type { AppProps } from 'next/app'
-import { NextPage } from 'next'
-import { AiFillHome } from 'react-icons/ai'
-import { HiLogout } from 'react-icons/hi'
-import { BsPersonBoundingBox,BsMailbox } from 'react-icons/bs'
-import { BiEnvelopeOpen } from 'react-icons/bi'
-import { MdOutgoingMail, MdOutlineAlternateEmail } from 'react-icons/md'
 import Link from 'next/link'
-import { RiFolderAddFill } from 'react-icons/ri'
-import { IoIosAdd } from 'react-icons/io'
-import { ImBook } from 'react-icons/im'
 import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import { AiFillHome } from 'react-icons/ai'
+import { BsMailbox, BsPersonBoundingBox } from 'react-icons/bs'
+import { FiTablet } from 'react-icons/fi'
+import { HiLogout } from 'react-icons/hi'
+import { ImBook } from 'react-icons/im'
+import { IoIosAdd } from 'react-icons/io'
+import { MdOutgoingMail, MdOutlineAlternateEmail } from 'react-icons/md'
+import { RiFolderAddFill } from 'react-icons/ri'
+import { getMe } from '../../libs/api/authAPI'
 
 const USDBlayout: React.FC = ({ children}) => {
-  const { pathname } = useRouter();
+    const [ useName,setName ] = useState('loading');
+    const router = useRouter();
+    const logout = async () => {
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('jwtToken');
+        router.push('/');
+    }
+    useEffect(()=>{
+        const checkMe = async () => {
+            try {
+                const res = await getMe();
+                if(res.status === 200){
+                    setName(res.data.username);
+                }else{
+                    router.push('/login');
+                }
+            } catch (error) {
+                router.push('/login');
+                console.log(error);
+            }
+        }
+        checkMe();
+    },[])
+    
   return (
       <div className="">
           <div className="flex w-full h-14 bg-slate-100 px-10 justify-between items-center">
            <Link passHref href='/'><a><span><AiFillHome className="text-2xl"/></span></a></Link>   
-           <span className="flex items-center h-10 leading-10">trinhatrau<HiLogout className="ml-3 text-2xl"/></span>
+           <span className="flex items-center h-10 leading-10">{useName}<HiLogout onClick={logout} className="ml-3 text-2xl cursor-pointer"/></span>
           </div>
 <div className="w-full flex">
         <div className="w-1/5 min-h-screen border-r-2">
@@ -30,7 +52,7 @@ const USDBlayout: React.FC = ({ children}) => {
                 <li className='mb-5'></li>
                 <Link passHref href="/user/novels"><a><li className="flex w-full p-2 items-center text-xl"><ImBook className="mr-3"/>Truyện của tôi</li></a></Link>
                 <Link passHref href="/user/addnew"><a><li className="flex w-full p-2 items-center text-xl"><RiFolderAddFill className="mr-3"/>Thêm truyện</li></a></Link>
-                <Link passHref href="/user/inschap"><a><li className="flex w-full p-2 items-center text-xl"><IoIosAdd className="mr-3"/>Thêm chương</li></a></Link>
+                <Link passHref href="/user/inschap"><a><li className="flex w-full p-2 items-center text-xl"><FiTablet className="mr-3"/>Đang theo dõi</li></a></Link>
  
             </ul>
         </div>

@@ -13,8 +13,15 @@ export interface SerVerNovel extends Novel<Author,Category>{
     _id: string,
     slug:string,
     likes: number,
-    Views: number,
+    views: number,
     chapCount: number,
     createdAt: string,
-    updatedAt: string
+    updatedAt: string,
+    scores: number,
+    rate_nums: number
+}
+export interface ServerFollowData{
+ _id: string,
+ follower: string,
+ novel: SerVerNovel
 }

@@ -5,7 +5,7 @@ import MainHome from '../components/MainHome/MainHome'
 import styles from '../styles/Home.module.css'
 import { Novel, SerVerNovel } from '../interface/_Novel'
 import { useEffect, useState } from 'react'
-import { getHasNewChaps, getModVote, getMostFollows, getMostLikes, getMostViews, getNewNovels, getNovelNewest } from '../libs/api/novelAPI'
+import { bestRates, bestvotes, getHasNewChaps, getModVote, getMostFollows, getMostLikes, getMostViews, getNewNovels, getNovelNewest } from '../libs/api/novelAPI'
 import { useRouter } from 'next/router'
 import HasNewChaps from '../components/Newupdate/HasNewChaps'
 import EditorRecomened from '../components/Editorecomend/EditorRecomened'
@@ -21,10 +21,11 @@ interface serverProps{
   mostLikesList?: SerVerNovel[],
   mostViewsList?: SerVerNovel[],
   mostFollowsList?: SerVerNovel[],
-
+  bestRateList?: SerVerNovel[],
+  bestVotesList? : SerVerNovel[],
 }
 
-const Home: NextPage<serverProps> = ({errorFetch,newestList,modVotesList,hasNewList,newNovelsList,mostLikesList,mostViewsList,mostFollowsList}:serverProps) => {
+const Home: NextPage<serverProps> = ({errorFetch,newestList,modVotesList,hasNewList,newNovelsList,mostLikesList,mostViewsList,mostFollowsList,bestRateList,bestVotesList}:serverProps) => {
   const [show,setShow] = useState(0);
   const router = useRouter();
   useEffect(()=>{
@@ -47,18 +48,18 @@ const Home: NextPage<serverProps> = ({errorFetch,newestList,modVotesList,hasNewL
           <img src={item.image} alt="bg" className="w-full h-full absolute object-cover z-0" />
           <div className="blacktotrans w-full h-full absolute"></div>
           <div className="flex mx-auto container p-12 z-10 pt-[120px]">
-            <div className="p-12 w-1/2">
+            <div className="p-12 flex flex-col justify-center w-1/2">
               <ul className="flex mb-4">
                 {
                   newestList.map((it,i)=>(<li key={i} onClick={()=>setShow(i)} className={`${ show === i ? 'bg-yellow-500' : 'bg-gray-300'} w-10 h-[3px] cursor-pointer`}></li>))
                 }
                
               </ul>
-              <span className='text-4xl block text-green-500 font-bold first-letter:uppercase mb-3'>{item.title}</span>
-              <p className=' first-letter:uppercase text-gray-400 mb-4'>
+              <span className='text-4xl block text-yellow-500  font-bold first-letter:uppercase mb-3'>{item.title}</span>
+              <p className=' first-letter:uppercase line-clamp-3 text-gray-400 mb-4'>
                 {item.description}
               </p>
-              <button onClick={()=>router.push(`/truyen/${item.slug}`)} className="px-3 py-2 bg-indigo-300">xem thêm</button>
+              <button onClick={()=>router.push(`/truyen/${item.slug}`)} className="px-3 py-2 bg-indigo-300 w-max">xem thêm</button>
             </div>
             
           </div>
@@ -73,13 +74,14 @@ const Home: NextPage<serverProps> = ({errorFetch,newestList,modVotesList,hasNewL
     <div className='container block z-30 min-h-screen'>
     <EditorRecomened data={modVotesList || []}/>
     <HasNewChaps newnovels={newNovelsList || []} hasnews={hasNewList || []}/>
-    <TopNovels/>
+    <TopNovels title='Truyện đề cử' novels = {bestVotesList || []}/>
     <FourCols 
       mostLikes = {mostLikesList || []}
       mostViews= {mostViewsList || []}
       mostFollows = {mostFollowsList || []}
+      bestRates = {bestRateList || []}
     />
-    <TopNovels/>
+    {/* <TopNovels/> */}
 
     {/* <Recomened/> */}
     {/* <Banner link='#' imgs='/images/banner1.jpg'/> */}
@@ -100,6 +102,8 @@ export const getStaticProps = async () => {
   const mostLikesList = await getMostLikes();
   const mostViewsList = await getMostViews();
   const mostFollowsList = await getMostFollows();
+  const bestRateList = await bestRates();
+  const bestVotesList = await bestvotes();
   return {
     props: {
       newestList,
@@ -108,7 +112,9 @@ export const getStaticProps = async () => {
       newNovelsList,
       mostLikesList,
       mostViewsList,
-      mostFollowsList
+      mostFollowsList,
+      bestRateList,
+      bestVotesList
     }
   }
  } catch (error) {

@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 import { IoMdAddCircle } from 'react-icons/io';
-import { toast, ToastContainer, ToastOptions } from 'react-toastify';
+import { toast, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetAllCates } from '../../customHooks/reactQuery/Categoris';
 import { Author } from '../../interface/_Author';

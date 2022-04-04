@@ -10,4 +10,8 @@ export const storeNewCate = async (Cate:CategoryWithOutId) => {
     const res = await API.post('/category',Cate);
     return res.data;
 }
+export const getBySlug = async (slug:string) => {
+    const res = await API.get<Category>(`/category/mycateid/${slug}`);
+    return res.data;
+}
 
