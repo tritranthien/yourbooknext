@@ -6,9 +6,10 @@ import { BsMailbox, BsPersonBoundingBox } from 'react-icons/bs'
 import { FiTablet } from 'react-icons/fi'
 import { HiLogout } from 'react-icons/hi'
 import { ImBook } from 'react-icons/im'
-import { IoIosAdd } from 'react-icons/io'
+import { IoIosNotificationsOutline } from 'react-icons/io'
 import { MdOutgoingMail, MdOutlineAlternateEmail } from 'react-icons/md'
 import { RiFolderAddFill } from 'react-icons/ri'
+import { ToastContainer } from 'react-toastify'
 import { getMe } from '../../libs/api/authAPI'
 
 const USDBlayout: React.FC = ({ children}) => {
@@ -40,8 +41,8 @@ const USDBlayout: React.FC = ({ children}) => {
       <div className="">
           <div className="flex w-full h-14 bg-slate-100 px-10 justify-between items-center">
            <Link passHref href='/'><a><span><AiFillHome className="text-2xl"/></span></a></Link>   
-           <span className="flex items-center h-10 leading-10">{useName}<HiLogout onClick={logout} className="ml-3 text-2xl cursor-pointer"/></span>
-          </div>
+           <span className="flex items-center h-10 leading-10"><IoIosNotificationsOutline className='cursor-pointer mr-2' size={25} onClick={()=>router.push('/user/notifications')}/>{useName}<HiLogout onClick={logout} className="ml-3 text-2xl cursor-pointer"/></span>
+        </div>
 <div className="w-full flex">
         <div className="w-1/5 min-h-screen border-r-2">
             <ul className="w-full list-none px-5 py-3">
@@ -60,6 +61,15 @@ const USDBlayout: React.FC = ({ children}) => {
             {children}
         </div>
     </div>      
+    <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              rtl={false}
+              draggable
+              pauseOnFocusLoss={false}
+        />
       </div>
     
   )

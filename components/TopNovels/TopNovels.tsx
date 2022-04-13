@@ -47,9 +47,9 @@ const TopNovels: React.FC<TopNovelsProps> = ({novels,title}:TopNovelsProps) => {
                                         </a>
                                     </Link>
                                 </span>
-                                <span className="w-full text-sm text-orange-700">{item.author.name}</span>
+                                <span className="w-full text-sm text-orange-700"><Link passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link></span>
                                 <div className="flex w-full justify-between text-xs ">
-                                    <span className="text-gray-500">{item.category.cate}</span>
+                                    <span className="text-gray-500"><Link passHref href={`/tonghop/${item.category.slug}`}><a>{item.category.cate}</a></Link></span>
                                     <span className="text-blue-500">
                                         <Link passHref href={ item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}>
                                             <a>

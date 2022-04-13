@@ -2,7 +2,7 @@ import type { FC, ReactElement } from 'react'
 import React from 'react';
 import UserBookCard from '../../components/Card/UserBookCard';
 import USDBlayout from '../../components/userDBLayout/USDBlayout';
-import { useGetFollowed } from '../../customHooks/reactQuery/followed';
+import { useGetFollowed } from '../../customHooks/reactQuery/Followed';
 
 const Userdata = () => {
   const { data,isSuccess,error } = useGetFollowed();

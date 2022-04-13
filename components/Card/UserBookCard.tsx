@@ -15,8 +15,8 @@ interface CardProps{
 const UserBookCard:React.FC<CardProps> = ({novel} :CardProps) => {
   return (
     <Link href={`/truyen/${novel.slug}`} passHref><a>
-      <div className="w-full h-full p-[10px] shadow-lg cursor-pointer relative">
-        <div className="w-[200px] h-[200px] relative rounded-md overflow-hidden">
+      <div className="w-full bg-white rounded-md h-full p-[10px] shadow-lg cursor-pointer relative">
+        <div className="w-full h-[200px] relative rounded-md overflow-hidden">
             <Image src={novel.image} className="object-cover" layout="fill"/>
             
         </div>

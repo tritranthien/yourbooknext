@@ -1,13 +1,11 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import React, { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 import { IoMdAddCircle } from 'react-icons/io';
 import { toast, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetAllCates } from '../../customHooks/reactQuery/Categoris';
 import { Author } from '../../interface/_Author';
-import { Category } from '../../interface/_Category';
-import { Novel } from '../../interface/_Novel';
+import { Novel, SerVerNovel } from '../../interface/_Novel';
 import { getAuthors } from '../../libs/api/authorAPI';
 import { addnewNovel, updateNovel } from '../../libs/api/novelAPI';
 import { upLoadPoster } from '../../libs/api/uploadFile';
@@ -17,7 +15,7 @@ import PosterPopup from '../popup/PostersPopup';
 
 interface NovelPageProps{
     isUpdate: boolean,
-    novelData?: Novel<Author,Category>
+    novelData?: SerVerNovel,
     closePopup?: ()=>void | undefined
 }
 
@@ -34,6 +32,7 @@ export const toastConfig:ToastOptions = {
 const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:NovelPageProps) => {
   const [imgfile,setIMG] = useState<File | null>(null);
   // const [authpicked,setAuthPicked] = useState(false);
+  // const [status,setStatus] = useState<'continue' | 'drop' | 'completed'>('continue');
   const [authorSearch,setAuthorSearch] = useState('');
   const [preShow,setPreshow] = useState<string | null>();
   const [openPopup,setOpenPopup] = useState<'none' | 'images' | 'createAuthor' | 'createCategory'>('none');
@@ -48,6 +47,7 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
         category: novelData.category._id,
         // chapCount: novelData.chapCount,
         description: novelData.description,
+        status: novelData.status,
         image: novelData.image
     };
   }
@@ -76,7 +76,8 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
 
 const handleInputChange = (e:ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | FocusEvent<HTMLTextAreaElement>)=>{
   const {name,value} = e.target;
-  setNovel(pre=>({...pre, [name]: value}))
+  setNovel(pre=>({...pre, [name]: value}));
+    console.log(value);
 }
 
 const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
@@ -145,8 +146,6 @@ const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
         setPreshow(Reader.result?.toString());
       }
       Reader.readAsDataURL(e.target.files[0]);
-    console.log(e.target.files[0])
-
     }
     
   }
@@ -180,14 +179,32 @@ const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
               {isUpdate ? 'chỉnh sửa nội dung truyện' : 'Thêm truyện mới'}
             </span>
             <div className="w-full p-5 bg-white">
+            {
+              isUpdate && <div className="flex justify-center mb-7">
+              <div>
+                <div className="form-check">
+                  <input name='status' value='continue' onChange={handleInputChange} className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" checked={novel.status == 'continue'}/>
+                  <label className="form-check-label inline-block text-gray-800">
+                    còn tiếp
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input name='status' value='completed' onChange={handleInputChange} className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" checked={novel.status == 'completed'}/>
+                  <label className="form-check-label inline-block text-gray-800" >
+                    Hoàn thành
+                  </label>
+                </div>
+              </div>
+            </div>
+            }
               <div className="flex items-center mb-7 ">
                 <label htmlFor="novelname" className=" w-[200px] px-3">tên truyện</label>
-                <input name="title" value={'' || novel.title} onChange={handleInputChange} type="text" className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md" placeholder="nhập vào tên truyện"/>
+                <input name="title" value={novel.title || ''} onChange={handleInputChange} type="text" className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md" placeholder="nhập vào tên truyện"/>
               </div>
               <div className="flex items-center mb-7 ">
                 <label htmlFor="author" className=" w-[200px] px-3">tác giả</label>
                 <div className="flex relative border border-width-1 rounded-md min-w-[500px]">
-                  <input name="author" autoComplete="off" value={'' || authorSearch} onChange={handleFindAuthor} type="text" className="w-[350px] outline-none px-2 py-1 rounded-md" placeholder="thêm vào tác giả"/>
+                  <input name="author" autoComplete="off" value={ authorSearch || '' } onChange={handleFindAuthor} type="text" className="w-[350px] outline-none px-2 py-1 rounded-md" placeholder="thêm vào tác giả"/>
                     <div className="w-[120px]">
                       { 
                         (authorSearch != '' && novel.author == '')&&<span className='block text-red-600 text-center py-1'>không tồn tại</span>
@@ -214,7 +231,7 @@ const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
               </div>
               <div className="flex items-center mb-7 ">
                 <label htmlFor="category" className=" w-[200px] px-3">danh mục</label>
-                <select value={'' || novel.category} onChange={handleInputChange} name="category" className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md" placeholder="">
+                <select value={ novel.category || ''} onChange={handleInputChange} name="category" className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md" placeholder="">
                   <option value="">---- vui lòng chọn thể loại ----</option>
                   {
                     allCates.isSuccess && allCates.data.map((item,index)=>{
@@ -227,8 +244,9 @@ const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
               </div>
               <div className="flex items-center mb-7 ">
                 <label htmlFor="description" className=" w-[200px] px-3">mô tả vắn tắt</label>
-                <textarea name="description" value={'' || novel.description} onBlur={handleInputChange} onChange={handleInputChange} className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md min-h-[200px]" placeholder="thêm vào mô tả về truyện"/>
+                <textarea name="description" value={novel.description || ''} onBlur={handleInputChange} onChange={handleInputChange} className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md min-h-[200px]" placeholder="thêm vào mô tả về truyện"/>
               </div>
+              
               <div className="flex mb-7 ">
                 <label htmlFor="image" className=" w-[200px] px-3">ảnh bìa</label>
                 <div className="w-[200px] h-[230] relative overflow-hidden border-2">
@@ -250,7 +268,9 @@ const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
                 <button onClick={handleReset} className="ml-5 px-2 py-1 bg-gray-200">làm mới</button>
               </div>
             </div>
+            
         </div>
+        
         {
           openPopup == 'createAuthor' && (
             <CreateAuthorPopUp showToast = {()=>{
@@ -259,6 +279,7 @@ const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
             }} closePopup={()=>setOpenPopup('none')}/>
           )
         }
+        
         {
           openPopup == 'createCategory' && (
             <CreateCategoryPopup showToast = {()=>{

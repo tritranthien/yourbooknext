@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import MainNovels from '../../../components/truyen/MainNovels';
@@ -39,12 +40,23 @@ const Novel: React.FC<NovelProps> = ({novel}:NovelProps) => {
 
 export const getServerSideProps = async ({params}: contextProps) => {
   const { slug } = params;
-  const novel = await getNovel(slug);
-  return{
-    props:{
-      novel
+    const novel = await getNovel(slug);
+    if(novel){
+      return{
+        props:{
+          novel
+        }
+      }
     }
-  }
+    
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/page404",
+      },
+      props: {}
+    }
+  
 }
 
 export default Novel;

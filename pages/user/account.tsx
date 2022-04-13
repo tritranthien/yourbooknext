@@ -1,13 +1,46 @@
-import type { FC, ReactElement } from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
+import { FC, ReactElement, useState } from 'react'
 import React from 'react';
+import { BsFillPersonFill, BsFillSdCardFill } from 'react-icons/bs';
+import { useQuery } from 'react-query';
 import USDBlayout from '../../components/userDBLayout/USDBlayout';
+import { getMyInfo, getVoted } from '../../libs/api/authAPI';
+import Voted from '../../components/voted/Voted';
+import Comented from '../../components/Comented/Comented';
 
 const Userdata = () => {
+  const [active,setActive] = useState(true);
+  const info = useQuery('myAccountInfo',getMyInfo);
     return (
         <div className="w-full min-h-screen">
             <span className="w-full block px-5 py-3 text-2xl font-bold">Thông tin người dùng</span>
-            <div className="flex p-5">
-              <span className=""></span>
+            <div className="flex w-full px-5 py-2 flex-col">
+              
+                {
+                  info.isSuccess && <><div className="w-full flex p-5">
+                      <Image src={info.data.image} width={180} height={180} objectFit="cover" />
+                      <div className="w-[calc(100%_-_180px)]">
+                      <span className='p-2 w-full font-bold text-xl text-sky-500 block pl-5'>{info.data.username}</span>
+                        <ul className="w-full px-7">
+                        <li className="flex items-center text-lg"><b className="w-[200px]">số truyện đã đăng:</b><Link passHref href={`/user/novels`}><a className="text-sky-500">{info.data.posted}</a></Link></li>
+                        <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số truyện theo dõi:</b><Link passHref href={`/user/inschap`}><a className="text-sky-500">{info.data.followed}</a></Link></li>
+                        <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số chương đã đăng:</b><Link passHref href={`/user/novels`}><a className="text-sky-500">{info.data.chapCount}</a></Link></li>
+                        <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số kim phiếu còn:</b><span className="text-yellow-600">{info.data.goldcard}</span></li>
+                        </ul>
+                      </div>
+                  </div>
+                  <div className="flex px-5">
+                    <span onClick={()=>setActive(true)} className={`hover:cursor-pointer block rounded-md px-3 py-1 mr-2 ${active && 'bg-orange-500 text-white'}`}>đã đề cử</span>
+                    <span onClick={()=>setActive(false)} className={`hover:cursor-pointer block rounded-md px-3 py-1 ${!active && 'bg-orange-500 text-white'}`}>đã bình luận</span>
+                  </div>
+                  <div className="">
+                    {
+                      active ? <Voted/> : <Comented/>
+                    }
+                  </div>
+                  </>
+                }
             </div>
         </div>
     )
@@ -22,5 +55,6 @@ Userdata.getLayout = function getLayout(page: ReactElement) {
       </USDBlayout>
     )
   }
+
 
 export default Userdata;

@@ -1,16 +1,12 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import MainHome from '../components/MainHome/MainHome'
-import styles from '../styles/Home.module.css'
-import { Novel, SerVerNovel } from '../interface/_Novel'
-import { useEffect, useState } from 'react'
-import { bestRates, bestvotes, getHasNewChaps, getModVote, getMostFollows, getMostLikes, getMostViews, getNewNovels, getNovelNewest } from '../libs/api/novelAPI'
 import { useRouter } from 'next/router'
-import HasNewChaps from '../components/Newupdate/HasNewChaps'
+import { useEffect, useState } from 'react'
 import EditorRecomened from '../components/Editorecomend/EditorRecomened'
-import TopNovels from '../components/TopNovels/TopNovels'
 import FourCols from '../components/FourColsLayout/FourCols'
+import HasNewChaps from '../components/Newupdate/HasNewChaps'
+import TopNovels from '../components/TopNovels/TopNovels'
+import { SerVerNovel } from '../interface/_Novel'
+import { bestRates, bestvotes, getHasNewChaps, getModVote, getMostFollows, getMostLikes, getMostViews, getNewNovels, getNovelNewest } from '../libs/api/novelAPI'
 
 interface serverProps{
   errorFetch?:boolean,

@@ -18,7 +18,7 @@ const Userdata = () => {
   
     return (<>
     <CreateOrUpdateNovel isUpdate={false}/>
-    <ToastContainer
+    {/* <ToastContainer
           position="top-right"
           autoClose={5000}
           hideProgressBar={false}
@@ -26,7 +26,7 @@ const Userdata = () => {
           rtl={false}
           draggable
           pauseOnFocusLoss={false}
-        />
+        /> */}
     </>
         
     )

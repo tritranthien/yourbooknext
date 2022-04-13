@@ -15,9 +15,9 @@ const HasNewChaps:React.FC<HasNewChapsProps> = ({hasnews,newnovels}: HasNewChaps
         {
             hasnews.map((item, index)=>{
                 return <li key={index} className='text-gray-400 w-full flex justify-between items-center py-2 border-b-[1px]'> 
-                    <span className='first-letter:uppercase one-line-hidden w-20'>{item.category.cate}</span>
+                    <span className='first-letter:uppercase one-line-hidden w-20'><Link passHref href={`/tonghop/${item.category.slug}`}><a>{item.category.cate}</a></Link></span>
                     <span className='capitalize text-gray-800 ml-3 min-w-[120px] one-line-hidden w-[calc(100%_-_400px)]'><Link passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
-                    <span className='text-xs w-[120px] ml-3 one-line-hidden'>{item.author.name}</span>
+                    <span className='text-xs w-[120px] ml-3 one-line-hidden'><Link passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link></span>
                     <span className='text-xs w-[100px] ml-3 one-line-hidden'><Link passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`Chương ${item.chapCount}`}</a></Link></span>
                     <span className='text-xs w-[100px] ml-3 one-line-hidden'>{format(parseISO(item.updatedAt),'yyyy-MM-dd')}</span>
                 </li>
@@ -35,7 +35,7 @@ const HasNewChaps:React.FC<HasNewChapsProps> = ({hasnews,newnovels}: HasNewChaps
                                <Link passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link>
                                
                             </span>
-                           <span className='w-1/4 text-zinc-400 one-line-hidden'>{item.category.cate}</span>
+                           <span className='w-1/4 text-zinc-400 one-line-hidden'><Link passHref href={`/tonghop/${item.category.slug}`}><a>{item.category.cate}</a></Link></span>
                         </li>
                     })
                 }

@@ -6,6 +6,10 @@ export const getAuthors = async (text: string) => {
     const res = await API.get<Author[]>(`/author/search/${text}`);
     return res.data;
 }
+export const findBySlug = async (slug: string) => {
+    const res = await API.get<Author[]>(`/author/getbyslug/${slug}`);
+    return res.data;
+}
 export const storeNewAuthor = async (newAuthor:AuthorWithOutId) => {
     const res = await API.post(`/author`,newAuthor);
     return res;

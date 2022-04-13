@@ -1,4 +1,6 @@
 
+import { NotiFullRes } from '../../interface/_Noti';
+import { UserFind } from '../../interface/_User';
 import API, { getAuthHeader } from './api'
 
 export const login = async (username: string,password: string) => {
@@ -41,4 +43,38 @@ export const voteForNovel = async (novel: string,voteDetail: {goldcard: number})
     const res = await API.post(`/auth/vote/${novel}`,voteDetail,authHeader);
     return res;
 }
+export const getMyInfo = async () => {
+    const authHeader = getAuthHeader();
+    const res = await API.get(`/auth/getmyinfo`,authHeader);
+    return res.data;
+}
+export const getVoted = async () => {
+    const authHeader = getAuthHeader();
+    const res = await API.get(`/auth/getvoted`,authHeader);
+    return res.data;
+}
+export const getCmted = async () => {
+    const authHeader = getAuthHeader();
+    const res = await API.get(`/auth/getcmt`,authHeader);
+    return res.data;
+}
+export const finByName = async (text:string) => {
+    const res = await API.get<UserFind[]>(`auth/findbyname/${text}`);
+    return res.data;
+}
 
+export const getNotis = async () => {
+    const authHeader = getAuthHeader();
+    const res = await API.get<NotiFullRes>(`auth/notis`,authHeader);
+    return res.data;
+}
+export const readNoti = async () => {
+    const authHeader = getAuthHeader();
+    const res = await API.get(`auth/readnotis`,authHeader);
+    return res.data;
+}
+export const readNotiInNav = async (NotiNotRead: string[]) => {
+    const authHeader = getAuthHeader();
+    const res = await API.post(`auth/readnotisinnav`,NotiNotRead,authHeader);
+    return res.data;
+}

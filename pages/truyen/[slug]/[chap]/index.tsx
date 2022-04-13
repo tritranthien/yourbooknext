@@ -1,3 +1,4 @@
+import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -7,7 +8,8 @@ import { IoIosArrowBack, IoIosSettings } from 'react-icons/io'
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
 import { SerVerChap } from '../../../../interface/_Chap';
 import { getChap } from '../../../../libs/api/novelAPI';
-
+import Chaplist from '../../../../components/popup/Chaplist'
+import Settings from '../../../../components/popup/Settings';
 interface SSGProps{
     params:{
         chap:number,
@@ -15,21 +17,29 @@ interface SSGProps{
     }
 }
 interface SSRRES{
-    thisChap?: SerVerChap,
+    thisChap: SerVerChap,
     slug: string,
-    errorFetch?: boolean
 }
 
-const index:React.FC<SSRRES> = ({slug,thisChap,errorFetch}:SSRRES) => {
+const index:React.FC<SSRRES> = ({slug,thisChap}:SSRRES) => {
     const router = useRouter();
     const [show,setShow] = useState<number>(-1);
-    if (errorFetch || !thisChap) {
-        return <div className="w-full h-[550px] flex flex-col justify-center items-center">
-            <span className="text-7xl font-bold">404</span>
-            <span className="font-bold text-xl">không có dữ liệu, vui lòng coi lại đường dẫn</span>
-        </div>
+    const [fontSize,setFontSize] = useState('text-[20px]');
+    const [stringFont,setStringFont] = useState('');
+    const [themse,setThemse] = useState({
+        bg: 'bg-white',
+        color: 'text-black'
+    });
+    const settingThemse = (themse:{bg: string, color:string}) => {
+        setThemse(themse);
     }
-    return <div className='w-full'>
+    const settingFontSize = (fontsize: string) => {
+        setFontSize(fontsize);
+    }
+    const settingFont = (font:string)=>{
+        setStringFont(font);
+    }
+    return <div className={`w-full ${themse.bg} ${themse.color}` }>
         
         <div className="container">
         <div className="flex border-b-orange-600-600 justify-between text-blue-500">
@@ -38,10 +48,10 @@ const index:React.FC<SSRRES> = ({slug,thisChap,errorFetch}:SSRRES) => {
             <div className="w-full flex flex-col py-5 px-10 ">
                 <span className="text-3xl font-bold uppercase">{thisChap.novel.title}</span>
                 <span className="text-xl text-blue-500">{`chương ${thisChap.chap}: ${thisChap.title}`}</span>
-                <span className="text-xl text-blue-500">{ `Người đăng: Trí trê` }</span>
-                <span className="text-xl text-blue-500">đăng lúc: 20/02/2022 </span>
+                <span className="text-xl text-blue-500">{ `người đăng: ${thisChap.poster?.username}` }</span>
+                <span className="text-xl text-blue-500">{ `đăng ngày: ${format(parseISO(thisChap.updatedAt),'yyyy-MM-dd')}` } </span>
             </div>
-            <span className=' flex px-10'>
+            <span className=' flex px-10 w-full justify-center'>
                 <button 
                 disabled={thisChap.chap <= 1} 
                 onClick={()=>{ router.push(`/truyen/${slug}/${thisChap.chap - 1}`)}} 
@@ -52,37 +62,42 @@ const index:React.FC<SSRRES> = ({slug,thisChap,errorFetch}:SSRRES) => {
                 <button 
                 disabled={ thisChap.chap == thisChap.novel.chapCount}
                 onClick={()=>{ router.push(`/truyen/${slug}/${thisChap.chap + 1}`)}}
-                className="flex justify-center items-center ml-2 w-8 h-8 leading-8 text-center cursor-pointer bg-blue-700 text-white rounded-sm disabled:opacity-70">
+                className="flex text- justify-center items-center ml-2 w-8 h-8 leading-8 text-center cursor-pointer bg-blue-700 text-white rounded-sm disabled:opacity-70">
                     <MdArrowForwardIos />
                 </button>
                 
                 
             </span>
-            <p className='w-full py-5 px-10 whitespace-pre-wrap'>
-                { thisChap.content }
-            </p>
+            <div className="flex w-full justify-center">
+                <p className={`w-[800px] py-5 px-5 whitespace-pre-wrap self-center ${fontSize} ${stringFont}`}>
+                    { thisChap.content }
+                </p>
+            </div>
+            <span className=' flex px-10 w-full justify-center mb-10'>
+                <button 
+                disabled={thisChap.chap <= 1} 
+                onClick={()=>{ router.push(`/truyen/${slug}/${thisChap.chap - 1}`)}} 
+                className="flex justify-center items-center w-8 h-8 leading-8 text-center cursor-pointer bg-blue-700 text-white rounded-sm disabled:opacity-70">
+                    <MdArrowBackIosNew />
+                </button>
+
+                <button 
+                disabled={ thisChap.chap == thisChap.novel.chapCount}
+                onClick={()=>{ router.push(`/truyen/${slug}/${thisChap.chap + 1}`)}}
+                className="flex justify-center items-center mb-5 ml-2 w-8 h-8 leading-8 text-center cursor-pointer bg-blue-700 text-white rounded-sm disabled:opacity-70">
+                    <MdArrowForwardIos />
+                </button>
+                
+                
+            </span>
         </div>
         <div className="w-[40px] fixed left-0 top-1/2 translate-y-[-50%] cursor-pointer">
             <span onClick={()=>setShow(0)} className="flex justify-center items-center w-[40px] h-[40px] text-xl opacity-70"><AiOutlineUnorderedList/></span>
-            <span className="flex justify-center items-center w-[40px] h-[40px] text-xl opacity-70"><IoIosSettings/></span>
+            <span onClick={()=>setShow(1)} className="flex justify-center items-center w-[40px] h-[40px] text-xl opacity-70"><IoIosSettings/></span>
             <span className="flex justify-center items-center w-[40px] h-[40px] text-xl opacity-70"><FaComment/></span>
         </div>
-        { show == 0 &&<div className="fixed top-0 left-0 right-0 bottom-0 bg-black/70 flex justify-center items-center">
-            <div className="relative w-[700px] h-[400px] bg-white px-10">
-                <span className="w-full font-bold py-5 block text-xl">Danh sách chương</span>
-                <span onClick={()=>setShow(-1)} className="absolute top-1 right-1 w-[50px] h-[50px] block text-[30px] cursor-pointer"><FaWindowClose/></span>
-                <ul className='flex flex-wrap'>
-                    <li className='w-1/2'>Chương 1: Thiên địa lực lượng</li>
-                    <li className='w-1/2'>Chương 2: Thiên địa lực lượng</li>
-                    <li className='w-1/2'>Chương 3: Thiên địa lực lượng</li>
-                    <li className='w-1/2'>Chương 4: Thiên địa lực lượng</li>
-                    <li className='w-1/2'>Chương 5: Thiên địa lực lượng</li>
-                    <li className='w-1/2'>Chương 6: Thiên địa lực lượng</li>
-           
-                </ul>
-            </div>
-            
-        </div>}
+        { show == 0 && <Chaplist slug={slug} novel={thisChap.novel._id} closePopup={()=>setShow(-1)}/>}
+        { show == 1 && <Settings settingFont={settingFont} stringFont={stringFont} stringSize={fontSize} settingFontSize={settingFontSize} settingThemse={settingThemse} closePopup={()=>setShow(-1)}/>}
 
         
   </div>;
@@ -93,9 +108,11 @@ export const getServerSideProps = async ({params}: SSGProps) => {
     const thisChap = await getChap(slug,chap);
     if (!thisChap._id) {
         return {
-            props:{
-                errorFetch: true
-            }
+            redirect: {
+                permanent: false,
+                destination: "/page404",
+            },
+            props:{}
         }
     }
     return {

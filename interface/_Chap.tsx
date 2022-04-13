@@ -1,6 +1,7 @@
 import { Author } from "./_Author";
 import { Category } from "./_Category";
-import { Novel } from "./_Novel";
+import { Novel, SerVerNovel } from "./_Novel";
+import { UserFind } from "./_User";
 
 export interface Chap<nv,pt>{
     title:string,
@@ -8,7 +9,9 @@ export interface Chap<nv,pt>{
     novel:nv,
     poster?:pt,
 }
-export interface SerVerChap extends Chap<Novel<Author,Category>,string>{
+export interface SerVerChap extends Chap<SerVerNovel,UserFind>{
     _id: string,
-    chap: number
+    chap: number,
+    createdAt: string,
+    updatedAt: string
 }

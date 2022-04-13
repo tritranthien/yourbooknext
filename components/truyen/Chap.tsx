@@ -4,6 +4,7 @@ import ReactPaginate from 'react-paginate';
 import { SerVerNovel } from '../../interface/_Novel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { format, parseISO } from 'date-fns';
 const Chap:React.FC<{novel:SerVerNovel}> = ({novel}:{novel:SerVerNovel}) => {
   const router = useRouter();
   const path = router.asPath;
@@ -50,7 +51,7 @@ const Chap:React.FC<{novel:SerVerNovel}> = ({novel}:{novel:SerVerNovel}) => {
             <td className="py-1 px-2 text-gray-400">{index+1}</td>
             <td className="py-1 px-2 text-gray-400 "><Link passHref href={`${path}/${item.chap}`}><a>{`Chuơng ${item.chap}`}</a></Link></td>
             <td className="py-1 px-2 text-blue-500 line-clamp-1"><Link passHref href={`${path}/${item.chap}`}><a>{item.title}</a></Link></td>
-            <td className="py-1 px-2 text-blue-500">{}</td>
+            <td className="py-1 px-2 text-blue-500">{format(parseISO(item.updatedAt),'yyyy-MM-dd')}</td>
           </tr>
         })
       }

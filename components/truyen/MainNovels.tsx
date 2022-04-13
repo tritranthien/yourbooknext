@@ -1,6 +1,8 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { ImBook } from 'react-icons/im';
+import { useAuthorNovels } from '../../customHooks/reactQuery/Novelofauthor';
 import { SerVerNovel } from '../../interface/_Novel';
 import avt from '../../public/images/avataaars.svg';
 import Cmt from '../cmt/Cmt';
@@ -13,6 +15,7 @@ interface MainNovels{
 const MainNovels:React.FC<MainNovels> = ({novel}:MainNovels) => {
   const [act,setAct] = useState<number>(0);
   const [isLoged, setLoged] = useState(false);
+  const {data, isSuccess,error} = useAuthorNovels(novel.author._id);
   useEffect(()=>{
     if(localStorage && localStorage.getItem('userInfo')){
       setLoged(true);
@@ -36,13 +39,18 @@ const MainNovels:React.FC<MainNovels> = ({novel}:MainNovels) => {
         </div>
       </div>
       <div className="w-1/4">
-        <div className="flex w-full rounded-md bg-slate-300 min-h-[100px]">
-          <Image src={avt} alt='avatar' />
+        <div className="flex w-full mt-2 rounded-md relative h-[250px] bg-slate-300 min-h-[100px]">
+          <Image src={novel.author.image} layout='fill' objectFit='cover' alt='avatar' />
         </div>
-        <span className='block w-full p-2 text-center border-b-2'>Ngô Khai</span>
-        <span className='flex w-full p-2 leading-7'><ImBook className='h-7 mr-2'/>Hỏa chi viêm đế</span>
-        <span className='flex w-full p-2 leading-7'><ImBook className='h-7 mr-2'/>Khai sơn trác mạn thân</span>
-
+        <span className='block w-full p-2 text-center border-b-2 text-blue-500 font-bold'><Link passHref href={`/tac-gia/${novel.author.slug}`}><a>{novel.author.name}</a></Link></span>
+        <span className="w-full text-center block px-2 py-1 font-bold">truyện khác cùng tác giả</span>
+        {
+          isSuccess && data.map((item,index)=>{
+            if(item._id != novel._id) {
+              return <span key={index} className='flex w-full p-2 leading-7'><ImBook className='h-7 mr-2'/><Link passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
+            }
+          })
+        }
       </div>
   </div>;
 };

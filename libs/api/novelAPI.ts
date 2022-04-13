@@ -1,7 +1,7 @@
 import { Author } from '../../interface/_Author';
 import { Category } from '../../interface/_Category';
 import { Chap, SerVerChap } from '../../interface/_Chap';
-import { Novel, ServerFollowData, SerVerNovel } from '../../interface/_Novel'
+import { Novel, ServerFollowData, SerVerNovel, ServerNovelPaging } from '../../interface/_Novel'
 import { ServerRatting } from '../../interface/_Ratting';
 import API, { getAuthHeader } from './api'
 
@@ -16,7 +16,8 @@ export const getAllNovels = async () => {
     return res.data;
 }
 export const addnewNovel = async (novel: Novel<string,string>) => {
-    const res = await API.post('/novels',novel);
+    const authHeader = getAuthHeader();
+    const res = await API.post('/novels',novel,authHeader);
     return res;
 }
 export const updateNovel = async (novel_id: string,novel: Novel<string,string>) => {
@@ -24,7 +25,8 @@ export const updateNovel = async (novel_id: string,novel: Novel<string,string>) 
     return res;
 }
 export const addNewChap = async (chap: Chap<string,string>) => {
-    const res = await API.post(`/novels/newchap`,chap);
+    const authHeader = getAuthHeader();
+    const res = await API.post(`/novels/newchap`,chap,authHeader);
     return res;
 }
 export const getChap = async (novel_id:string,chap:number ) => {
@@ -33,6 +35,10 @@ export const getChap = async (novel_id:string,chap:number ) => {
 }
 export const getChaps = async (novel: string, page:number ) => {
     const res = await API.get<SerVerChap[]>(`/novels/chaps/${novel}?page=${page}`);
+    return res.data;
+}
+export const getChapsNoLimit = async (novel: string) => {
+    const res = await API.get<SerVerChap[]>(`/novels/fullchaps/${novel}`);
     return res.data;
 }
 export const getNovel = async (slug:string) => {
@@ -95,14 +101,26 @@ export const bestvotes = async () => {
     return res.data;
 }
 export const novelsBycate = async (cateId: string,page:number = 1) => {
-    const res = await API.get<SerVerNovel[]>(`/novels/getbycate/${cateId}?page=${page}`);
+    const res = await API.get<ServerNovelPaging>(`/novels/getbycate/${cateId}?page=${page}`);
     return res.data;
 }
 export const novelsCompletedByCate = async (cateId: string,page:number = 1) => {
     const res = await API.get<SerVerNovel[]>(`/novels/getcompleted/${cateId}?page=${page}`);
     return res.data;
 }
-export const bestViewsInCate = async (cateId: string,page:number = 1) => {
-    const res = await API.get<SerVerNovel[]>(`/novels/bestviews/${cateId}?page=${page}`);
+export const bestViewsInCate = async (cateId: string) => {
+    const res = await API.get<ServerNovelPaging>(`/novels/bestviews/${cateId}`);
+    return res.data;
+}
+export const filterInCate = async (cateId: string,page:number = 1,stt:string,cnum: number,srt:string) => {
+    const res = await API.get<ServerNovelPaging>(`/novels/filterincate/${cateId}?page=${page}&stt=${stt}&cnum=${cnum}&srt=${srt}`);
+    return res.data;
+}
+export const getByTurn = async (turn:string,page:number=1,) => {
+    const res = await API.get<ServerNovelPaging>(`/novels/turn/${turn}?page=${page}`);
+    return res.data;
+}
+export const getByAuthor = async (author:string) => {
+    const res = await API.get<SerVerNovel[]>(`/novels/getbyauthor/${author}`);
     return res.data;
 }

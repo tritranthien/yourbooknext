@@ -5,6 +5,7 @@ export interface Novel<TAuthor,TCate>{
     _id?: string,
     author: TAuthor,
     title: string,
+    status: 'continue' | 'completed' | 'drop',
     description: string,
     image: string,
     category: TCate
@@ -24,4 +25,8 @@ export interface ServerFollowData{
  _id: string,
  follower: string,
  novel: SerVerNovel
+}
+export interface ServerNovelPaging{
+    novels:SerVerNovel[],
+    total: number
 }

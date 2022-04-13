@@ -67,10 +67,10 @@ const index:React.FC = () => {
           </>}
           
           <label htmlFor="password" className="w-full text-sm">Mật khẩu</label>
-          <input onChange={(e:ChangeEvent<HTMLInputElement>)=>setPassWord(e.target.value)} type="text" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
+          <input onChange={(e:ChangeEvent<HTMLInputElement>)=>setPassWord(e.target.value)} type="password" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
           { isSingup && <>
             <label htmlFor="retypePassword" className="w-full text-sm">Nhập lại mật khẩu</label>
-          <input onChange={(e:ChangeEvent<HTMLInputElement>)=>setRPass(e.target.value)} type="text" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
+          <input onChange={(e:ChangeEvent<HTMLInputElement>)=>setRPass(e.target.value)} type="password" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
           </>}
           
           <button onClick={isSingup ? signUp : signIn} className="px-3 py-1 mt-4 bg-blue-500 text-white rounded-md mx-auto">{isSingup ? 'Đăng ký' : 'Đăng nhập'}</button>
