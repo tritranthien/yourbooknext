@@ -13,7 +13,7 @@ const Userdata = () => {
             <span className="font-bold text-2xl">thư tới</span>
             <ul className="w-full mt-4">
               {
-                isSuccess && data.map((item,index)=>{
+                isSuccess && data?.map((item,index)=>{
                   return <li onClick={()=>setOpen(index)} key={index} className="cursor-pointer flex text-sm  w-full p-2 border-b-[1px] border-b-gray-300 border-t-[1px] -mt-[1px] border-t-gray-300">
                     <span className="font-bold mr-2">from:</span>
                     <span className="line-clamp-1 w-2/12">
@@ -31,11 +31,11 @@ const Userdata = () => {
                 <div className="w-[500px] relative bg-white shadow-md p-4">
                   <AiFillCloseSquare onClick={()=>setOpen(-1)} size={25} color="red" className='absolute top-1 right-1 cursor-pointer'/>
                   <span className="block font-bold mt-2"><b className='mr-2'>người gửi:</b>
-                  <i className="text-orange-500">{data[open].sender.username}</i>
+                  <i className="text-orange-500">{data && data[open].sender.username}</i>
                   </span>
-                  <span className="mt-2 block"><b className="mr-2">tiêu đề:</b><i>{data[open].title}</i></span>
+                  <span className="mt-2 block"><b className="mr-2">tiêu đề:</b><i>{data && data[open].title}</i></span>
                   <span className='font-bold block mt-2'>nội dung: </span>
-                  <p className="p-2 text-gray-500 h-[220px] overflow-y-auto">{data[open].content}</p>
+                  <p className="p-2 text-gray-500 h-[220px] overflow-y-auto">{data && data[open].content}</p>
                 </div>
                   
               </div>

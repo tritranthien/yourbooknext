@@ -59,7 +59,7 @@ const Cmtitem:React.FC<CmtItemProps> = ({cmt,novelId}:CmtItemProps) => {
         </div>
         }
         {
-          showmore && isSuccess && data.map((item,index)=>{
+          showmore && isSuccess && data?.map((item,index)=>{
             return <div key={index} className="w-full ml-5 mt-2">
             <span className="w-full px-2 py-1 font-bold text-blue-800">{item.auth.username}</span>
             

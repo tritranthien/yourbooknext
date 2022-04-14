@@ -252,7 +252,7 @@ const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
                 <div className="w-[200px] h-[230] relative overflow-hidden border-2">
                   
                 { 
-                  (preShow || novel.image) && <Image className="absolute object-cover" src={ preShow || novel.image } layout="fill"/>
+                  (preShow || novel.image) && <Image className="absolute object-cover" alt="hinh duoc chon" src={ preShow || novel.image } layout="fill"/>
                 }
                 <input onChange={handleFile} type="file" className="opacity-20 w-[200px] h-[200px] relative after:w-full after:h-full after:absolute after:content-['chọn_từ_thiết_bị'] after:bg-white after:left-0 after:top-0 after:flex after:justify-center after:items-center after:text-xl after:border-2 after:cursor-pointer after:text-wrap"/>
 

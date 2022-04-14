@@ -24,7 +24,7 @@ const { data, isSuccess, error } = useGetme();
 const ck = useQuery('followedFromUser',()=>followeds(),{onSuccess: dt=>{
     const socket = io("http://localhost:3000/");   
     if(isSuccess){
-        socket.emit('join',data.data._id);
+        socket.emit('join',data?.data._id);
     }
     if(dt.length > 0){
         dt.forEach(e=>{
@@ -132,7 +132,7 @@ const turnToReaded = async () => {
             </ul>
             
                 <div className="flex items-center text-black relative">
-                    <span className='text-blue-400 ml-3 p-3 text-sm'>{ isSuccess ? <a href="/user/account">{data.data.username}</a> : <a href='/login'>Đăng nhập</a>}</span>
+                    <span className='text-blue-400 ml-3 p-3 text-sm'>{ isSuccess ? <Link passHref href="/user/account"><a>{data?.data.username}</a></Link> : <Link passHref href="/login"><a>Đăng nhập</a></Link>}</span>
                     
                     
                     {
@@ -155,9 +155,9 @@ const turnToReaded = async () => {
                             {
                                 NotiList.map((item,index)=>{
                                     if(item.type == 'newmess'){
-                                        return <Link passHref href={`/user/messbox`}><a><li key={index} className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>một tin nhắn mới từ <b>{item.sender}</b></li></a></Link>
+                                        return <Link key={index} passHref href={`/user/messbox`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>một tin nhắn mới từ <b>{item.sender}</b></li></a></Link>
                                     }
-                                    return <Link passHref href={`/truyen/${item.novel?.slug}/${item.chap}`}><a><li key={index} className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>truyện <b className="text-blue-500">{item.novel?.title}</b> chương <b className="text-blue-500">{item.chap}</b> vừa xuất thế</li></a></Link>
+                                    return <Link key={index} passHref href={`/truyen/${item.novel?.slug}/${item.chap}`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>truyện <b className="text-blue-500">{item.novel?.title}</b> chương <b className="text-blue-500">{item.chap}</b> vừa xuất thế</li></a></Link>
                                 })
                             }
                             <Link passHref href='/user/notifications'><a><li className="px-2 py-1 font-bold w-full text-center text-blue-500 mb-1">xem tất cả</li></a></Link>

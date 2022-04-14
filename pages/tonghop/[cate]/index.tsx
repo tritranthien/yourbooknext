@@ -27,7 +27,7 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
   return (
     <div className="w-full">
       <div className="relative w-full h-48">
-        <Image layout='fill' src={novelsUpdated.length > 0 ? novelsUpdated[0].image : '/images/tt3.jpg'} objectFit='cover'/>
+        <Image layout='fill' alt="tong hop top 1" src={novelsUpdated.length > 0 ? novelsUpdated[0].image : '/images/tt3.jpg'} objectFit='cover'/>
         <span className="absolute top-0 left-0 w-full h-full bg-black/70 text-2xl font-bold flex justify-center items-center uppercase text-white">{cateName}</span>
       </div>
       <div className="container py-2">
@@ -57,7 +57,7 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
               <span className="font-bold block mb-2"><i>{`Truyện ${cateName} xem nhiều`}</i></span>
               <Link passHref href={`/truyen/${novelsBestViews[0].slug}`}><a>
               <div className="w-full relative text-sm">
-              <Image width="450" height="400" objectFit='cover' src={novelsBestViews[0].image}/>
+              <Image width="450" height="400" objectFit='cover' alt={novelsBestViews[0].title} src={novelsBestViews[0].image}/>
               <span className="absolute top-2 left-2 rounded-full block w-6 h-6 text-center leading-6 text-white bg-green-500">1</span>
               <span className="absolute top-2 right-2 rounded-md block px-3 py-1 text-white bg-violet-700">{`Chương ${novelsBestViews[0].chapCount}`}</span>
               <div className="absolute bottom-3 left-2 right-2 bg-white py-1">

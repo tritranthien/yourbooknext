@@ -44,7 +44,7 @@ const MainNovels:React.FC<MainNovels> = ({novel}:MainNovels) => {
         <span className='block w-full p-2 text-center border-b-2 text-blue-500 font-bold'><Link passHref href={`/tac-gia/${novel.author.slug}`}><a>{novel.author.name}</a></Link></span>
         <span className="w-full text-center block px-2 py-1 font-bold">truyện khác cùng tác giả</span>
         {
-          isSuccess && data.map((item,index)=>{
+          isSuccess && data?.map((item,index)=>{
             if(item._id != novel._id) {
               return <span key={index} className='flex w-full p-2 leading-7'><ImBook className='h-7 mr-2'/><Link passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
             }

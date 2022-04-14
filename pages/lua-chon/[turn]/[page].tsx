@@ -40,7 +40,7 @@ const Turn:React.FC<TurnProps> = ({novels,heading,turn,page,total}:TurnProps) =>
   return (
     <div className="w-full bg-gray-100">
         <div className="relative w-full h-48 bg-black">
-            <Image layout="fill" objectFit='cover' src={novels.length > 0 ? novels[0].image : '/images/tt2.jpg'}/>
+            <Image layout="fill" objectFit='cover' alt="top novels" src={novels.length > 0 ? novels[0].image : '/images/tt2.jpg'}/>
             <span className="absolute top-0 left-0 w-full h-full text-2xl uppercase bg-black/70 flex justify-center items-center font-bold text-white">{heading}</span>
         </div>
         <div className="container flex justify-center p-5">

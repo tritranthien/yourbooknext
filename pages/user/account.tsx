@@ -17,7 +17,7 @@ const Userdata = () => {
               
                 {
                   info.isSuccess && <><div className="w-full flex p-5">
-                      <Image src={info.data.image} width={180} height={180} objectFit="cover" />
+                      <Image src={info.data.image} alt={info.data.image} width={180} height={180} objectFit="cover" />
                       <div className="w-[calc(100%_-_180px)]">
                       <span className='p-2 w-full font-bold text-xl text-sky-500 block pl-5'>{info.data.username}</span>
                         <ul className="w-full px-7">

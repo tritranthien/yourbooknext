@@ -35,7 +35,7 @@ const Authorpage:React.FC<AuthorpageProps> = ({author}:AuthorpageProps) => {
           <div className="w-3/4">
             <span className="w-full block px-3 py-1 text-2xl">Truyện của tác giả: <b className="text-orange-500">{author.name} </b></span>
             {
-              isSuccess && data.map((item,index)=>{
+              isSuccess && data?.map((item,index)=>{
                 return <VerticalCard key={index} novel={item}/>
               })
             }

@@ -21,7 +21,7 @@ interface SSRRES{
     slug: string,
 }
 
-const index:React.FC<SSRRES> = ({slug,thisChap}:SSRRES) => {
+const ChapIndex:React.FC<SSRRES> = ({slug,thisChap}:SSRRES) => {
     const router = useRouter();
     const [show,setShow] = useState<number>(-1);
     const [fontSize,setFontSize] = useState('text-[20px]');
@@ -123,4 +123,4 @@ export const getServerSideProps = async ({params}: SSGProps) => {
     }
 }
 
-export default index;
+export default ChapIndex;

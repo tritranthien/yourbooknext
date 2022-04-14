@@ -40,7 +40,7 @@ const PosterPopup:React.FC<PopUpProps> = ({closePopup,choonseImage} : PopUpProps
                     {
                       imageList?.map((item,index)=>{
                         return <div onClick={()=>choonseImage(item)} key={index} className="relative w-[200px] h-[200px] cursor-pointer">
-                          <Image className="object-cover" src={item} layout='fill'/>
+                          <Image className="object-cover" src={item} alt={item} layout='fill'/>
                         </div>
                       })
                     }

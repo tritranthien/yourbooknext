@@ -3,7 +3,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { getMe, login, signUpAPI } from '../../libs/api/authAPI';
 
-const index:React.FC = () => {
+const Login:React.FC = () => {
   const router = useRouter();
   const [loadding, setLoading] = useState(true);
   const [isSingup,setSingup] = useState(false);
@@ -82,4 +82,4 @@ const index:React.FC = () => {
   )
 }
 
-export default index
+export default Login

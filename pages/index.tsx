@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import EditorRecomened from '../components/Editorecomend/EditorRecomened'
@@ -41,7 +42,7 @@ const Home: NextPage<serverProps> = ({errorFetch,newestList,modVotesList,hasNewL
           if (show === index) {
 
             return <div key={index} className="w-full min-h-[600px] flex relative">
-          <img src={item.image} alt="bg" className="w-full h-full absolute object-cover z-0" />
+          <Image src={item.image} alt="bg" layout='fill' />
           <div className="blacktotrans w-full h-full absolute"></div>
           <div className="flex mx-auto container p-12 z-10 pt-[120px]">
             <div className="p-12 flex flex-col justify-center w-1/2">

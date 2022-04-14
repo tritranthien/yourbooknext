@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -41,7 +42,7 @@ const EditorRecomened:React.FC<Maincomponent> = ({data}:Maincomponent) => {
         {
               data.map((item,index)=>{
                   return <SwiperSlide key={index}>
-                  <img className='w-full h-full object-cover' src={item.image} />
+                  <Image width={220} height={220} objectFit="cover" src={item.image} alt={item.title}/>
               </SwiperSlide>
               })
           }

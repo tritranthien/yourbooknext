@@ -12,7 +12,7 @@ const VerticalCard:React.FC<CardProps> = ({novel} :CardProps) => {
     <Link href={`/truyen/${novel.slug}`} passHref><a>
       <div className="flex w-full p-4">
         <div className="w-[150px] h-[150px] relative">
-          <Image layout='fill' objectFit='cover' src={novel.image} />
+          <Image layout='fill' objectFit='cover' alt={novel.title} src={novel.image} />
         </div>
         <div className="w-full px-5">
           <span className="font-bold block text-neutral-500 w-full">{novel.title}</span>

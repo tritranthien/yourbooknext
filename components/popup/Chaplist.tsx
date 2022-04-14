@@ -19,7 +19,7 @@ const Chaplist:React.FC<ChapProps> = ({closePopup,novel,slug}:ChapProps) => {
                 <span onClick={closePopup} className="absolute top-1 right-1 w-[50px] h-[50px] block text-[30px] cursor-pointer"><FaWindowClose/></span>
                 <ul className='flex flex-wrap h-[300px] overflow-y-auto'>
                     {
-                        isSuccess && data.map((item,index)=>{
+                        isSuccess && data?.map((item,index)=>{
                             return <li key={index} onClick={()=>{
                                 closePopup();
                                 router.push(`/truyen/${slug}/${item.chap}`);

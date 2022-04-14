@@ -44,7 +44,7 @@ const All:React.FC<AllPageProps> = ({novels,cateName,cateId,total}:AllPageProps)
     <div className="">
         <div className="w-full h-40 relative">
             {
-                novels.length > 0 && <Image objectFit='cover' src={novels[0].image} layout="fill"/>
+                novels.length > 0 && <Image objectFit='cover' alt="tong hop top" src={novels[0].image} layout="fill"/>
             }
            <span className="absolute text-3xl uppercase font-bold flex justify-center items-center text-white w-full h-full bg-black/70">{`truyện ${cateName}`}</span>
         </div>
