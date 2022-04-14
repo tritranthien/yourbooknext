@@ -111,7 +111,8 @@ export const getStaticProps = async () => {
       mostFollowsList,
       bestRateList,
       bestVotesList
-    }
+    },
+    revalidate: 320
   }
  } catch (error) {
   return {

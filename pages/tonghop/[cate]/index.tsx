@@ -117,7 +117,8 @@ export const getStaticProps = async ({params}:contextProps) => {
       novelsCompleted,
       novelsBestViews,
       cateName: myCate.cate,
-    }
+    },
+    revalidate: 600,
   }
 }
 
