@@ -1,6 +1,5 @@
 import { format, parseISO } from 'date-fns'
 import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
 import VerticalCard from '../../components/Card/VerticalCard'
 import { useAuthorNovels } from '../../customHooks/reactQuery/Novelofauthor'

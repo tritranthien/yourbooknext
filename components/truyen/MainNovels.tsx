@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { ImBook } from 'react-icons/im';
 import { useAuthorNovels } from '../../customHooks/reactQuery/Novelofauthor';
 import { SerVerNovel } from '../../interface/_Novel';
-import avt from '../../public/images/avataaars.svg';
 import Cmt from '../cmt/Cmt';
 import Chap from './Chap';
 import Gt from './Gt';

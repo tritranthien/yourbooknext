@@ -1,13 +1,12 @@
-import { ChangeEvent, FC, ReactElement, useCallback, useState } from 'react'
-import React from 'react';
 import debounce from 'lodash.debounce';
-import USDBlayout from '../../components/userDBLayout/USDBlayout';
-import { finByName } from '../../libs/api/authAPI';
-import { UserFind } from '../../interface/_User';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { ChangeEvent, ReactElement, useCallback, useState } from 'react';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { sendMessage } from '../../libs/api/messAPI';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import USDBlayout from '../../components/userDBLayout/USDBlayout';
+import { UserFind } from '../../interface/_User';
+import { finByName } from '../../libs/api/authAPI';
+import { sendMessage } from '../../libs/api/messAPI';
 
 const Userdata = () => {
   const [title,setTitle] = useState('');

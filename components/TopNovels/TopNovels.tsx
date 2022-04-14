@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { Novel, SerVerNovel } from '../../interface/_Novel';
+import { SerVerNovel } from '../../interface/_Novel';
 interface TopNovelsProps{
     novels: SerVerNovel[],
     title: string

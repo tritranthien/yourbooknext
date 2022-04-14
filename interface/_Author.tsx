@@ -8,4 +8,4 @@ export interface Author{
     image: string,
     novelCount: number,
 }
-export type AuthorWithOutId = Omit<Author,'_id'>;
+export type AuthorWithOutId = Omit<Author,'_id' | 'slug' | 'image' | 'novelCount'>;

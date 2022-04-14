@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
-import { FaComment, FaWindowClose } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosSettings } from 'react-icons/io'
+import { FaComment } from 'react-icons/fa';
+import { IoIosArrowBack, IoIosSettings } from 'react-icons/io';
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
+import Chaplist from '../../../../components/popup/Chaplist';
+import Settings from '../../../../components/popup/Settings';
 import { SerVerChap } from '../../../../interface/_Chap';
 import { getChap } from '../../../../libs/api/novelAPI';
-import Chaplist from '../../../../components/popup/Chaplist'
-import Settings from '../../../../components/popup/Settings';
 interface SSGProps{
     params:{
         chap:number,

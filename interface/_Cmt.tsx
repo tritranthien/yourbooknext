@@ -1,3 +1,4 @@
+import { SerVerNovel } from "./_Novel";
 import { User } from "./_User";
 
 export interface Cmt{
@@ -5,8 +6,9 @@ export interface Cmt{
     novel:string,
     parent?:string
 }
-export interface ServerCmt extends Cmt{
+export interface ServerCmt extends Omit<Cmt,'novel'>{
     auth: User,
     _id: string,
+    novel:SerVerNovel,
     repCount: number
 }

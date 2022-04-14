@@ -2,19 +2,16 @@ import React, { ReactElement, useState } from 'react';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 import { MdOutlineEditNote } from 'react-icons/md';
 import { useQuery } from 'react-query';
-import { ToastContainer } from 'react-toastify';
 import UserBookCard from '../../components/Card/UserBookCard';
 import AddNewChapPopup from '../../components/popup/AddNewChapPopup';
 import EditNovelPopup from '../../components/popup/EditNovelPopup';
 import USDBlayout from '../../components/userDBLayout/USDBlayout';
-import { Author } from '../../interface/_Author';
-import { Category } from '../../interface/_Category';
-import { Novel, SerVerNovel } from '../../interface/_Novel';
+import { SerVerNovel } from '../../interface/_Novel';
 import { getAllNovels } from '../../libs/api/novelAPI';
 
 const Userdata = () => {
     const novels = useQuery('allNovels',()=>getAllNovels());
-    const [novelUpdating,setNovelUpdating] = useState<Novel<Author,Category> | null>(null);
+    const [novelUpdating,setNovelUpdating] = useState<SerVerNovel | null>(null);
     const [currentNovel,setCurrentNovel] = useState<SerVerNovel | null>(null);
     return (
         <div className="w-full min-h-screen z-40">

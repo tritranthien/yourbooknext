@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Novel } from '../../interface/_Novel';
+import React from 'react';
 
 const Recomened:React.FC = () => {
 //   const  [recomenedList,setRL] = useState<Novel[]>([]);

@@ -1,10 +1,9 @@
-import { parseISO,format } from 'date-fns';
-import { FC, ReactElement, useState } from 'react'
-import React from 'react';
+import { format, parseISO } from 'date-fns';
+import React, { ReactElement, useState } from 'react';
+import { AiFillCloseSquare } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import USDBlayout from '../../components/userDBLayout/USDBlayout';
 import { mySents } from '../../libs/api/messAPI';
-import { AiFillCloseSquare } from 'react-icons/ai';
 
 const Userdata = () => {
   const [open,setOpen] = useState(-1);

@@ -1,12 +1,10 @@
 import React from 'react'
 import { AiFillCloseSquare } from 'react-icons/ai'
-import { Author } from '../../interface/_Author'
-import { Category } from '../../interface/_Category'
-import { Novel } from '../../interface/_Novel'
+import { SerVerNovel } from '../../interface/_Novel'
 import CreateOrUpdateNovel from '../samePage/CreateOrUpdateNovel'
 
 interface EditPopupProps{
-  novel: Novel<Author,Category>
+  novel: SerVerNovel,
   closeUpdate: ()=>void
 }
 

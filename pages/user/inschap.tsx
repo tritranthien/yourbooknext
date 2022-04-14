@@ -1,4 +1,4 @@
-import type { FC, ReactElement } from 'react'
+import type { ReactElement } from 'react';
 import React from 'react';
 import UserBookCard from '../../components/Card/UserBookCard';
 import USDBlayout from '../../components/userDBLayout/USDBlayout';

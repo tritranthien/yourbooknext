@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { ToastOptions,ToastContainer } from 'react-toastify';
+import { ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateOrUpdateNovel from '../../components/samePage/CreateOrUpdateNovel';
 import USDBlayout from '../../components/userDBLayout/USDBlayout';

@@ -1,8 +1,18 @@
+import { SerVerNovel } from './../../interface/_Novel';
 
+import { ServerCmt } from '../../interface/_Cmt';
 import { NotiFullRes } from '../../interface/_Noti';
 import { UserFind } from '../../interface/_User';
 import API, { getAuthHeader } from './api'
-
+interface ServerVoted{
+    _id:string,
+    novel: SerVerNovel,
+    content:string,
+    voter: string,
+    goldcard: number,
+    createdAt: string,
+    updatedAt: string
+}
 export const login = async (username: string,password: string) => {
     const res = await API.post(`/auth/login`,{ 
         username: username, 
@@ -50,12 +60,12 @@ export const getMyInfo = async () => {
 }
 export const getVoted = async () => {
     const authHeader = getAuthHeader();
-    const res = await API.get(`/auth/getvoted`,authHeader);
+    const res = await API.get<ServerVoted[]>(`/auth/getvoted`,authHeader);
     return res.data;
 }
 export const getCmted = async () => {
     const authHeader = getAuthHeader();
-    const res = await API.get(`/auth/getcmt`,authHeader);
+    const res = await API.get<ServerCmt[]>(`/auth/getcmt`,authHeader);
     return res.data;
 }
 export const finByName = async (text:string) => {

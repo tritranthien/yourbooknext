@@ -1,11 +1,11 @@
 import Image from 'next/image'
-import React, { useState,useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import ReactPaginate from 'react-paginate'
 import { useQuery } from 'react-query'
 import VerticalCard from '../../../components/Card/VerticalCard'
-import { SerVerNovel, ServerNovelPaging } from '../../../interface/_Novel'
+import { SerVerNovel } from '../../../interface/_Novel'
 import { getBySlug } from '../../../libs/api/category'
-import ReactPaginate,{ReactPaginateProps} from 'react-paginate';
-import { novelsBycate,filterInCate } from '../../../libs/api/novelAPI'
+import { filterInCate, novelsBycate } from '../../../libs/api/novelAPI'
 interface contextProps{ 
 	params : { 
 		cate : string 

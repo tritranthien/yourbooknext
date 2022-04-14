@@ -1,7 +1,6 @@
 import React from 'react';
-import ColNovels from '../ColNovels/ColNovels';
-import { recomenedList } from '../../fakedata/recomenedList'
 import { SerVerNovel } from '../../interface/_Novel';
+import ColNovels from '../ColNovels/ColNovels';
 interface FourCols{
   mostLikes: SerVerNovel[],
   mostViews: SerVerNovel[],

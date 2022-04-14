@@ -1,13 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC, ReactElement, useState } from 'react'
-import React from 'react';
-import { BsFillPersonFill, BsFillSdCardFill } from 'react-icons/bs';
+import React, { ReactElement, useState } from 'react';
 import { useQuery } from 'react-query';
-import USDBlayout from '../../components/userDBLayout/USDBlayout';
-import { getMyInfo, getVoted } from '../../libs/api/authAPI';
-import Voted from '../../components/voted/Voted';
 import Comented from '../../components/Comented/Comented';
+import USDBlayout from '../../components/userDBLayout/USDBlayout';
+import Voted from '../../components/voted/Voted';
+import { getMyInfo } from '../../libs/api/authAPI';
 
 const Userdata = () => {
   const [active,setActive] = useState(true);

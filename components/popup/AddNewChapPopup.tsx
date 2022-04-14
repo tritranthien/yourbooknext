@@ -33,7 +33,6 @@ const AddNewChapPopup:React.FC<PopupProps> = ({novel,closeChap}:PopupProps) => {
     } catch (error) {
       
       toast.update(upChapToast,{ render:`lỗi đăng tải chương: ${title}`,autoClose: 5000, type: 'error',isLoading: false})
-      console.log(error.response);
     }
   }
   

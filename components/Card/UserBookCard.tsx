@@ -1,12 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
-import { AiOutlineFileAdd } from 'react-icons/ai'
-import { MdEditNote } from 'react-icons/md'
-import { Author } from '../../interface/_Author'
-import { Category } from '../../interface/_Category'
-import { Novel, SerVerNovel } from '../../interface/_Novel'
-import EditNovelPopup from '../popup/EditNovelPopup'
+import React from 'react'
+import { SerVerNovel } from '../../interface/_Novel'
 
 interface CardProps{
     novel: SerVerNovel

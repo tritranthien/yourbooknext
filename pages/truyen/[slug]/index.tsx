@@ -1,11 +1,9 @@
-import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import MainNovels from '../../../components/truyen/MainNovels';
 import Titlebanner from '../../../components/truyen/Titlebanner';
 import { Novel, SerVerNovel } from '../../../interface/_Novel';
-import { checkMyFollow } from '../../../libs/api/authAPI';
-import { getNovel, rated } from '../../../libs/api/novelAPI';
+import { getNovel } from '../../../libs/api/novelAPI';
 
 interface contextProps{ 
 	params : { 

@@ -1,9 +1,6 @@
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React from 'react'
 import { FaWindowClose } from 'react-icons/fa'
-import { useQuery } from 'react-query'
-import { getChapsNoLimit } from '../../libs/api/novelAPI'
 interface ChapProps{
     closePopup: () => void,
     settingThemse: (thems:{bg:string,color:string})=>void,

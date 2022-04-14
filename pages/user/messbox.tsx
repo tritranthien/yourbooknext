@@ -1,10 +1,9 @@
-import { FC, ReactElement, useState } from 'react'
-import React from 'react';
-import USDBlayout from '../../components/userDBLayout/USDBlayout';
-import { useQuery } from 'react-query';
-import { myRecievers } from '../../libs/api/messAPI';
-import { parseISO,format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
+import React, { ReactElement, useState } from 'react';
 import { AiFillCloseSquare } from 'react-icons/ai';
+import { useQuery } from 'react-query';
+import USDBlayout from '../../components/userDBLayout/USDBlayout';
+import { myRecievers } from '../../libs/api/messAPI';
 
 const Userdata = () => {
   const [open,setOpen] = useState(-1);

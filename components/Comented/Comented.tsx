@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import React from 'react'
-import { BsFillSdCardFill } from 'react-icons/bs';
+import React from 'react';
 import { useQuery } from 'react-query';
-import { getCmted, getVoted } from '../../libs/api/authAPI';
+import { getCmted } from '../../libs/api/authAPI';
 
 const Comented = () => {
   const {data,isSuccess,error} = useQuery('myComented',getCmted);

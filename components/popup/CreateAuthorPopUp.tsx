@@ -19,7 +19,7 @@ const CreateAuthorPopUp:React.FC<PopUpProps> = ({showToast,closePopup}: PopUpPro
   const addNewAuthor = async () => {
     const newAuthor:AuthorWithOutId = {
         name: authorName,
-        birth: new Date(authorBirth),
+        birth: new Date(authorBirth).toISOString(),
         des: authorDes
     }
     try {
