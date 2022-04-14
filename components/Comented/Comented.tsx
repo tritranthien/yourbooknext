@@ -12,12 +12,16 @@ const Comented = () => {
                       <ul className="p-5">
                      
                         {
-                          isSuccess && data.map((item,index)=>{
-                            return <li key={index} className="flex py-1">
-                              <span className="px-3 font-bold line-clamp-1"><Link passHref href={`/truyen/${item.novel.slug}`}><a className="text-sky-500">{item.novel.title}</a></Link></span>
-                              <span className="px-3 line-clamp-1"><i>{`"${item.content}"`}</i></span>
-                            </li>
-                          })
+                          isSuccess && <>
+                          {
+                            data.map((item,index)=>{
+                              return <li key={index} className="flex py-1">
+                                <span className="px-3 font-bold line-clamp-1"><Link passHref href={`/truyen/${item.novel.slug}`}><a className="text-sky-500">{item.novel.title}</a></Link></span>
+                                <span className="px-3 line-clamp-1"><i>{`"${item.content}"`}</i></span>
+                              </li>
+                            })
+                          }
+                          </>
                         }
                       </ul>
                     </div>
