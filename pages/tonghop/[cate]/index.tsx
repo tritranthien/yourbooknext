@@ -100,7 +100,7 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
 export const getStaticPaths = async () => {
     const cates = await getAllCates();
     const paths = cates.map(item=>({
-      params: {cate: item.cate ,cate_id: item._id },
+      params: {cate: item.slug},
     }))
     return { paths, fallback: 'blocking' }
 }
