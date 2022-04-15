@@ -8,6 +8,7 @@ import { format, parseISO } from 'date-fns';
 const Chap:React.FC<{novel:SerVerNovel}> = ({novel}:{novel:SerVerNovel}) => {
   const router = useRouter();
   const path = router.asPath;
+  const [mychaps, setMychaps] = useState([]);
   const [page,setPage] = useState(1);
   const chaps = useChaps(novel._id,page);
   const handlePageChange = (event:{selected:number}) => {
@@ -15,7 +16,10 @@ const Chap:React.FC<{novel:SerVerNovel}> = ({novel}:{novel:SerVerNovel}) => {
   }
   useEffect(()=>{
     chaps.refetch();
-  },[page,chaps])
+  },[page,novel])
+  // if(chaps.isFetching){
+  //   return <span className="w-full text-center px-3 py-1 font bold">loadding...</span>
+  // }
   return <div>
     { 
       novel.chapCount > 50 && 

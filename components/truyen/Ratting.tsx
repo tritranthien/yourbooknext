@@ -78,6 +78,9 @@ const Ratting:React.FC<RateProps> = ({novel,loged}: RateProps) => {
     :
     <p className='p-5'><i>bạn phải đăng nhập mới có thể đánh giá truyện</i></p>
     }
+    {
+      data && data.length <=0 && <span className='px-3 py-1'><i>chưa có đánh giá nào, hãy là người đầu tiên nhé</i></span>
+    }
     { isSuccess && data?.map((item,index)=>{
       return <RateContent rate={item} key={index}/>
     }) }

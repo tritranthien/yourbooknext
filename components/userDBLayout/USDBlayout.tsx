@@ -24,14 +24,10 @@ const USDBlayout: React.FC = ({ children}) => {
         const checkMe = async () => {
             try {
                 const res = await getMe();
-                if(res.status === 200){
-                    setName(res.data.username);
-                }else{
-                    router.push('/login');
-                }
+                    setName(res.username);
+               
             } catch (error) {
                 router.push('/login');
-                console.log(error);
             }
         }
         checkMe();

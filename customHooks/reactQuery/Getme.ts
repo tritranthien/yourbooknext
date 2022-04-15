@@ -1,10 +1,7 @@
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { UserFind } from '../../interface/_User';
 import { getMe } from '../../libs/api/authAPI';
+
 export const useGetme = () => {
-    return useQuery('checkLogin', getMe, {onError: (err) =>{
-        localStorage.removeItem('userInfo');
-        localStorage.removeItem('jwtToken');
-    },
-    cacheTime: 0
-});
+    return useQuery('checkLogin', getMe);
 }

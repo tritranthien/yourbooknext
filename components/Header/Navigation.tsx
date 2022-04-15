@@ -15,16 +15,25 @@ import { NotiFullRes, ServerNoti } from '../../interface/_Noti';
 const Navigation: React.FC = () => {
 const [currentPage,setCurrentPage] = useState(0);
 const [showNoti,setShowNoti] = useState(false);
+const [userId,setUserId] = useState('');
 const [NotiList,setNotiList] = useState<ServerNoti[]>([]);
 // const [userName, setname] = useState('');
 const route = useRouter();
 const [uid,setUid] = useState('');
 const [notRead,setNotRead] = useState(0);
-const { data, isSuccess, error } = useGetme();
-const ck = useQuery('followedFromUser',()=>followeds(),{onSuccess: dt=>{
-    const socket = io("http://localhost:3000/");   
+const { data, isSuccess, error,refetch } = useQuery(['checkLogin',userId], getMe, {
+    enabled: false,
+    onError: ()=>{
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('jwtToken');
+    }
+});
+const ck = useQuery('followedFromUser',()=>followeds(),{
+    enabled: false,
+    onSuccess: dt=>{
+    const socket = io("https://yourbook-be-node.vercel.app:3000/");   
     if(isSuccess){
-        socket.emit('join',data?.data._id);
+        socket.emit('join',data?._id);
     }
     if(dt.length > 0){
         dt.forEach(e=>{
@@ -39,7 +48,9 @@ const ck = useQuery('followedFromUser',()=>followeds(),{onSuccess: dt=>{
             })
         }
 }});
-const noti = useQuery('notification',getNotis,{onSuccess: data=>{
+const noti = useQuery('notification',getNotis,{
+    enabled: false,
+    onSuccess: data=>{
     setNotiList([...data.notis]);
     if(data.count != notRead){
         setNotRead(data.count);
@@ -87,6 +98,23 @@ const turnToReaded = async () => {
         }
     
 }
+useEffect(()=>{
+    if (localStorage.getItem('userInfo')) {
+        const stringUser = localStorage.getItem('userInfo');
+        if(stringUser != null) {
+            const userData = JSON.parse(stringUser);
+            setUserId(userData._id);
+        }
+        
+    }
+},[])
+useEffect(()=>{
+    if(userId != ''){
+        refetch();
+        ck.refetch();
+        noti.refetch();
+    }
+},[userId])
  return (
   <div className="w-full sticky z-30">
       <div className={`container ${ route.pathname == '/' ? 'flex flex-nowrap justify-between' : 'hidden'}  mx-auto w-full h-14`}>
@@ -132,7 +160,7 @@ const turnToReaded = async () => {
             </ul>
             
                 <div className="flex items-center text-black relative">
-                    <span className='text-blue-400 ml-3 p-3 text-sm'>{ isSuccess ? <Link passHref href="/user/account"><a>{data?.data.username}</a></Link> : <Link passHref href="/login"><a>Đăng nhập</a></Link>}</span>
+                    <span className='text-blue-400 ml-3 p-3 text-sm'>{ isSuccess ? <Link passHref href="/user/account"><a>{data?.username}</a></Link> : <Link passHref href="/login"><a>Đăng nhập</a></Link>}</span>
                     
                     
                     {

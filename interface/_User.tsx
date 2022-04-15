@@ -6,7 +6,6 @@ export interface User{
 }
 
 export interface UserFind extends User{
-    username: string;
     _id: string;
     email: string
 }

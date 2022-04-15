@@ -30,8 +30,8 @@ export const signUpAPI = async (username: string,password: string, email: string
 }
 export const getMe = async () => {
     const authHeader = getAuthHeader();
-    const res = await API.get(`/auth/me`,authHeader);
-    return res;
+    const res = await API.get<UserFind>(`/auth/me`,authHeader);
+    return res.data;
 }
 export const checkMyFollow = async (novelId: string) => {
     const authHeader = getAuthHeader();
