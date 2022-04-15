@@ -1,17 +1,18 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState,useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiFillHome } from 'react-icons/ai';
-import { IoIosNotifications } from 'react-icons/io';
 import { FiSearch } from 'react-icons/fi';
+import { IoIosNotifications } from 'react-icons/io';
 import { MdDarkMode } from 'react-icons/md';
-import { useGetAllCates } from '../../customHooks/reactQuery/Categoris';
-import { useGetme } from '../../customHooks/reactQuery/Getme';
-import {io} from 'socket.io-client'
-import { getMe, getNotis,readNotiInNav } from '../../libs/api/authAPI';
 import { useQuery } from 'react-query';
+import { io } from 'socket.io-client';
+import { useGetAllCates } from '../../customHooks/reactQuery/Categoris';
+import { ServerNoti } from '../../interface/_Noti';
+import { getMe, getNotis, readNotiInNav } from '../../libs/api/authAPI';
 import { followeds } from '../../libs/api/novelAPI';
-import { NotiFullRes, ServerNoti } from '../../interface/_Noti';
+import Pusher from 'pusher-js';
+import { type } from 'os';
 const Navigation: React.FC = () => {
 const [currentPage,setCurrentPage] = useState(0);
 const [showNoti,setShowNoti] = useState(false);
@@ -30,24 +31,7 @@ const { data, isSuccess, error,refetch } = useQuery(['checkLogin',userId], getMe
 });
 const ck = useQuery('followedFromUser',()=>followeds(),{
     enabled: false,
-    onSuccess: dt=>{
-    const socket = io("http://localhost:3000/");   
-    if(isSuccess){
-        socket.emit('join',data?._id);
-    }
-    if(dt.length > 0){
-        dt.forEach(e=>{
-                socket.emit('join',e.novel._id);
-            })
-            socket.on('newchap',mdt=>{
-                console.log(mdt);
-                noti.refetch();
-            }).on('newmess',mdt=>{
-                console.log(mdt);
-                noti.refetch();
-            })
-        }
-}});
+});
 const noti = useQuery('notification',getNotis,{
     enabled: false,
     onSuccess: data=>{
@@ -109,7 +93,7 @@ useEffect(()=>{
     }
 },[])
 useEffect(()=>{
-    if(userId != ''){
+    if( userId && userId.length > 0){
         refetch();
         ck.refetch();
         noti.refetch();
