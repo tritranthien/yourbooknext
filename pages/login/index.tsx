@@ -15,9 +15,7 @@ const Login:React.FC = () => {
     const checkLogin = async () => {
       try {
         const res = await getMe();
-        if(res.status === 200){
           router.push('/user/account');
-        }
       } catch (error) {
         setLoading(false);
       }
