@@ -13,6 +13,9 @@ const Userdata = () => {
           {/* {
             isSuccess && data?.length <= 0 && <p className='p-2'><i>Bạn chưa theo dõi chuyện nào cả</i></p>
           } */}
+          {
+            data && data.length <= 0 && <p className='p-2'><i>Bạn chưa theo dõi chuyện nào cả</i></p>
+          }
             {
               isSuccess && data?.map((item,index)=>{
                 return <div key={index} className="group w-[220px] h-[350px] relative">

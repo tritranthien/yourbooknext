@@ -13,6 +13,9 @@ const Userdata = () => {
             <span className="font-bold text-2xl">thư tới</span>
             <ul className="w-full mt-4">
               {
+                data && data.length <= 0 && <li className="py-1 px-3"><i>bạn chưa theo dõi truyện nào</i></li>
+              }
+              {
                 isSuccess && data?.map((item,index)=>{
                   return <li onClick={()=>setOpen(index)} key={index} className="cursor-pointer flex text-sm  w-full p-2 border-b-[1px] border-b-gray-300 border-t-[1px] -mt-[1px] border-t-gray-300">
                     <span className="font-bold mr-2">from:</span>

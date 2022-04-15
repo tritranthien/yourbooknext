@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import { Novel, SerVerNovel } from '../../interface/_Novel';
+import { SerVerNovel } from '../../interface/_Novel';
 const Card: React.FC<{novel: SerVerNovel}> = ({novel}) => {
   return <div className='w-[280px] h-[350px] shadow-sm'>
     <div className='relative w-full h-2/5'>

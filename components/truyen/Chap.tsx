@@ -12,11 +12,10 @@ const Chap:React.FC<{novel:SerVerNovel}> = ({novel}:{novel:SerVerNovel}) => {
   const chaps = useChaps(novel._id,page);
   const handlePageChange = (event:{selected:number}) => {
     setPage(event.selected+1);
-    console.log(event)
   }
   useEffect(()=>{
     chaps.refetch();
-  },[page])
+  },[page,chaps])
   return <div>
     { 
       novel.chapCount > 50 && 

@@ -35,8 +35,19 @@ const All:React.FC<AllPageProps> = ({novels,cateName,cateId,total}:AllPageProps)
             }
         }
     })
-    useEffect(()=>{
+    const setStt = async (value:string) => {
+        setStatusNovel(value);
         refetch();
+    }
+    const setChap = async (value:number) => {
+        setchapNumNovel(value);
+        refetch();
+    }
+    const setSort = async (value:'updatedAt' | 'views' | 'likes') => {
+        setsortNovel(value);
+        refetch();
+    }
+    useEffect(()=>{
         window.scrollTo(0, 0);
     },[statusNovel,chapNumNovel,sortNovel,page])
 
@@ -52,19 +63,19 @@ const All:React.FC<AllPageProps> = ({novels,cateName,cateId,total}:AllPageProps)
             <div className=" w-1/4 p-2">
                 <div className='sticky top-0'>
                     <span className="font-bold w-full block mb-2">Tình trạng</span>
-                    <button onClick={()=>setStatusNovel('all')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'all' && `bg-orange-300`}`}>tất cả</button>
-                    <button onClick={()=>setStatusNovel('continue')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'continue' && `bg-orange-300`}`}>đang ra</button>
-                    <button onClick={()=>setStatusNovel('completed')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'completed' && `bg-orange-300`}`}>hoàn thành</button>
+                    <button onClick={()=>setStt('all')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'all' && `bg-orange-300`}`}>tất cả</button>
+                    <button onClick={()=>setStt('continue')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'continue' && `bg-orange-300`}`}>đang ra</button>
+                    <button onClick={()=>setStt('completed')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'completed' && `bg-orange-300`}`}>hoàn thành</button>
                     <span className="font-bold w-full block mt-5 mb-2">Số chương</span>
-                    <button onClick={()=>setchapNumNovel(0)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 0 && `bg-orange-300`}`}>tất cả</button>
-                    <button onClick={()=>setchapNumNovel(300)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 300 && `bg-orange-300`}`}>{`< 300`}</button>
-                    <button onClick={()=>setchapNumNovel(1000)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 1000 && `bg-orange-300`}`}>{`300-1000`}</button>
-                    <button onClick={()=>setchapNumNovel(2000)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 2000 && `bg-orange-300`}`}>{`1000-2000`}</button>
-                    <button onClick={()=>setchapNumNovel(2001)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 2001 && `bg-orange-300`}`}>{`> 2000`}</button>
+                    <button onClick={()=>setChap(0)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 0 && `bg-orange-300`}`}>tất cả</button>
+                    <button onClick={()=>setChap(300)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 300 && `bg-orange-300`}`}>{`< 300`}</button>
+                    <button onClick={()=>setChap(1000)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 1000 && `bg-orange-300`}`}>{`300-1000`}</button>
+                    <button onClick={()=>setChap(2000)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 2000 && `bg-orange-300`}`}>{`1000-2000`}</button>
+                    <button onClick={()=>setChap(2001)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 2001 && `bg-orange-300`}`}>{`> 2000`}</button>
                     <span className="font-bold w-full block mt-5 mb-2">Sắp xếp</span>
-                    <button onClick={()=>setsortNovel('updatedAt')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${sortNovel === 'updatedAt' && `bg-orange-300`}`}>vừa cập nhật</button>
-                    <button onClick={()=>setsortNovel('likes')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${sortNovel === 'likes' && `bg-orange-300`}`}>yêu thích</button>
-                    <button onClick={()=>setsortNovel('views')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${sortNovel === 'views' && `bg-orange-300`}`}>xem nhiều</button>
+                    <button onClick={()=>setSort('updatedAt')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${sortNovel === 'updatedAt' && `bg-orange-300`}`}>vừa cập nhật</button>
+                    <button onClick={()=>setSort('likes')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${sortNovel === 'likes' && `bg-orange-300`}`}>yêu thích</button>
+                    <button onClick={()=>setSort('views')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${sortNovel === 'views' && `bg-orange-300`}`}>xem nhiều</button>
                     
                 </div>
                 

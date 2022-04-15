@@ -7,7 +7,7 @@ import { mySents } from '../../libs/api/messAPI';
 
 const Userdata = () => {
   const [open,setOpen] = useState(-1);
-  const {data,isSuccess,error} = useQuery('myMessSent',mySents)
+  const {data,isSuccess,error} = useQuery('myMessSent',mySents);
     return (
         <div className="w-full min-h-screen p-4">
             <span className="font-bold text-2xl">thư đã gửi</span>
