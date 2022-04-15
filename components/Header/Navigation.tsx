@@ -31,7 +31,7 @@ const { data, isSuccess, error,refetch } = useQuery(['checkLogin',userId], getMe
 const ck = useQuery('followedFromUser',()=>followeds(),{
     enabled: false,
     onSuccess: dt=>{
-    const socket = io("https://yourbook-be-node.vercel.app:3000/");   
+    const socket = io("http://localhost:3000/");   
     if(isSuccess){
         socket.emit('join',data?._id);
     }
