@@ -15,9 +15,16 @@ const Userdata = () => {
   const [userList,setUserList] = useState<UserFind[]>([]);
   const [revicerList,setReciver] = useState<UserFind[]>([]);
   const debouncedSave = useCallback(
-		debounce((nextValue:string) => finByName(nextValue), 1000),
-		[], // will be created only once initially
-	);
+    debounce( async (nextValue:string) => {
+        if(nextValue.length > 0) {
+          const res = await finByName(nextValue);
+          setUserList([...res]); 
+        }else{
+          setUserList([]);
+        }
+    }, 1000),
+    [], // will be created only once initially
+  );
   const handlePush = (newitem:UserFind) => {
     setReciver(pre=>[...pre,newitem]);
     setFindUser('');
@@ -30,19 +37,7 @@ const Userdata = () => {
   const handleInputFindChange = async (e:ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setFindUser(value);
-
-    if(value.length > 0){
-      const listUser = await debouncedSave(value);
-      if(listUser){
-        if(listUser.length > 0){
-          setUserList([...listUser]);
-        }else {
-          setUserList([]);
-        }
-      }
-    }
-      
-    
+    debouncedSave(value);
   }
   const handleReset = () => {
     setContent('');
@@ -79,7 +74,7 @@ const Userdata = () => {
                   }
                   {
                     finduser.length > 0 && userList.length > 0 && userList.map((item,index)=>{
-                      return <li key={index} onClick={()=>handlePush(item)} className="cursor-pointer">{item.username}</li>
+                      return <li key={index} onClick={()=>handlePush(item)} className="cursor-pointer text-orange-500 py-1 px-3 font-bold">{item.username}</li>
                     })
                   }
               </ul>

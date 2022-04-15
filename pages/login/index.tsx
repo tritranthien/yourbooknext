@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
@@ -48,9 +49,16 @@ const Login:React.FC = () => {
       alert('đã xảy ra lỗi khi đăng ký');
     }
   }
+  useEffect(()=>{
+    setUserName('');
+    setPassWord('');
+    setRPass('');
+    setEmail('');
+  },[isSingup]);
   if(loadding) {
     return <div className="flex justify-center items-center w-screen h-screen font-extrabold text-3xl"> loading...</div>
   }
+  
   return (
     <div className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-screen h-screen flex justify-center items-center'>
       <div className="w-[300px] min-h-[400px] bg-white rounded-md shadow-md">
@@ -60,22 +68,25 @@ const Login:React.FC = () => {
         </div>
         <div className="w-full p-7">
           <label htmlFor="username" className="w-full text-sm">Tên đăng nhập</label>
-          <input  onChange={(e:ChangeEvent<HTMLInputElement>)=>setUserName(e.target.value)} type="text" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
+          <input value={username || ''} onChange={(e:ChangeEvent<HTMLInputElement>)=>setUserName(e.target.value)} type="text" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
           { isSingup && <>
             <label htmlFor="email" className="w-full text-sm">Email</label>
-            <input onChange={(e:ChangeEvent<HTMLInputElement>)=>setEmail(e.target.value)} type="text" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
+            <input value={email || ''} onChange={(e:ChangeEvent<HTMLInputElement>)=>setEmail(e.target.value)} type="text" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
           </>}
           
           <label htmlFor="password" className="w-full text-sm">Mật khẩu</label>
-          <input onChange={(e:ChangeEvent<HTMLInputElement>)=>setPassWord(e.target.value)} type="password" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
+          <input value={password || ''} onChange={(e:ChangeEvent<HTMLInputElement>)=>setPassWord(e.target.value)} type="password" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
           { isSingup && <>
             <label htmlFor="retypePassword" className="w-full text-sm">Nhập lại mật khẩu</label>
-          <input onChange={(e:ChangeEvent<HTMLInputElement>)=>setRPass(e.target.value)} type="password" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
+          <input value={RPass || ''} onChange={(e:ChangeEvent<HTMLInputElement>)=>setRPass(e.target.value)} type="password" className="w-full px-2 py-1 outline-none rounded-md border border-gray-400 mt-2 mb-3" />
           </>}
           
           <button onClick={isSingup ? signUp : signIn} className="px-3 py-1 mt-4 bg-blue-500 text-white rounded-md mx-auto">{isSingup ? 'Đăng ký' : 'Đăng nhập'}</button>
           <br />
-          { !isSingup && <a href="#" className="block text-blue-400 mt-5 w-full text-center">quên mật khẩu?</a>}
+          { !isSingup && <>
+            <Link passHref href='#'><a className="block text-blue-400 mt-5 w-full text-center">quên mật khẩu?</a></Link>
+            <Link passHref href='/'><a className="block text-blue-400 mt-1 w-full text-center">quay lại trang chủ</a></Link>
+          </>}
         </div>
       </div>
     </div>

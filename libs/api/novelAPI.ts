@@ -1,8 +1,9 @@
 import { Author } from '../../interface/_Author';
 import { Category } from '../../interface/_Category';
 import { Chap, SerVerChap } from '../../interface/_Chap';
-import { Novel, ServerFollowData, SerVerNovel, ServerNovelPaging } from '../../interface/_Novel'
+import { Novel, NovelSearch, ServerFollowData, SerVerNovel, ServerNovelPaging } from '../../interface/_Novel'
 import { ServerRatting } from '../../interface/_Ratting';
+import { UserFind } from '../../interface/_User';
 import API, { getAuthHeader } from './api'
 
 export interface resStatus{
@@ -122,5 +123,10 @@ export const getByTurn = async (turn:string,page:number=1,) => {
 }
 export const getByAuthor = async (author:string) => {
     const res = await API.get<SerVerNovel[]>(`/novels/getbyauthor/${author}`);
+    return res.data;
+}
+
+export const searchAll = async (text:string) => {
+    const res = await API.get<(NovelSearch | Author)[]>(`/novels/search/${text}`);
     return res.data;
 }

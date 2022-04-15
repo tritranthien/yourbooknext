@@ -1,5 +1,6 @@
+import { debounce } from 'lodash';
 import Image from 'next/image';
-import React, { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FocusEvent, useCallback, useEffect, useState } from 'react';
 import { IoMdAddCircle } from 'react-icons/io';
 import { toast, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -79,20 +80,21 @@ const handleInputChange = (e:ChangeEvent<HTMLInputElement | HTMLSelectElement | 
   setNovel(pre=>({...pre, [name]: value}));
     console.log(value);
 }
-
-const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
+const debouncedSave = useCallback(
+  debounce( async (nextValue:string) => {
+      if(nextValue.length > 0) {
+          const res = await getAuthors(nextValue);
+          setAuthList([...res]); 
+      }else{
+          setAuthList([]);
+      }
+  }, 1000),
+  [], // will be created only once initially
+);
+const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
   setNovel(pre=>({...pre,author:''}));
-  await setAuthorSearch(e.target.value);
-  if (authorSearch == '' || e.target.value == '') {
-    setAuthList([]);
-    return
-  }
-  try {
-    const result = await getAuthors(authorSearch);
-    setAuthList([...result]);
-  } catch (error) {
-    setAuthList([]);
-  }
+  setAuthorSearch(e.target.value);
+  debouncedSave(e.target.value);
 }
 
 
@@ -220,7 +222,7 @@ const handleFindAuthor = async (e:ChangeEvent<HTMLInputElement>) => {
                           setAuthorSearch(item.name);
                           // setAuthPicked(true);
                           setAuthList([])
-                        }} className="w-full px-3 py-1" key={index}>{item.name}</li>
+                        }} className="w-full px-3 py-1 cursor-pointer font-bold text-blue-500" key={index}>{item.name}</li>
                       })
                     }
                   </ul>

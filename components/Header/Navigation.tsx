@@ -1,26 +1,27 @@
+import { debounce } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { AiFillHome } from 'react-icons/ai';
 import { FiSearch } from 'react-icons/fi';
 import { IoIosNotifications } from 'react-icons/io';
 import { MdDarkMode } from 'react-icons/md';
 import { useQuery } from 'react-query';
-import { io } from 'socket.io-client';
 import { useGetAllCates } from '../../customHooks/reactQuery/Categoris';
+import { Author } from '../../interface/_Author';
 import { ServerNoti } from '../../interface/_Noti';
+import { NovelSearch } from '../../interface/_Novel';
+import { UserFind } from '../../interface/_User';
 import { getMe, getNotis, readNotiInNav } from '../../libs/api/authAPI';
-import { followeds } from '../../libs/api/novelAPI';
-import Pusher from 'pusher-js';
-import { type } from 'os';
+import { followeds, searchAll } from '../../libs/api/novelAPI';
 const Navigation: React.FC = () => {
 const [currentPage,setCurrentPage] = useState(0);
+const [SearchList,setSearchList] = useState<(NovelSearch | Author)[]>([]);
 const [showNoti,setShowNoti] = useState(false);
 const [userId,setUserId] = useState('');
 const [NotiList,setNotiList] = useState<ServerNoti[]>([]);
-// const [userName, setname] = useState('');
+const [searchText, setSearch] = useState('');
 const route = useRouter();
-const [uid,setUid] = useState('');
 const [notRead,setNotRead] = useState(0);
 const { data, isSuccess, error,refetch } = useQuery(['checkLogin',userId], getMe, {
     enabled: false,
@@ -29,6 +30,17 @@ const { data, isSuccess, error,refetch } = useQuery(['checkLogin',userId], getMe
         localStorage.removeItem('jwtToken');
     }
 });
+const debouncedSave = useCallback(
+    debounce( async (nextValue:string) => {
+        if(nextValue.length > 0) {
+            const res = await searchAll(nextValue);
+            setSearchList([...res]); 
+        }else{
+            setSearchList([]);
+        }
+    }, 1000),
+    [], // will be created only once initially
+);
 const ck = useQuery('followedFromUser',()=>followeds(),{
     enabled: false,
 });
@@ -82,6 +94,10 @@ const turnToReaded = async () => {
         }
     
 }
+const searchNow = (text:string) => {
+    setSearch(text);
+    debouncedSave(text);
+}
 useEffect(()=>{
     if (localStorage.getItem('userInfo')) {
         const stringUser = localStorage.getItem('userInfo');
@@ -104,9 +120,30 @@ useEffect(()=>{
       <div className={`container ${ route.pathname == '/' ? 'flex flex-nowrap justify-between' : 'hidden'}  mx-auto w-full h-14`}>
         <p className="w-36 h-full text-center text-2xl font-bold leading-[56px] text-sky-200">Your Book</p>
         <div className="flex h-14 items-center">
-            <div className="flex flex-nowrap h-8 rounded-md ring-1 bg-white ring-slate-900/10 overflow-hidden">
+            <div className="relative flex flex-nowrap h-8 ring-1 bg-white ring-slate-900/10 ">
                 <FiSearch className='self-center w-8 '/>
-                <input type="text" className="w-[calc(100%_-_w-8)] outline-none pr-2 placeholder-gray-300" placeholder='Tìm kiếm ...'/>
+                <input name="search" value={searchText || ''} onChange={(e:ChangeEvent<HTMLInputElement>)=>searchNow(e.target.value)} type="text" className="w-[calc(100%_-_w-8)] outline-none pr-2 placeholder-gray-300 " placeholder='Tìm kiếm ...'/>
+                <ul className="absolute z-50 top-8 left-0 w-full bg-gray-300 box-shadow-md text-sm">
+                    {
+                        SearchList.length > 0 && SearchList.map((item,index)=>{
+                            if('title' in item){
+                                return <Link key={index} passHref href={`/truyen/${item.slug}`}><a>
+                                            <li className="px-3 py-2">
+                                                <b>{item.title}</b>
+                                                <br/>
+                                                <i>truyện</i>
+                                            </li>
+                                        </a></Link>
+                            }else{
+                                return <Link key={index} passHref href={`/tac-gia/${item.slug}`}><a><li className="px-3 py-2">
+                                            <b>{item.name}</b>
+                                            <br/>
+                                            <i>tác giả</i>
+                                        </li></a></Link>    
+                                }
+                        })
+                    }
+                </ul>
             </div>
             <ul className="flex list-none px-3 leading-8">
                     {

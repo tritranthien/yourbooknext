@@ -30,3 +30,8 @@ export interface ServerNovelPaging{
     novels:SerVerNovel[],
     total: number
 }
+export interface NovelSearch{
+    title: string,
+    _id:string,
+    slug:string,
+}
