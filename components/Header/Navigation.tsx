@@ -122,10 +122,12 @@ useEffect(()=>{
     setOpenMenu(false);
 },[route.asPath]);
  return (
-  <div className="w-full md:sticky z-30 md:block fixed max-h-screen overflow-x-hidden md:overflow-x-visible overflow-y-auto md:overflow-y-visible">
-      {
-          !openMenu && <CgMenuGridO onClick={()=>setOpenMenu(true)} className={`fixed top-0 left-0 z-40 md:hidden opacity-60`} size={40} color="orange"/>
-      }
+     <>
+        {
+            !openMenu && <CgMenuGridO onClick={()=>setOpenMenu(true)} className={`fixed top-1 left-1 z-[120] md:hidden opacity-60`} size={40} color="orange"/>
+        }
+        <div className="w-full md:sticky z-30 md:block fixed max-h-screen overflow-x-hidden md:overflow-x-visible overflow-y-auto md:overflow-y-visible">
+      
       
       <div className={`container ${ route.pathname == '/' ? 'md:flex md:flex-nowrap md:justify-between' : 'hidden'} mx-auto w-full md:h-14`}>
         <p className="w-36 h-full text-center text-2xl font-bold leading-[56px] text-sky-200 hidden md:block">Your Book</p>
@@ -230,6 +232,8 @@ useEffect(()=>{
       
     
   </div>
+     </>
+  
  );
   
 };
