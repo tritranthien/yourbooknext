@@ -26,7 +26,7 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
   const { cate } = router.query;
   return (
     <div className="w-full">
-      <div className="relative w-full h-48">
+      <div className="relative w-full h-[250px] md:h-48">
         <Image layout='fill' alt="tong hop top 1" src={novelsUpdated.length > 0 ? novelsUpdated[0].image : '/images/tt3.jpg'} objectFit='cover'/>
         <span className="absolute top-0 left-0 w-full h-full bg-black/70 text-2xl font-bold flex justify-center items-center uppercase text-white">{cateName}</span>
       </div>

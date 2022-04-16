@@ -122,12 +122,12 @@ useEffect(()=>{
     setOpenMenu(false);
 },[route.asPath]);
  return (
-  <div className="w-full md:sticky z-30 md:block fixed max-h-screen overflow-y-auto md:overflow-visible">
+  <div className="w-full md:sticky z-30 md:block fixed max-h-screen overflow-x-hidden md:overflow-x-visible overflow-y-auto md:overflow-y-visible">
       {
           !openMenu && <CgMenuGridO onClick={()=>setOpenMenu(true)} className={`fixed top-0 left-0 z-40 md:hidden opacity-60`} size={40} color="orange"/>
       }
       
-      <div className={`container ${ route.pathname == '/' ? 'hidden md:flex md:flex-nowrap md:justify-between' : 'hidden'}  mx-auto w-full h-14`}>
+      <div className={`container ${ route.pathname == '/' ? 'md:flex md:flex-nowrap md:justify-between' : 'hidden'} mx-auto w-full md:h-14`}>
         <p className="w-36 h-full text-center text-2xl font-bold leading-[56px] text-sky-200 hidden md:block">Your Book</p>
         <div className="flex h-14 items-center">
             <div className="relative flex flex-nowrap h-8 ring-1 bg-white ring-slate-900/10 ">
@@ -170,7 +170,7 @@ useEffect(()=>{
         </div>
         
       </div>
-      <div className={`w-full max-w-[375px] md:max-w-full relative ${openMenu ? 'block' : 'hidden'} md:block ${ blackbg  && 'bg-black' }`}>
+      <div className={`w-full max-w-[375px] md:max-w-full relative ${openMenu ? 'block' : 'hidden'} md:block ${ blackbg  && 'bg-black' } ${ route.pathname == '/' && 'mt-[30px] md:mt-0'}`}>
         <VscGitPullRequestClosed onClick={()=>setOpenMenu(false)} className={`absolute top-1 right-1 z-40 md:hidden`} size={30} color="orange"/>
         <div className="mx-auto sticky top-0 text-gray-300 container flex flex-col md:flex-row items-center justify-between md:h-7 w-full bg-gray-800 md:bg-transparent">
             <ul className="md:text-sm font-bold md:font-normal flex flex-col md:flex-row h-full list-none gap-y-1 py-5 md:py-0">
