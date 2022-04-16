@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { AiFillHome } from 'react-icons/ai';
+import { CgMenuGridO } from 'react-icons/cg';
+import { VscGitPullRequestClosed } from 'react-icons/vsc';
 import { FiSearch } from 'react-icons/fi';
 import { IoIosNotifications } from 'react-icons/io';
 import { MdDarkMode } from 'react-icons/md';
@@ -15,6 +17,7 @@ import { UserFind } from '../../interface/_User';
 import { getMe, getNotis, readNotiInNav } from '../../libs/api/authAPI';
 import { followeds, searchAll } from '../../libs/api/novelAPI';
 const Navigation: React.FC = () => {
+const [openMenu,setOpenMenu] = useState(false);
 const [currentPage,setCurrentPage] = useState(0);
 const [SearchList,setSearchList] = useState<(NovelSearch | Author)[]>([]);
 const [showNoti,setShowNoti] = useState(false);
@@ -115,10 +118,17 @@ useEffect(()=>{
         noti.refetch();
     }
 },[userId])
+useEffect(()=>{
+    setOpenMenu(false);
+},[route.asPath]);
  return (
-  <div className="w-full sticky z-30 hidden md:block">
-      <div className={`container ${ route.pathname == '/' ? 'flex flex-nowrap justify-between' : 'hidden'}  mx-auto w-full h-14`}>
-        <p className="w-36 h-full text-center text-2xl font-bold leading-[56px] text-sky-200">Your Book</p>
+  <div className="w-full md:sticky z-30 md:block fixed max-h-screen overflow-y-auto md:overflow-visible">
+      {
+          !openMenu && <CgMenuGridO onClick={()=>setOpenMenu(true)} className={`fixed top-0 left-0 z-40 md:hidden opacity-60`} size={40} color="orange"/>
+      }
+      
+      <div className={`container ${ route.pathname == '/' ? 'hidden md:flex md:flex-nowrap md:justify-between' : 'hidden'}  mx-auto w-full h-14`}>
+        <p className="w-36 h-full text-center text-2xl font-bold leading-[56px] text-sky-200 hidden md:block">Your Book</p>
         <div className="flex h-14 items-center">
             <div className="relative flex flex-nowrap h-8 ring-1 bg-white ring-slate-900/10 ">
                 <FiSearch className='self-center w-8 '/>
@@ -160,15 +170,16 @@ useEffect(()=>{
         </div>
         
       </div>
-      <div className={`w-full ${ blackbg  && 'bg-black' }`}>
-        <div className="mx-auto sticky top-0 text-gray-300 container flex items-center justify-between h-7 w-full bg-transparent">
-            <ul className="text-sm flex h-full list-none">
-            <li className="px-2 flex items-center hover:text-yellow-500"><Link passHref href='/'><a><AiFillHome size={20}/></a></Link></li>
-            <li className="group leading-7 h-full relative hover: px-2 first-letter:uppercase">Thể loại
-                            <ul className="absolute invisible group-hover:visible hover:visible top-7 py-3 px-4 flex w-[700px] flex-wrap list-none bg-gray-800 text-slate-200">
+      <div className={`w-full max-w-[375px] md:max-w-full relative ${openMenu ? 'block' : 'hidden'} md:block ${ blackbg  && 'bg-black' }`}>
+        <VscGitPullRequestClosed onClick={()=>setOpenMenu(false)} className={`absolute top-1 right-1 z-40 md:hidden`} size={30} color="orange"/>
+        <div className="mx-auto sticky top-0 text-gray-300 container flex flex-col md:flex-row items-center justify-between md:h-7 w-full bg-gray-800 md:bg-transparent">
+            <ul className="md:text-sm font-bold md:font-normal flex flex-col md:flex-row h-full list-none gap-y-1 py-5 md:py-0">
+            <li className="px-2 flex items-center hover:text-yellow-500"><Link passHref href='/'><a className="flex items-center"><AiFillHome size={20}/><b className="md:hidden text-yellow-600 text-2xl ml-1">trang chủ</b></a></Link></li>
+            <li className="group leading-7 h-full relative px-2 first-letter:uppercase">Thể loại
+                            <ul className=" md:absolute md:invisible group-hover:visible hover:visible md:top-7 py-3 px-4 flex md:w-[700px] flex-wrap list-none bg-gray-800 text-teal-600 italic md:text-slate-200">
                                 {
                                     allCates.isSuccess && allCates.data.map((item,index)=>{
-                                        return <li key={index} className="px-2 py-1 w-3/12 first-letter:uppercase hover:text-yellow-500"><Link passHref href={`/tonghop/${item.slug}`}><a>{item.cate}</a></Link></li>
+                                        return <li key={index} className="px-2 py-1 w-1/2 md:w-3/12 first-letter:uppercase hover:text-yellow-500"><Link passHref href={`/tonghop/${item.slug}`}><a>{item.cate}</a></Link></li>
                                     })
                                 }
                             </ul>
