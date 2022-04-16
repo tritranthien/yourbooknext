@@ -180,7 +180,7 @@ const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
             <span className="w-full block px-5 py-3 text-2xl font-bold relative">
               {isUpdate ? 'chỉnh sửa nội dung truyện' : 'Thêm truyện mới'}
             </span>
-            <div className="w-full p-5 bg-white">
+            <div className="w-full p-3 md:p-5 bg-white">
             {
               isUpdate && <div className="flex justify-center mb-7">
               <div>
@@ -199,13 +199,13 @@ const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
               </div>
             </div>
             }
-              <div className="flex items-center mb-7 ">
-                <label htmlFor="novelname" className=" w-[200px] px-3">tên truyện</label>
-                <input name="title" value={novel.title || ''} onChange={handleInputChange} type="text" className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md" placeholder="nhập vào tên truyện"/>
+              <div className="md:flex items-center mb-7 ">
+                <label htmlFor="novelname" className=" w-[200px] px-3 hidden md:block">tên truyện</label>
+                <input name="title" value={novel.title || ''} onChange={handleInputChange} type="text" className="w-full md:w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md " placeholder="nhập vào tên truyện"/>
               </div>
               <div className="flex items-center mb-7 ">
-                <label htmlFor="author" className=" w-[200px] px-3">tác giả</label>
-                <div className="flex relative border border-width-1 rounded-md min-w-[500px]">
+                <label htmlFor="author" className=" w-[200px] px-3 hidden md:block">tác giả</label>
+                <div className="flex relative border border-width-1 w-[calc(100%_-_50px)] rounded-md md:min-w-[500px]">
                   <input name="author" autoComplete="off" value={ authorSearch || '' } onChange={handleFindAuthor} type="text" className="w-[350px] outline-none px-2 py-1 rounded-md" placeholder="thêm vào tác giả"/>
                     <div className="w-[120px]">
                       { 
@@ -214,7 +214,7 @@ const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
                     
                     </div>
 
-                  <ul className="absolute top-[34px] w-[500px] shadow-md bg-white">
+                  <ul className="absolute top-[34px] w-full md:w-[500px] shadow-md bg-white">
                     {
                       authList.map((item,index)=>{
                         return <li onClick={()=>{
@@ -232,8 +232,8 @@ const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
                 
               </div>
               <div className="flex items-center mb-7 ">
-                <label htmlFor="category" className=" w-[200px] px-3">danh mục</label>
-                <select value={ novel.category || ''} onChange={handleInputChange} name="category" className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md" placeholder="">
+                <label htmlFor="category" className=" w-[200px] px-3 hidden md:block">danh mục</label>
+                <select value={ novel.category || ''} onChange={handleInputChange} name="category" className="w-[calc(100%_-_50px)] md:w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md" placeholder="">
                   <option value="">---- vui lòng chọn thể loại ----</option>
                   {
                     allCates.isSuccess && allCates.data.map((item,index)=>{
@@ -245,13 +245,13 @@ const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
                 <button onClick={()=>setOpenPopup('createCategory')} className="py-1 px-2 bg-white text-green-600"><IoMdAddCircle className='text-2xl'/></button>
               </div>
               <div className="flex items-center mb-7 ">
-                <label htmlFor="description" className=" w-[200px] px-3">mô tả vắn tắt</label>
+                <label htmlFor="description" className=" w-[200px] px-3 hidden md:block ">mô tả vắn tắt</label>
                 <textarea name="description" value={novel.description || ''} onBlur={handleInputChange} onChange={handleInputChange} className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md min-h-[200px]" placeholder="thêm vào mô tả về truyện"/>
               </div>
               
-              <div className="flex mb-7 ">
-                <label htmlFor="image" className=" w-[200px] px-3">ảnh bìa</label>
-                <div className="w-[200px] h-[230] relative overflow-hidden border-2">
+              <div className="flex flex-wrap mb-7 ">
+                <label htmlFor="image" className=" w-[200px] px-3 hidden md:block">ảnh bìa</label>
+                <div className="w-[200px] h-[230px] relative overflow-hidden border-2">
                   
                 { 
                   (preShow || novel.image) && <Image className="absolute object-cover" alt="hinh duoc chon" src={ preShow || novel.image } layout="fill"/>
@@ -261,7 +261,7 @@ const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
                 </div>
                 <button onClick={()=>setOpenPopup('images')} className="px-2 py-1 bg-blue-500 text-white h-[100px] w-[100px] ml-4 self-center"> hoặc chọn poster có sẵn tại đây</button>
               </div>
-              <div className="flex mb-7 mt-7 justify-center w-[500px]">
+              <div className="flex mb-7 mt-7 justify-center md:w-[500px]">
                 {
                  isUpdate ? <button onClick={addNewPoster} className="px-2 py-1 text-white bg-blue-500">chỉnh sửa</button>
                   :

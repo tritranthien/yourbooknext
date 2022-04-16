@@ -38,16 +38,16 @@ const Turn:React.FC<TurnProps> = ({novels,heading,turn,page,total}:TurnProps) =>
     // },[page,turn])
   
   return (
-    <div className="w-full bg-gray-100">
+    <div className="w-full">
         <div className="relative w-full h-48 bg-black">
             <Image layout="fill" objectFit='cover' alt="top novels" src={novels.length > 0 ? novels[0].image : '/images/tt2.jpg'}/>
             <span className="absolute top-0 left-0 w-full h-full text-2xl uppercase bg-black/70 flex justify-center items-center font-bold text-white">{heading}</span>
         </div>
-        <div className="container flex justify-center p-5">
-        <div className="flex flex-wrap w-full justify-center gap-4">
+        <div className="container flex justify-center md:p-5">
+        <div className="flex flex-wrap w-full justify-center gap-y-3 py-3 md:gap-4">
             {
                 novels.map((item,index)=>{
-                    return <div className="w-[230px] h-[320px]" key={index}>
+                    return <div className=" w-full md:w-[230px] md:h-[320px]" key={index}>
                         <UserBookCard novel={item}/>
                     </div>
                 })

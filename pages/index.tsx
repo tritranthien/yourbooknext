@@ -41,18 +41,13 @@ const Home: NextPage<serverProps> = ({errorFetch,newestList,modVotesList,hasNewL
         newestList?.map((item,index)=>{
           if (show === index) {
 
-            return <div key={index} className="w-full min-h-[600px] flex relative">
-          <Image src={item.image} alt="bg" layout='fill' />
+            return <div key={index} className="w-full h-screen md:h-[600px] flex relative">
+          <Image src={item.image} alt="bg" layout='fill' objectFit='cover'/>
           <div className="blacktotrans w-full h-full absolute"></div>
-          <div className="flex mx-auto container p-12 z-10 pt-[120px]">
-            <div className="p-12 flex flex-col justify-center w-1/2">
-              <ul className="flex mb-4">
-                {
-                  newestList.map((it,i)=>(<li key={i} onClick={()=>setShow(i)} className={`${ show === i ? 'bg-yellow-500' : 'bg-gray-300'} w-10 h-[3px] cursor-pointer`}></li>))
-                }
-               
-              </ul>
-              <span className='text-4xl block text-yellow-500  font-bold first-letter:uppercase mb-3'>{item.title}</span>
+          <div className="flex mx-auto container p-6 md:p-12 z-10 pt-[120px]">
+            <div className="md:p-6 lg:p-12 flex flex-col justify-center w-full md:w-1/2">
+              
+              <span className='text-2xl lg:text-4xl block text-yellow-500  font-bold first-letter:uppercase mb-3'>{item.title}</span>
               <p className=' first-letter:uppercase line-clamp-3 text-gray-400 mb-4'>
                 {item.description}
               </p>

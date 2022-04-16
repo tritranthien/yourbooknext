@@ -116,7 +116,7 @@ useEffect(()=>{
     }
 },[userId])
  return (
-  <div className="w-full sticky z-30">
+  <div className="w-full sticky z-30 hidden md:block">
       <div className={`container ${ route.pathname == '/' ? 'flex flex-nowrap justify-between' : 'hidden'}  mx-auto w-full h-14`}>
         <p className="w-36 h-full text-center text-2xl font-bold leading-[56px] text-sky-200">Your Book</p>
         <div className="flex h-14 items-center">

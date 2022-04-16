@@ -22,9 +22,9 @@ const Userdata = () => {
               }
             {
               novels.isSuccess && novels.data.map((item,index)=>{
-                return <div key={index} className="group w-[220px] h-[320px] relative">
+                return <div key={index} className="group w-full md:w-[220px] md:h-[320px] relative">
                   <UserBookCard novel={item}/>
-                  <div className="group-hover:flex absolute top-4 right-4 hidden p-2 text-3xl cursor-pointer rounded-md bg-white opacity-80">
+                  <div className="flex absolute top-4 right-4 p-2 text-3xl cursor-pointer rounded-md bg-white opacity-80">
                     <MdOutlineEditNote className="hover:text-blue-500" onClick={()=>setNovelUpdating(item)}/>  
                     <AiOutlineFileAdd className="hover:text-blue-500" onClick={()=>setCurrentNovel(item)}/>
                     

@@ -9,7 +9,7 @@ const Userdata = () => {
     return (
       <div className="w-full min-h-screen z-40">
           <span className="block px-5 py-3 text-2xl font-bold">Truyện đang theo dõi</span>
-        <div className="w-full flex flex-wrap gap-4 p-5 min-h-screen">
+        <div className="w-full flex flex-wrap md:gap-4 p-5 md:min-h-screen">
           {/* {
             isSuccess && data?.length <= 0 && <p className='p-2'><i>Bạn chưa theo dõi chuyện nào cả</i></p>
           } */}
@@ -18,7 +18,7 @@ const Userdata = () => {
           }
             {
               isSuccess && data?.map((item,index)=>{
-                return <div key={index} className="group w-[220px] h-[350px] relative">
+                return <div key={index} className="group w-full md:w-[220px] h-max md:h-[350px] relative">
                   <UserBookCard key={index} novel={item.novel}/>
                 </div>
                 

@@ -47,8 +47,8 @@ const All:React.FC<AllPageProps> = ({novels,cateName,cateId,total}:AllPageProps)
             }
            <span className="absolute text-3xl uppercase font-bold flex justify-center items-center text-white w-full h-full bg-black/70">{`truyện ${cateName}`}</span>
         </div>
-        <div className="container flex flex-nowrap">
-            <div className=" w-1/4 p-2">
+        <div className="container flex flex-col md:flex-row flex-nowrap">
+            <div className=" w-full md:w-1/4 p-2">
                 <div className='sticky top-0'>
                     <span className="font-bold w-full block mb-2">Tình trạng</span>
                     <button onClick={()=>setStatusNovel('all')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'all' && `bg-orange-300`}`}>tất cả</button>
@@ -70,7 +70,7 @@ const All:React.FC<AllPageProps> = ({novels,cateName,cateId,total}:AllPageProps)
             </div>
                 
             
-            <div className="w-3/4">
+            <div className="w-full md:w-3/4">
                 {
                     novelList.map((item, index)=>{
                         return <VerticalCard key={index} novel={item}/>

@@ -60,10 +60,10 @@ const Ratting:React.FC<RateProps> = ({novel,loged}: RateProps) => {
       checkRated(novel._id);
     }
   },[])
-  return <div className='w-full p-10'>
+  return <div className='w-full md:p-10'>
     { 
       loged ? 
-      ( myrated ? <p className='p-5'><i>bạn đã đánh giá truyện này rồi</i></p> : 
+      ( myrated ? <p className='md:p-5'><i>bạn đã đánh giá truyện này rồi</i></p> : 
        <div className='w-full'>
       <span className="font-medium text-2xl w-full">VIẾT ĐÁNH GIÁ</span>
       <textarea value={content || ''} onBlur={handleChange} onChange={handleChange} className="w-full outline-none border-2 h-28 p-2"/>
@@ -77,10 +77,10 @@ const Ratting:React.FC<RateProps> = ({novel,loged}: RateProps) => {
       <button onClick={sendRate} className="px-3 py-1 rounded-sm text-white bg-blue-700">Đăng</button>
     </div>)
     :
-    <p className='p-5'><i>bạn phải <Link passHref href="/login"><a><b className='text-blue-500'>đăng nhập</b></a></Link> mới có thể đánh giá truyện</i></p>
+    <p className='md:p-5'><i>bạn phải <Link passHref href="/login"><a><b className='text-blue-500'>đăng nhập</b></a></Link> mới có thể đánh giá truyện</i></p>
     }
     {
-      data && data.length <=0 && <span className='px-5 py-1'><b>chưa có đánh giá nào, hãy là người đầu tiên nhé</b></span>
+      data && data.length <=0 && <span className='md:px-5 py-1'><b>chưa có đánh giá nào, hãy là người đầu tiên nhé</b></span>
     }
     { isSuccess && data?.map((item,index)=>{
       return <RateContent rate={item} key={index}/>

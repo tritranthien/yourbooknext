@@ -89,36 +89,36 @@ const Titlebanner: React.FC<TitlebannerProps> = ({novel}:TitlebannerProps) => {
         // refetch();
       }
     },[novel._id])
-  return <div className="w-full h-[450px] p-50px">
-          <div className='w-full h-full bg-black mt-[-28px] relative'>
-            <Image src={novel.image} className='absolute opacity-10 object-cover' layout='fill'/>
-          <div className="absolute top-0 left-0 w-full h-full">
-        <div className="container p-0 py-5 flex h-full justify-center items-center">
-        <div className="w-[250px] h-[300px] relative">
-            <Image src={novel.image} className='object-cover absolute' layout='fill'/>
-        </div>
-        <ul className="w-[calc(100%_-_250px)] h-[300px] px-10 text-slate-500">
-          <li className='w-full capitalize font-bold text-slate-400 text-4xl'>{novel.title}</li>
-          <li className="flex h-8 text-xl mt-4 items-center"><span><BsStackOverflow/></span><span className='ml-2'>{novel.category.cate}</span></li>
-          <li className="flex h-8 text-xl mt-4 items-center"><span><BsPersonFill/></span><span className='ml-2'>{novel.author.name}</span></li>
-          <li className="flex h-8 text-xl mt-4 items-center"><span><BsWifi/></span><span className='ml-2'>{novel.status}</span></li>
-          <li className="flex h-8 text-xl mt-4 items-cente"><span><RiFilePaperFill/></span><span className='ml-2'>{`chương ${novel.chapCount}`}</span></li>
-          <li className='flex h-8 text-xl mt-4 items-cente'>
-            <Rating 
-              initialRating={novel.scores == 0 ? 4.5 : novel.scores}
-              readonly
-              step={1}
-              fullSymbol={<AiFillStar size={25} color={'yellow'}/>}
-              emptySymbol={<AiOutlineStar size={25} color={'yellow'}/>}
-            />
-        </li>
-          <ul className='flex list-none mt-4 text-xl gap-x-7'>
-              <li className='flex items-center'><span><AiOutlineEye/></span><span className='ml-2'>{novel.views}</span></li>
-              <li className='flex items-center'><span><FcLike/></span><span className='ml-2'>{novel.likes}</span></li>
-              <li className='flex items-center'><button onClick={followed ? cancelFollow : followNow} disabled={!isLoged} className='px-4 py-1 text-white bg-orange-500 rounded-md'>{ followed ? 'Hủy theo dõi' : 'Theo dõi'}</button></li>
-              <li className='flex items-center'><button onClick={()=>setOpen(true)} disabled={!isLoged} className='px-4 py-1 text-white bg-green-500 rounded-md'>đề cử</button></li>
-          </ul>
-        </ul>
+  return <div className="w-full h-[550px] md:h-[450px]">
+          <div className='w-full h-full bg-black md:mt-[-28px] relative'>
+            <Image src={novel.image} className="opacity-20" objectFit="cover" layout='fill'/>
+          <div className="absolute top-0 left-0 w-full flex items-center h-full">
+        <div className="container p-0 py-10 md:py-5 flex md:h-full justify-center items-center">
+            <div className="w-[250px] h-[300px] hidden md:block relative ml-10">
+                <Image src={novel.image} className='object-cover absolute' layout='fill'/>
+            </div>
+            <ul className="md:w-[calc(100%_-_250px)] h-full py-5 px-5 md:px-10 text-slate-500">
+              <li className='w-full capitalize font-bold text-slate-400 text-2xl md:text-3xl lg:text-4xl'>{novel.title}</li>
+              <li className="flex h-8 text-xl mt-4 items-center"><span><BsStackOverflow/></span><span className='ml-2'>{novel.category.cate}</span></li>
+              <li className="flex h-8 text-xl mt-4 items-center"><span><BsPersonFill/></span><span className='ml-2'>{novel.author.name}</span></li>
+              <li className="flex h-8 text-xl mt-4 items-center"><span><BsWifi/></span><span className='ml-2'>{novel.status}</span></li>
+              <li className="flex h-8 text-xl mt-4 items-cente"><span><RiFilePaperFill/></span><span className='ml-2'>{`chương ${novel.chapCount}`}</span></li>
+              <li className='flex h-8 text-xl mt-4 items-cente'>
+                <Rating 
+                  initialRating={novel.scores == 0 ? 4.5 : novel.scores}
+                  readonly
+                  step={1}
+                  fullSymbol={<AiFillStar size={25} color={'yellow'}/>}
+                  emptySymbol={<AiOutlineStar size={25} color={'yellow'}/>}
+                />
+            </li>
+              <ul className='flex list-none mt-4 text-xl gap-x-2 md:gap-x-7'>
+                  <li className='flex items-center'><span><AiOutlineEye/></span><span className='ml-2'>{novel.views}</span></li>
+                  <li className='flex items-center'><span><FcLike/></span><span className='ml-2'>{novel.likes}</span></li>
+                  <li className='flex items-center'><button onClick={followed ? cancelFollow : followNow} disabled={!isLoged} className='px-2 py-1 text-white bg-orange-500 rounded-md'>{ followed ? 'Hủy theo dõi' : 'Theo dõi'}</button></li>
+                  <li className='flex items-center'><button onClick={()=>setOpen(true)} disabled={!isLoged} className='px-2 py-1 text-white bg-green-500 rounded-md'>đề cử</button></li>
+              </ul>
+            </ul>
         
         
     </div>

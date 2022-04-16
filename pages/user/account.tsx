@@ -16,11 +16,11 @@ const Userdata = () => {
             <div className="flex w-full px-5 py-2 flex-col">
               
                 {
-                  info.isSuccess && <><div className="w-full flex p-5">
+                  info.isSuccess && <><div className="w-full flex flex-col md:flex-row md:p-5">
                       <Image src={info.data.image} alt={info.data.image} width={180} height={180} objectFit="cover" />
-                      <div className="w-[calc(100%_-_180px)]">
-                      <span className='p-2 w-full font-bold text-xl text-sky-500 block pl-5'>{info.data.username}</span>
-                        <ul className="w-full px-7">
+                      <div className="w-full md:w-[calc(100%_-_180px)]">
+                      <span className='p-2 w-full font-bold text-xl text-sky-500 block md:pl-5'>{info.data.username}</span>
+                        <ul className="w-full px-2 md:px-7">
                         <li className="flex items-center text-lg"><b className="w-[200px]">số truyện đã đăng:</b><Link passHref href={`/user/novels`}><a className="text-sky-500">{info.data.posted}</a></Link></li>
                         <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số truyện theo dõi:</b><Link passHref href={`/user/inschap`}><a className="text-sky-500">{info.data.followed}</a></Link></li>
                         <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số chương đã đăng:</b><Link passHref href={`/user/novels`}><a className="text-sky-500">{info.data.chapCount}</a></Link></li>
@@ -28,7 +28,7 @@ const Userdata = () => {
                         </ul>
                       </div>
                   </div>
-                  <div className="flex px-5">
+                  <div className="flex mt-5 px-2 md:px-5">
                     <span onClick={()=>setActive(true)} className={`hover:cursor-pointer block rounded-md px-3 py-1 mr-2 ${active && 'bg-orange-500 text-white'}`}>đã đề cử</span>
                     <span onClick={()=>setActive(false)} className={`hover:cursor-pointer block rounded-md px-3 py-1 ${!active && 'bg-orange-500 text-white'}`}>đã bình luận</span>
                   </div>

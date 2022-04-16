@@ -20,24 +20,25 @@ const MainNovels:React.FC<MainNovels> = ({novel}:MainNovels) => {
       setLoged(true);
     }
   },[])
-  return <div className='container pt-0 flex'>
-      <div className="w-3/4">
-        <ul className="flex list-none cursor-pointer p-2">
+  return <div className='container pt-0 flex flex-wrap md:flex-nowrap'>
+      <div className="w-full md:w-3/4">
+        <ul className="flex list-none cursor-pointer py-2 md:p-2">
             <li onClick={()=>setAct(0)} className={`w-[150px] h-[50px] leading-[50px] text-center ${ act == 0 ? 'rounded-md bg-orange-600 text-white' : 'bg-transparent' }`}>Giới thiệu</li>
             <li onClick={()=>setAct(1)} className={`w-[150px] h-[50px] leading-[50px] text-center ${ act == 1 ? 'rounded-md text-white bg-orange-600' : 'bg-transparent' }`}>DS.chương</li>
             <li onClick={()=>setAct(2)} className={`w-[150px] h-[50px] leading-[50px] text-center ${ act == 2 ? 'rounded-md text-white bg-orange-600' : 'bg-transparent' }`}>Đánh giá</li>
-            <li className={`w-[150px] h-[50px] leading-[50px] text-center`}><a href='#cmt'>Bình luận</a></li>
+            <li className={`w-[150px] h-[50px] leading-[50px] text-center hidden md:block`}><a href='#cmt'>Bình luận</a></li>
         </ul>
         <div className="w-full min-h-[500px] border-top-2 mt-[-2px]">
           { act == 0 && <Gt des={novel.description}/> }
           { act == 1 && <Chap novel={novel}/> }
           { act == 2 && <Ratting loged={isLoged} novel={novel}/> }
         </div>
-        <div id='cmt' className="w-full">
+        <div id='cmt' className="w-full mb-5">
           <Cmt novel={novel} loged={isLoged}/>
         </div>
       </div>
-      <div className="w-1/4">
+      <div className=" w-full md:w-1/4">
+        <span className="font-bold text-xl block px-2 py-1 ">tác giả</span>
         <div className="flex w-full mt-2 rounded-md relative h-[250px] bg-slate-300 min-h-[100px]">
           <Image src={novel.author.image} layout='fill' objectFit='cover' alt='avatar' />
         </div>

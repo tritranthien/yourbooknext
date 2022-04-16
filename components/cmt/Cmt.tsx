@@ -34,10 +34,10 @@ const Cmt:React.FC<CmtProps> = ({loged,novel}: CmtProps) => {
         }
     }
   return (
-    <div className="p-5 w-full">
+    <div className="md:p-5 w-full">
         <span className="font-bold text-xl px-2 py-1">bình luận</span>
         {
-            loged && <div className="mb-5 p-3">
+            loged && <div className="lg:mb-5 p-3">
                 <textarea value={ cmtContent || '' } onBlur={handleInput} onChange={handleInput} className="w-full outline-none rounded-md border-2 p-2 resize-none h-24"/>
                 <button onClick={postCmt} className="px-2 py-1 mt-2 bg-blue-500 text-white rounded-sm">bình luận</button>
             </div>

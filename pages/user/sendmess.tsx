@@ -65,6 +65,7 @@ const Userdata = () => {
     return (
         <div className="w-full min-h-screen p-4">
             <span className="block font-bold text-2xl mb-5">soạn thông điệp</span>
+            <div className="md:pl-10">
             <label className="mt-4 font-bold">người nhận</label>
             <div className="relative h-8">
               <input value={finduser || ''} onChange={handleInputFindChange} type="text" className="h-full w-[200px] outline-none border-[1px] rounded px-1" />
@@ -88,11 +89,12 @@ const Userdata = () => {
               }
             </ul>
             <label className="block mt-4 font-bold">tiêu đề</label>
-            <input value={title || ''} onChange={(e:ChangeEvent<HTMLInputElement>)=>setTitle(e.target.value)} name="title" placeholder="nhập vào tiêu đề" type="text" className="block outline-none border-[1px] border-gray-200 rounded w-[400px] mt-1 p-1"/>
+            <input value={title || ''} onChange={(e:ChangeEvent<HTMLInputElement>)=>setTitle(e.target.value)} name="title" placeholder="nhập vào tiêu đề" type="text" className="block outline-none border-[1px] border-gray-200 rounded md:w-[500px] mt-1 p-1"/>
             <label className="block mt-4 font-bold">nội dung</label>
-            <textarea value={content || ''} onBlur={(e:ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)} onChange={(e:ChangeEvent<HTMLTextAreaElement>) =>setContent(e.target.value)} name="content" placeholder="nhập vào nội dung" className="block outline-none border-[1px] border-gray-200 rounded resize-none w-[400px] h-[250px] mt-1 p-1 mb-6" />
+            <textarea value={content || ''} onBlur={(e:ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)} onChange={(e:ChangeEvent<HTMLTextAreaElement>) =>setContent(e.target.value)} name="content" placeholder="nhập vào nội dung" className="block outline-none border-[1px] border-gray-200 rounded resize-none w-[500px] h-[250px] mt-1 p-1 mb-6" />
             <button onClick={sendMess} className='ml-5 outline-none rounded-md text-white bg-sky-500 px-3 py-1'>gửi</button>
             <button onClick={handleReset} className='outline-none rounded-md text-white bg-gray-500 px-3 py-1 ml-2'>làm mới</button>
+            </div>
         </div>
     )
 }

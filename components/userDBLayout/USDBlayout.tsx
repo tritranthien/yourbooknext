@@ -40,7 +40,7 @@ const USDBlayout: React.FC = ({ children}) => {
            <span className="flex items-center h-10 leading-10"><IoIosNotificationsOutline className='cursor-pointer mr-2' size={25} onClick={()=>router.push('/user/notifications')}/>{useName}<HiLogout onClick={logout} className="ml-3 text-2xl cursor-pointer"/></span>
         </div>
 <div className="w-full flex">
-        <div className="w-1/5 min-h-screen border-r-2">
+        <div className="w-[250px] min-h-screen border-r-2 hidden md:block">
             <ul className="w-full list-none px-5 py-3">
                 <Link passHref href="/user/account"><a><li className="flex w-full p-2 items-center text-xl mt-5"><BsPersonBoundingBox className="mr-3"/>Tổng quan</li></a></Link>
                 <Link passHref href="/user/sendmess"><a><li className="flex w-full p-2 items-center text-xl"><MdOutlineAlternateEmail className="mr-3"/>Gửi tin nhắn</li></a></Link>
@@ -53,7 +53,7 @@ const USDBlayout: React.FC = ({ children}) => {
  
             </ul>
         </div>
-        <div className="w-4/5">
+        <div className="w-full md:w-[calc(100%_-_250px)]">
             {children}
         </div>
     </div>      

@@ -61,7 +61,7 @@ const Login:React.FC = () => {
   
   return (
     <div className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-screen h-screen flex justify-center items-center'>
-      <div className="w-[300px] min-h-[400px] bg-white rounded-md shadow-md">
+      <div className="w-5/6 md:w-[300px] bg-white rounded-md shadow-md overflow-y-auto">
         <div className="flex w-full-width bg-gray-200 cursor-pointer">
           <span onClick={()=>setSingup(false)} className={`w-1/2 text-center ${ isSingup ? '' : 'bg-white'} px-3 font-bold h-10 leading-10`}>Đăng nhập</span>
           <span onClick={()=>setSingup(true)} className={`w-1/2 text-center ${ isSingup ? 'bg-white' : ''} px-3 font-bold h-10 leading-10`}>Đăng ký</span>

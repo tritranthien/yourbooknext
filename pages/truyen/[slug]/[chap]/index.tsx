@@ -42,14 +42,14 @@ const ChapIndex:React.FC<SSRRES> = ({slug,thisChap}:SSRRES) => {
     return <div className={`w-full ${themse.bg} ${themse.color}` }>
         
         <div className="container">
-        <div className="flex border-b-orange-600-600 justify-between text-blue-500">
+        <div className="flex border-b-orange-600 justify-between text-blue-500">
             <Link passHref href={`/truyen/${slug}`}><a><span className="flex items-center h-11 font-bold text-gray-900"><IoIosArrowBack />{thisChap.novel.title}</span></a></Link>
         </div>
-            <div className="w-full flex flex-col py-5 px-10 ">
-                <span className="text-3xl font-bold uppercase">{thisChap.novel.title}</span>
+            <div className="w-full flex flex-col py-2 md:py-5 md:px-10 ">
+                <span className="text-3xl font-bold uppercase hidden md:block">{thisChap.novel.title}</span>
                 <span className="text-xl text-blue-500">{`chương ${thisChap.chap}: ${thisChap.title}`}</span>
-                <span className="text-xl text-blue-500">{ `người đăng: ${thisChap.poster?.username}` }</span>
-                <span className="text-xl text-blue-500">{ `đăng ngày: ${format(parseISO(thisChap.updatedAt),'yyyy-MM-dd')}` } </span>
+                <span className="text-xl text-blue-500 ">{ `người đăng: ${thisChap.poster?.username}` }</span>
+                <span className="text-xl text-blue-500 hidden md:block">{ `đăng ngày: ${format(parseISO(thisChap.updatedAt),'yyyy-MM-dd')}` } </span>
             </div>
             <span className=' flex px-10 w-full justify-center'>
                 <button 
@@ -69,7 +69,7 @@ const ChapIndex:React.FC<SSRRES> = ({slug,thisChap}:SSRRES) => {
                 
             </span>
             <div className="flex w-full justify-center">
-                <p className={`w-[800px] py-5 px-5 whitespace-pre-wrap self-center ${fontSize} ${stringFont}`}>
+                <p className={`max-w-[800px] py-5 md:px-5 whitespace-pre-wrap self-center ${fontSize} ${stringFont}`}>
                     { thisChap.content }
                 </p>
             </div>
@@ -91,7 +91,7 @@ const ChapIndex:React.FC<SSRRES> = ({slug,thisChap}:SSRRES) => {
                 
             </span>
         </div>
-        <div className="w-[40px] fixed left-0 top-1/2 translate-y-[-50%] cursor-pointer">
+        <div className="w-[40px] fixed left-0 top-1/2 translate-y-[-50%] cursor-pointer text-black">
             <span onClick={()=>setShow(0)} className="flex justify-center items-center w-[40px] h-[40px] text-xl opacity-70"><AiOutlineUnorderedList/></span>
             <span onClick={()=>setShow(1)} className="flex justify-center items-center w-[40px] h-[40px] text-xl opacity-70"><IoIosSettings/></span>
             <span className="flex justify-center items-center w-[40px] h-[40px] text-xl opacity-70"><FaComment/></span>

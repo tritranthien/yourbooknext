@@ -32,7 +32,7 @@ const Userdata = () => {
             </ul>
             {
               open >= 0 && isSuccess && <div className='flex fixed top-0 left-0 w-screen h-screen justify-center items-center'>
-                <div className="w-[500px] relative bg-white shadow-md p-4">
+                <div className="w-11/12 md:w-[500px] relative bg-white shadow-md p-4">
                   <AiFillCloseSquare onClick={()=>setOpen(-1)} size={25} color="red" className='absolute top-1 right-1 cursor-pointer'/>
                   <span className="block font-bold mt-2"><b className='mr-2'>gửi đến:</b>
                   {

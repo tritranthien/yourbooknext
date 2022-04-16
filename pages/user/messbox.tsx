@@ -22,16 +22,16 @@ const Userdata = () => {
                     <span className="line-clamp-1 w-2/12">
                     <i className="mr-2 text-orange-500">{item.sender.username}</i>
                     </span>
-                    <span className="font-bold italic line-clamp-1 px-2 w-3/12">{item.title}</span>
-                    <span className="italic px-2 line-clamp-1 w-5/12">{`"${item.content}"`}</span>
-                    <span className="w-1/12">{format(parseISO(item.createdAt),'yyyy-MM-dd')}</span>
+                    <span className="font-bold italic line-clamp-1 px-2 w-10/12 md:w-3/12">{item.title}</span>
+                    <span className="italic px-2 md:line-clamp-1 md:w-5/12 hidden md:block">{`"${item.content}"`}</span>
+                    <span className="w-1/12 hidden md:block">{format(parseISO(item.createdAt),'yyyy-MM-dd')}</span>
                   </li>
                 })
               }
             </ul>
             {
               open >= 0 && isSuccess && <div className='flex fixed top-0 left-0 w-screen h-screen justify-center items-center'>
-                <div className="w-[500px] relative bg-white shadow-md p-4">
+                <div className="w-11/12 md:w-[500px] relative bg-white shadow-md p-4">
                   <AiFillCloseSquare onClick={()=>setOpen(-1)} size={25} color="red" className='absolute top-1 right-1 cursor-pointer'/>
                   <span className="block font-bold mt-2"><b className='mr-2'>người gửi:</b>
                   <i className="text-orange-500">{data && data[open].sender.username}</i>

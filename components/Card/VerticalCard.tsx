@@ -10,11 +10,11 @@ interface CardProps{
 const VerticalCard:React.FC<CardProps> = ({novel} :CardProps) => {
   return (
     <Link href={`/truyen/${novel.slug}`} passHref><a>
-      <div className="flex w-full p-4">
-        <div className="w-[150px] h-[150px] relative">
+      <div className="flex w-full px-2 py-4 md:p-4">
+        <div className="lg:w-[150px] lg:h-[150px] relative">
           <Image layout='fill' objectFit='cover' alt={novel.title} src={novel.image} />
         </div>
-        <div className="w-full px-5">
+        <div className="w-full lg:px-5">
           <span className="font-bold block text-neutral-500 w-full">{novel.title}</span>
           <span className="block text-orange-700 w-full">{novel.author.name}</span>
           <p className="w-full line-clamp-3 text-gray-500 text-sm">{novel.description}</p>

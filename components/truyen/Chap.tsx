@@ -38,23 +38,23 @@ const Chap:React.FC<{novel:SerVerNovel}> = ({novel}:{novel:SerVerNovel}) => {
     />
     }
       
-    <table className="list-none w-full mt-5">
-      <thead>
+    <table className="list-none w-full md:mt-5">
+      <thead className="hidden md:block">
       <tr className="">
-              <th className="py-1 px-2 text-gray-600 font-bold text-left">STT</th>
-              <th className="py-1 px-2 text-gray-600 font-bold text-left">Chương</th>
-              <th className="py-1 px-2 text-gray-600 font-bold text-left truncate">Tiêu đề chương</th>
-              <th className="py-1 px-2 text-gray-600 font-bold text-left">ngày đăng</th>
+              <th className="py-1 px-2 text-gray-600 font-bold text-left hidden md:block">STT</th>
+              <th className="py-1 px-1 md:px-2 text-gray-600 font-bold text-left">Chương</th>
+              <th className="py-1 px-1 md:px-2 text-gray-600 font-bold text-left truncate">Tiêu đề chương</th>
+              <th className="py-1 px-2 text-gray-600 font-bold text-left hidden md:block">ngày đăng</th>
           </tr>
       </thead>
           <tbody>
           { 
         chaps.isSuccess && chaps.data.map((item,index)=>{
           return <tr className="" key={index}>
-            <td className="py-1 px-2 text-gray-400">{index+1}</td>
-            <td className="py-1 px-2 text-gray-400 "><Link passHref href={`${path}/${item.chap}`}><a>{`Chuơng ${item.chap}`}</a></Link></td>
-            <td className="py-1 px-2 text-blue-500 line-clamp-1"><Link passHref href={`${path}/${item.chap}`}><a>{item.title}</a></Link></td>
-            <td className="py-1 px-2 text-blue-500">{format(parseISO(item.updatedAt),'yyyy-MM-dd')}</td>
+            <td className="py-1 px-2 text-gray-400 hidden md:block">{index+1}</td>
+            <td className="py-1 px-1 md:px-2 text-gray-400 "><Link passHref href={`${path}/${item.chap}`}><a>{`Ch.${item.chap}`}</a></Link></td>
+            <td className="py-1 px-1 md:px-2 text-blue-500 line-clamp-1"><Link passHref href={`${path}/${item.chap}`}><a>{item.title}</a></Link></td>
+            <td className="py-1 px-2 text-blue-500 hidden md:block">{format(parseISO(item.updatedAt),'yyyy-MM-dd')}</td>
           </tr>
         })
       }

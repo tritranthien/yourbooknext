@@ -20,8 +20,8 @@ const Authorpage:React.FC<AuthorpageProps> = ({author}:AuthorpageProps) => {
     <div className="w-full">
       <div className="container">
         
-        <div className="flex mt-10">
-          <div className="w-1/4">
+        <div className="flex flex-wrap md:flex-nowrap mt-10">
+          <div className="w-full md:w-1/4 mb-5 md:mb-0">
           <span className="block  text-white text-2xl uppercase px-3 py-1 bg-stone-900">tác giả: <b className="text-orange-500">{author.name}</b></span>
             <div className="w-full relative h-[250px]">
               <Image src={author.image} objectFit='cover' layout="fill" alt={author.slug}/>
@@ -32,7 +32,7 @@ const Authorpage:React.FC<AuthorpageProps> = ({author}:AuthorpageProps) => {
               <p className=""><b>mô tả: </b>{author.des && author.des != '' ? author.des : '???'}</p>
             </div>
           </div>
-          <div className="w-3/4">
+          <div className="w-full md:w-3/4">
             <span className="w-full block px-3 py-1 text-2xl">Truyện của tác giả: <b className="text-orange-500">{author.name} </b></span>
             {
               isSuccess && data?.map((item,index)=>{

@@ -8,7 +8,7 @@ type ColNovelsProps = {
 
 
 const ColNovels:React.FC<ColNovelsProps> = ({Coltitle,Coldata}: ColNovelsProps) => {
-  return <div className='w-1/4 p-2'>
+  return <div className='w-full md:w-1/4 p-2'>
     <span className='text-sky-600 text-xl py-2 font-bold border-b-2 block w-full'>{Coltitle}</span>
     <ul className="w-full list-none">
         {
