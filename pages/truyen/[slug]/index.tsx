@@ -14,7 +14,7 @@ interface NovelProps{
   novel: SerVerNovel;
 }
 
-const Novel: React.FC<NovelProps> = ({novel}:NovelProps) => {
+const NovelPage: React.FC<NovelProps> = ({novel}:NovelProps) => {
   const  [isLoged, setLoged] = useState(false);
   useEffect(()=>{
     if( localStorage && localStorage.getItem('userInfo') ){
@@ -57,4 +57,4 @@ export const getServerSideProps = async ({params}: contextProps) => {
   
 }
 
-export default Novel;
+export default NovelPage;

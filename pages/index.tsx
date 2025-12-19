@@ -2,7 +2,8 @@ import type { NextPage } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import EditorRecomened from '../components/Editorecomend/EditorRecomened'
+import dynamic from 'next/dynamic'
+const EditorRecomened = dynamic(() => import('../components/Editorecomend/EditorRecomened'), { ssr: false })
 import FourCols from '../components/FourColsLayout/FourCols'
 import HasNewChaps from '../components/Newupdate/HasNewChaps'
 import TopNovels from '../components/TopNovels/TopNovels'
@@ -110,7 +111,12 @@ export const getStaticProps = async () => {
     },
     revalidate: 320
   }
- } catch (error) {
+ } catch (error: any) {
+  console.error("Error in getStaticProps:", error.message);
+  if (error.response) {
+    console.error("Response data:", error.response.data);
+    console.error("Response status:", error.response.status);
+  }
   return {
     props: {
       errorFetch:true

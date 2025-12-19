@@ -139,7 +139,7 @@ useEffect(()=>{
                     {
                         SearchList.length > 0 && SearchList.map((item,index)=>{
                             if('title' in item){
-                                return <Link key={index} passHref href={`/truyen/${item.slug}`}><a>
+                                return <Link legacyBehavior key={index} passHref href={`/truyen/${item.slug}`}><a>
                                             <li className="px-3 py-2">
                                                 <b>{item.title}</b>
                                                 <br/>
@@ -147,7 +147,7 @@ useEffect(()=>{
                                             </li>
                                         </a></Link>
                             }else{
-                                return <Link key={index} passHref href={`/tac-gia/${item.slug}`}><a><li className="px-3 py-2">
+                                return <Link legacyBehavior key={index} passHref href={`/tac-gia/${item.slug}`}><a><li className="px-3 py-2">
                                             <b>{item.name}</b>
                                             <br/>
                                             <i>tác giả</i>
@@ -176,25 +176,25 @@ useEffect(()=>{
         <VscGitPullRequestClosed onClick={()=>setOpenMenu(false)} className={`absolute top-1 right-1 z-40 md:hidden`} size={30} color="orange"/>
         <div className="mx-auto sticky top-0 text-gray-300 container flex flex-col md:flex-row items-center justify-between md:h-7 w-full bg-gray-800 md:bg-transparent">
             <ul className="md:text-sm font-bold md:font-normal flex flex-col md:flex-row h-full list-none gap-y-1 py-5 md:py-0">
-            <li className="px-2 flex items-center hover:text-yellow-500"><Link passHref href='/'><a className="flex items-center"><AiFillHome size={20}/><b className="md:hidden text-yellow-600 text-2xl ml-1">trang chủ</b></a></Link></li>
+            <li className="px-2 flex items-center hover:text-yellow-500"><Link legacyBehavior passHref href='/'><a className="flex items-center"><AiFillHome size={20}/><b className="md:hidden text-yellow-600 text-2xl ml-1">trang chủ</b></a></Link></li>
             <li className="group leading-7 h-full relative px-2 first-letter:uppercase">Thể loại
                             <ul className=" md:absolute md:invisible group-hover:visible hover:visible md:top-7 py-3 px-4 flex md:w-[700px] flex-wrap list-none bg-gray-800 text-teal-600 italic md:text-slate-200">
                                 {
                                     allCates.isSuccess && allCates.data.map((item,index)=>{
-                                        return <li key={index} className="px-2 py-1 w-1/2 md:w-3/12 first-letter:uppercase hover:text-yellow-500"><Link passHref href={`/tonghop/${item.slug}`}><a>{item.cate}</a></Link></li>
+                                        return <li key={index} className="px-2 py-1 w-1/2 md:w-3/12 first-letter:uppercase hover:text-yellow-500"><Link legacyBehavior passHref href={`/tonghop/${item.slug}`}><a>{item.cate}</a></Link></li>
                                     })
                                 }
                             </ul>
                         </li>
             {
                 listMenu.map((item, index)=>{
-                    return <li key={index} className="px-2 leading-7 first-letter:uppercase hover:text-yellow-500"><Link passHref href={`/lua-chon/${item.slug}/1`}><a>{item.headding}</a></Link></li>
+                    return <li key={index} className="px-2 leading-7 first-letter:uppercase hover:text-yellow-500"><Link legacyBehavior passHref href={`/lua-chon/${item.slug}/1`}><a>{item.headding}</a></Link></li>
                 })
             }
             </ul>
             
                 <div className="flex items-center text-black relative">
-                    <span className='text-blue-400 ml-3 p-3 text-sm'>{ isSuccess ? <Link passHref href="/user/account"><a>{data?.username}</a></Link> : <Link passHref href="/login"><a>Đăng nhập</a></Link>}</span>
+                    <span className='text-blue-400 ml-3 p-3 text-sm'>{ isSuccess ? <Link legacyBehavior passHref href="/user/account"><a>{data?.username}</a></Link> : <Link legacyBehavior passHref href="/login"><a>Đăng nhập</a></Link>}</span>
                     
                     
                     {
@@ -217,12 +217,12 @@ useEffect(()=>{
                             {
                                 NotiList.map((item,index)=>{
                                     if(item.type == 'newmess'){
-                                        return <Link key={index} passHref href={`/user/messbox`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>một tin nhắn mới từ <b>{item.sender}</b></li></a></Link>
+                                        return <Link legacyBehavior key={index} passHref href={`/user/messbox`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>một tin nhắn mới từ <b>{item.sender}</b></li></a></Link>
                                     }
-                                    return <Link key={index} passHref href={`/truyen/${item.novel?.slug}/${item.chap}`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>truyện <b className="text-blue-500">{item.novel?.title}</b> chương <b className="text-blue-500">{item.chap}</b> vừa xuất thế</li></a></Link>
+                                    return <Link legacyBehavior key={index} passHref href={`/truyen/${item.novel?.slug}/${item.chap}`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>truyện <b className="text-blue-500">{item.novel?.title}</b> chương <b className="text-blue-500">{item.chap}</b> vừa xuất thế</li></a></Link>
                                 })
                             }
-                            <Link passHref href='/user/notifications'><a><li className="px-2 py-1 font-bold w-full text-center text-blue-500 mb-1">xem tất cả</li></a></Link>
+                            <Link legacyBehavior passHref href='/user/notifications'><a><li className="px-2 py-1 font-bold w-full text-center text-blue-500 mb-1">xem tất cả</li></a></Link>
                         </ul>
                     }
                 </div>

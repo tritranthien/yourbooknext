@@ -77,7 +77,7 @@ const Ratting:React.FC<RateProps> = ({novel,loged}: RateProps) => {
       <button onClick={sendRate} className="px-3 py-1 rounded-sm text-white bg-blue-700">Đăng</button>
     </div>)
     :
-    <p className='md:p-5'><i>bạn phải <Link passHref href="/login"><a><b className='text-blue-500'>đăng nhập</b></a></Link> mới có thể đánh giá truyện</i></p>
+    <p className='md:p-5'><i>bạn phải <Link legacyBehavior passHref href="/login"><a><b className='text-blue-500'>đăng nhập</b></a></Link> mới có thể đánh giá truyện</i></p>
     }
     {
       data && data.length <=0 && <span className='md:px-5 py-1'><b>chưa có đánh giá nào, hãy là người đầu tiên nhé</b></span>

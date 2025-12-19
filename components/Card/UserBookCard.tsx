@@ -9,7 +9,7 @@ interface CardProps{
 
 const UserBookCard:React.FC<CardProps> = ({novel} :CardProps) => {
   return (
-    <Link href={`/truyen/${novel.slug}`} passHref><a>
+    <Link legacyBehavior href={`/truyen/${novel.slug}`} passHref><a>
       <div className="w-full bg-white rounded-md h-full flex flex-row md:flex-col py-1 md:p-[10px] md:shadow-lg cursor-pointer relative">
         <div className="w-[70px] md:w-full h-[105px] md:h-[200px] relative rounded-md overflow-hidden">
             <Image src={novel.image} alt={novel.title} className="object-cover" layout="fill"/>

@@ -9,7 +9,7 @@ type BannerProps = {
 
 const Banner:React.FC<BannerProps> = ({imgs,link}: BannerProps) => {
   return <div className="container px-5"> 
-  <Link passHref href={link}>
+  <Link legacyBehavior passHref href={link}>
       <a>
         <div className="w-full h-14 relative flex justify-center items-center"> 
           <Image alt='image' layout='fill' src={imgs} className='absolute object-cover opacity-50 z-10'/>

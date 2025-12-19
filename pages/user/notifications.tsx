@@ -27,9 +27,9 @@ const Userdata = () => {
               {
                 isSuccess && data?.notis.map((item,index)=>{
                   if(item.type == 'newmess'){
-                    return <Link key={index} passHref href='/user/messbox'><a><li className={`py-1 px-3 flex ${!item.read && 'bg-gray-200'}`}><IoIosNotificationsOutline size={25}/> bạn có tin nhắn mới từ <b className="px-2">{item.sender}</b></li></a></Link>
+                    return <Link legacyBehavior key={index} passHref href='/user/messbox'><a><li className={`py-1 px-3 flex ${!item.read && 'bg-gray-200'}`}><IoIosNotificationsOutline size={25}/> bạn có tin nhắn mới từ <b className="px-2">{item.sender}</b></li></a></Link>
                   }
-                  return <Link key={index} passHref href={`/truyen/${item.novel?.slug}/${item.chap}`}><a><li key={index} className={`py-1 px-3 flex ${!item.read && 'bg-gray-200'}`}><IoIosNotificationsOutline size={25}/> truyện <b className="px-2">{item.novel?.title}</b>vừa cập nhật chap mới <b className="px-2">{item.chap}</b></li></a></Link>
+                  return <Link legacyBehavior key={index} passHref href={`/truyen/${item.novel?.slug}/${item.chap}`}><a><li key={index} className={`py-1 px-3 flex ${!item.read && 'bg-gray-200'}`}><IoIosNotificationsOutline size={25}/> truyện <b className="px-2">{item.novel?.title}</b>vừa cập nhật chap mới <b className="px-2">{item.chap}</b></li></a></Link>
                 })
               }
             </ul>

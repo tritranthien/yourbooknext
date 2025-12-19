@@ -9,7 +9,7 @@ interface CardProps{
 
 const VerticalCard:React.FC<CardProps> = ({novel} :CardProps) => {
   return (
-    <Link href={`/truyen/${novel.slug}`} passHref><a>
+    <Link legacyBehavior href={`/truyen/${novel.slug}`} passHref><a>
       <div className="flex w-full px-2 py-4 md:p-4">
         <div className="lg:w-[150px] lg:h-[150px] relative">
           <Image layout='fill' objectFit='cover' alt={novel.title} src={novel.image} />

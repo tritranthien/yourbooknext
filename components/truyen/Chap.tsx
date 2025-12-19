@@ -52,8 +52,8 @@ const Chap:React.FC<{novel:SerVerNovel}> = ({novel}:{novel:SerVerNovel}) => {
         chaps.isSuccess && chaps.data.map((item,index)=>{
           return <tr className="" key={index}>
             <td className="py-1 px-2 text-gray-400 hidden md:block">{index+1}</td>
-            <td className="py-1 px-1 md:px-2 text-gray-400 "><Link passHref href={`${path}/${item.chap}`}><a>{`Ch.${item.chap}`}</a></Link></td>
-            <td className="py-1 px-1 md:px-2 text-blue-500 line-clamp-1"><Link passHref href={`${path}/${item.chap}`}><a>{item.title}</a></Link></td>
+            <td className="py-1 px-1 md:px-2 text-gray-400 "><Link legacyBehavior passHref href={`${path}/${item.chap}`}><a>{`Ch.${item.chap}`}</a></Link></td>
+            <td className="py-1 px-1 md:px-2 text-blue-500 line-clamp-1"><Link legacyBehavior passHref href={`${path}/${item.chap}`}><a>{item.title}</a></Link></td>
             <td className="py-1 px-2 text-blue-500 hidden md:block">{format(parseISO(item.updatedAt),'yyyy-MM-dd')}</td>
           </tr>
         })

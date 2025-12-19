@@ -43,7 +43,7 @@ const ChapIndex:React.FC<SSRRES> = ({slug,thisChap}:SSRRES) => {
         
         <div className="container">
         <div className="flex border-b-orange-600 justify-between text-blue-500">
-            <Link passHref href={`/truyen/${slug}`}><a><span className="flex items-center h-11 font-bold text-gray-900"><IoIosArrowBack />{thisChap.novel.title}</span></a></Link>
+            <Link legacyBehavior passHref href={`/truyen/${slug}`}><a><span className="flex items-center h-11 font-bold text-gray-900"><IoIosArrowBack />{thisChap.novel.title}</span></a></Link>
         </div>
             <div className="w-full flex flex-col py-2 md:py-5 md:px-10 ">
                 <span className="text-3xl font-bold uppercase hidden md:block">{thisChap.novel.title}</span>

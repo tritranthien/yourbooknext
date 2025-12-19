@@ -53,7 +53,7 @@ const Turn:React.FC<TurnProps> = ({novels,heading,turn,page,total}:TurnProps) =>
                 })
             }
             {
-                novels.length == 0 && <span className="font-bold text-xl"><i>chưa có {heading}, vui lòng quay lại <Link passHref href='/'><a className='text-sky-500'>trang chủ</a></Link> để kiếm truyện khác</i></span>
+                novels.length == 0 && <span className="font-bold text-xl"><i>chưa có {heading}, vui lòng quay lại <Link legacyBehavior passHref href='/'><a className='text-sky-500'>trang chủ</a></Link> để kiếm truyện khác</i></span>
             }
             {
                     total > 15 && <ReactPaginate

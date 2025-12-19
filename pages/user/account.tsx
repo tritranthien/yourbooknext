@@ -21,9 +21,9 @@ const Userdata = () => {
                       <div className="w-full md:w-[calc(100%_-_180px)]">
                       <span className='p-2 w-full font-bold text-xl text-sky-500 block md:pl-5'>{info.data.username}</span>
                         <ul className="w-full px-2 md:px-7">
-                        <li className="flex items-center text-lg"><b className="w-[200px]">số truyện đã đăng:</b><Link passHref href={`/user/novels`}><a className="text-sky-500">{info.data.posted}</a></Link></li>
-                        <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số truyện theo dõi:</b><Link passHref href={`/user/inschap`}><a className="text-sky-500">{info.data.followed}</a></Link></li>
-                        <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số chương đã đăng:</b><Link passHref href={`/user/novels`}><a className="text-sky-500">{info.data.chapCount}</a></Link></li>
+                        <li className="flex items-center text-lg"><b className="w-[200px]">số truyện đã đăng:</b><Link legacyBehavior passHref href={`/user/novels`}><a className="text-sky-500">{info.data.posted}</a></Link></li>
+                        <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số truyện theo dõi:</b><Link legacyBehavior passHref href={`/user/inschap`}><a className="text-sky-500">{info.data.followed}</a></Link></li>
+                        <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số chương đã đăng:</b><Link legacyBehavior passHref href={`/user/novels`}><a className="text-sky-500">{info.data.chapCount}</a></Link></li>
                         <li className="flex items-center text-lg mt-2"><b className="w-[200px]">số kim phiếu còn:</b><span className="text-yellow-600">{info.data.goldcard}</span></li>
                         </ul>
                       </div>

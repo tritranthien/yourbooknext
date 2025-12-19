@@ -84,8 +84,8 @@ const Login:React.FC = () => {
           <button onClick={isSingup ? signUp : signIn} className="px-3 py-1 mt-4 bg-blue-500 text-white rounded-md mx-auto">{isSingup ? 'Đăng ký' : 'Đăng nhập'}</button>
           <br />
           { !isSingup && <>
-            <Link passHref href='#'><a className="block text-blue-400 mt-5 w-full text-center">quên mật khẩu?</a></Link>
-            <Link passHref href='/'><a className="block text-blue-400 mt-1 w-full text-center">quay lại trang chủ</a></Link>
+            <Link legacyBehavior passHref href='#'><a className="block text-blue-400 mt-5 w-full text-center">quên mật khẩu?</a></Link>
+            <Link legacyBehavior passHref href='/'><a className="block text-blue-400 mt-1 w-full text-center">quay lại trang chủ</a></Link>
           </>}
         </div>
       </div>

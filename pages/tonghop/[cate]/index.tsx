@@ -39,14 +39,14 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
               novelsUpdated.map((item, index)=>{
                   return <li key={index} className='text-gray-400 w-full flex justify-between items-center py-2 border-b-[1px]'> 
                       <span className='first-letter:uppercase one-line-hidden hidden  lg:block w-20'>{item.category.cate}</span>
-                      <span className='capitalize text-gray-800 ml-3 min-w-[120px] one-line-hidden w-11/12 lg:w-[calc(100%_-_400px)]'><Link passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
-                      <span className='text-xs w-[120px] ml-3 one-line-hidden hidden lg:block'><Link passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link></span>
-                      <span className='text-xs w-[100px] ml-3 one-line-hidden'><Link passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`Chương ${item.chapCount}`}</a></Link></span>
+                      <span className='capitalize text-gray-800 ml-3 min-w-[120px] one-line-hidden w-11/12 lg:w-[calc(100%_-_400px)]'><Link legacyBehavior passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
+                      <span className='text-xs w-[120px] ml-3 one-line-hidden hidden lg:block'><Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link></span>
+                      <span className='text-xs w-[100px] ml-3 one-line-hidden'><Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`Chương ${item.chapCount}`}</a></Link></span>
                       <span className='text-xs md:w-[100px] ml-3 one-line-hidden hidden w-1/12 lg:block'>{format(parseISO(item.updatedAt),'yyyy-MM-dd')}</span>
                   </li>
               })
               :
-              <span className="font-bold">Thể loại này chưa có truyện nào được đăng cả :( hãy quay lại <i className='text-sky-500'><Link passHref href='/'><a>trang chủ</a></Link></i> tìm truyện khác</span>
+              <span className="font-bold">Thể loại này chưa có truyện nào được đăng cả :( hãy quay lại <i className='text-sky-500'><Link legacyBehavior passHref href='/'><a>trang chủ</a></Link></i> tìm truyện khác</span>
           }
           { novelsUpdated.length > 0 && <button onClick={()=>router.push(`/tonghop/${cate}/all`)} className='text-2xl w-full py-1 px-2 block bg-sky-500 text-white mb-2'>xem đầy đủ</button>}
         </ul>
@@ -55,7 +55,7 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
             {
               novelsBestViews.length > 0 && <>
               <span className="font-bold block mb-2"><i>{`Truyện ${cateName} xem nhiều`}</i></span>
-              <Link passHref href={`/truyen/${novelsBestViews[0].slug}`}><a>
+              <Link legacyBehavior passHref href={`/truyen/${novelsBestViews[0].slug}`}><a>
               <div className="w-full relative text-sm">
                 <div className="relative w-full h-[220px] md:h-[280px]">
                 <Image layout="fill" objectFit='cover' alt={novelsBestViews[0].title} src={novelsBestViews[0].image}/>
@@ -78,8 +78,8 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
                 }
                 return <div key={index} className="w-full mt-2 flex flex-nowrap text-sm">
                 <span className="block w-6 h-6 text-center leading-6 text-white bg-green-300 rounded-full">{index+1}</span>
-                <span className="px-2 line-clamp-1 w-[calc(100%_-_55px)]"><Link passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
-                <span className="px-2 w-[25px]"><Link passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`C.${item.chapCount}`}</a></Link></span>
+                <span className="px-2 line-clamp-1 w-[calc(100%_-_55px)]"><Link legacyBehavior passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
+                <span className="px-2 w-[25px]"><Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`C.${item.chapCount}`}</a></Link></span>
               </div>
               })
             }

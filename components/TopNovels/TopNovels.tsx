@@ -21,7 +21,13 @@ const TopNovels: React.FC<TopNovelsProps> = ({novels,title}:TopNovelsProps) => {
                 <span className="text-gray-500 text-xs px-2 mb-1">{novels[0].category.cate}</span>
                 <span className="text-blue-500 text-xs px-2 mb-1">{`${novels[0].chapCount} chương`}</span>
             </div>
-            <span className="text-orange-700 px-2 mb-1">{novels[0].author.name}</span>
+            {novels[0].author.slug ? (
+                <Link legacyBehavior passHref href={`/tac-gia/${novels[0].author.slug}`}>
+                    <a className="text-orange-700 px-2 mb-1">{novels[0].author.name}</a>
+                </Link>
+            ) : (
+                <span className="text-orange-700 px-2 mb-1">{novels[0].author.name}</span>
+            )}
             <p className="text-sm line-clamp-2 px-2 mb-4">{novels[0].description}</p>
         </div>
         }
@@ -35,26 +41,38 @@ const TopNovels: React.FC<TopNovelsProps> = ({novels,title}:TopNovelsProps) => {
                         <div className="flex w-full">
                            
                             <div className="w-[80px] h-[90px] relative">
-                                <Link passHref href={`/truyen/${item.slug}`}>
+                                <Link legacyBehavior passHref href={`/truyen/${item.slug}`}>
                                     <a>
-                                        <Image src = {item.image} className='absolute object-cover' layout='fill'/>
+                                        <Image src = {item.image} alt={item.title} className='absolute object-cover' layout='fill'/>
                                     </a>
                                 </Link>
                             </div>
                             <div className="w-[calc(100%_-_80px)] mx-2">
                                 
                                 <span className="w-full line-clamp-2 text-base h-12 font-medium text-gray-600">
-                                    <Link passHref href={`/truyen/${item.slug}`}>
+                                    <Link legacyBehavior passHref href={`/truyen/${item.slug}`}>
                                         <a>
                                             {item.title}
                                         </a>
                                     </Link>
                                 </span>
-                                <span className="w-full text-sm text-orange-700"><Link passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link></span>
+                                <span className="w-full text-sm text-orange-700">
+                                    {item.author.slug ? (
+                                        <Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link>
+                                    ) : (
+                                        item.author.name
+                                    )}
+                                </span>
                                 <div className="flex w-full justify-between text-xs ">
-                                    <span className="text-gray-500"><Link passHref href={`/tonghop/${item.category.slug}`}><a>{item.category.cate}</a></Link></span>
+                                    <span className="text-gray-500">
+                                        {item.category.slug ? (
+                                            <Link legacyBehavior passHref href={`/tonghop/${item.category.slug}`}><a>{item.category.cate}</a></Link>
+                                        ) : (
+                                            item.category.cate
+                                        )}
+                                    </span>
                                     <span className="text-blue-500">
-                                        <Link passHref href={ item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}>
+                                        <Link legacyBehavior passHref href={ item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}>
                                             <a>
                                                 {`${item.chapCount} chương`}
                                             </a>
