@@ -17,225 +17,226 @@ import { UserFind } from '../../interface/_User';
 import { getMe, getNotis, readNotiInNav } from '../../libs/api/authAPI';
 import { followeds, searchAll } from '../../libs/api/novelAPI';
 const Navigation: React.FC = () => {
-const [openMenu,setOpenMenu] = useState(false);
-const [currentPage,setCurrentPage] = useState(0);
-const [SearchList,setSearchList] = useState<(NovelSearch | Author)[]>([]);
-const [showNoti,setShowNoti] = useState(false);
-const [userId,setUserId] = useState('');
-const [NotiList,setNotiList] = useState<ServerNoti[]>([]);
-const [searchText, setSearch] = useState('');
-const route = useRouter();
-const [notRead,setNotRead] = useState(0);
-const { data, isSuccess, error,refetch } = useQuery(['checkLogin',userId], getMe, {
-    enabled: false,
-    onError: ()=>{
-        localStorage.removeItem('userInfo');
-        localStorage.removeItem('jwtToken');
-    }
-});
-const debouncedSave = useCallback(
-    debounce( async (nextValue:string) => {
-        if(nextValue.length > 0) {
-            const res = await searchAll(nextValue);
-            setSearchList([...res]); 
-        }else{
-            setSearchList([]);
+    const [openMenu, setOpenMenu] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [SearchList, setSearchList] = useState<(NovelSearch | Author)[]>([]);
+    const [showNoti, setShowNoti] = useState(false);
+    const [userId, setUserId] = useState('');
+    const [NotiList, setNotiList] = useState<ServerNoti[]>([]);
+    const [searchText, setSearch] = useState('');
+    const route = useRouter();
+    const [notRead, setNotRead] = useState(0);
+    const { data, isSuccess, error, refetch } = useQuery(['checkLogin', userId], getMe, {
+        enabled: false,
+        onError: () => {
+            localStorage.removeItem('userInfo');
+            localStorage.removeItem('jwtToken');
         }
-    }, 1000),
-    [], // will be created only once initially
-);
-const ck = useQuery('followedFromUser',()=>followeds(),{
-    enabled: false,
-});
-const noti = useQuery('notification',getNotis,{
-    enabled: false,
-    onSuccess: data=>{
-    setNotiList([...data.notis]);
-    if(data.count != notRead){
-        setNotRead(data.count);
-    }
-}});
-const allCates = useGetAllCates();
-const blackbg = route.asPath.includes('lua-chon') || route.asPath.includes('tonghop') || route.asPath.includes('truyen');
-const listmap = [
-    'truyện chữ',
-    'truyện tranh',
-    'truyện audio'
-]
-const listMenu = [
-    { 
-        headding: 'truyện hot',
-        slug: 'truyen-hot'
-    },
-    { 
-        headding: 'truyện mới',
-        slug: 'moi-nhat'
-    },
-    { 
-        headding: 'truyện full',
-        slug: 'hoan-thanh'
-    }
-    
-]
-const turnToReaded = async () => {
-  
-        const listNotRead = NotiList.reduce((arr,crr)=>{
-            if(!crr.read){
+    });
+    const debouncedSave = useCallback(
+        debounce(async (nextValue: string) => {
+            if (nextValue.length > 0) {
+                const res = await searchAll(nextValue);
+                setSearchList([...res]);
+            } else {
+                setSearchList([]);
+            }
+        }, 1000),
+        [], // will be created only once initially
+    );
+    const ck = useQuery('followedFromUser', () => followeds(), {
+        enabled: false,
+    });
+    const noti = useQuery('notification', getNotis, {
+        enabled: false,
+        onSuccess: data => {
+            setNotiList([...data.notis]);
+            if (data.count != notRead) {
+                setNotRead(data.count);
+            }
+        }
+    });
+    const allCates = useGetAllCates();
+    const blackbg = route.asPath.includes('lua-chon') || route.asPath.includes('tonghop') || route.asPath.includes('truyen');
+    const listmap = [
+        'truyện chữ',
+        'truyện tranh',
+        'truyện audio'
+    ]
+    const listMenu = [
+        {
+            headding: 'truyện hot',
+            slug: 'truyen-hot'
+        },
+        {
+            headding: 'truyện mới',
+            slug: 'moi-nhat'
+        },
+        {
+            headding: 'truyện full',
+            slug: 'hoan-thanh'
+        }
+
+    ]
+    const turnToReaded = async () => {
+
+        const listNotRead = NotiList.reduce((arr, crr) => {
+            if (!crr.read) {
                 arr.push(crr._id);
             }
             return arr;
-        },[] as string[]);
+        }, [] as string[]);
         console.log(listNotRead);
-        
+
         try {
             const res = await readNotiInNav(listNotRead);
-            if(res.success) {
+            if (res.success) {
                 setNotRead(notRead - listNotRead.length);
             }
         } catch (error) {
-            
+
         }
-    
-}
-const searchNow = (text:string) => {
-    setSearch(text);
-    debouncedSave(text);
-}
-useEffect(()=>{
-    if (localStorage.getItem('userInfo')) {
-        const stringUser = localStorage.getItem('userInfo');
-        if(stringUser != null) {
-            const userData = JSON.parse(stringUser);
-            setUserId(userData._id);
-        }
-        
+
     }
-},[])
-useEffect(()=>{
-    if( userId && userId.length > 0){
-        refetch();
-        ck.refetch();
-        noti.refetch();
+    const searchNow = (text: string) => {
+        setSearch(text);
+        debouncedSave(text);
     }
-},[userId])
-useEffect(()=>{
-    setOpenMenu(false);
-},[route.asPath]);
- return (
-     <>
-        {
-            !openMenu && <CgMenuGridO onClick={()=>setOpenMenu(true)} className={`fixed top-1 left-1 z-[120] md:hidden opacity-60`} size={40} color="orange"/>
+    useEffect(() => {
+        if (localStorage.getItem('userInfo')) {
+            const stringUser = localStorage.getItem('userInfo');
+            if (stringUser != null) {
+                const userData = JSON.parse(stringUser);
+                setUserId(userData._id);
+            }
+
         }
-        <div className="w-full md:sticky z-30 md:block fixed max-h-screen overflow-x-hidden md:overflow-x-visible overflow-y-auto md:overflow-y-visible">
-      
-      
-      <div className={`container ${ route.pathname == '/' ? 'md:flex md:flex-nowrap md:justify-between' : 'hidden'} mx-auto w-full md:h-14`}>
-        <p className="w-36 h-full text-center text-2xl font-bold leading-[56px] text-sky-200 hidden md:block">Your Book</p>
-        <div className="flex h-14 items-center">
-            <div className="relative flex flex-nowrap h-8 ring-1 bg-white ring-slate-900/10 ">
-                <FiSearch className='self-center w-8 '/>
-                <input name="search" value={searchText || ''} onChange={(e:ChangeEvent<HTMLInputElement>)=>searchNow(e.target.value)} type="text" className="w-[calc(100%_-_w-8)] outline-none pr-2 placeholder-gray-300 " placeholder='Tìm kiếm ...'/>
-                <ul className="absolute z-50 top-8 left-0 w-full bg-gray-300 box-shadow-md text-sm">
-                    {
-                        SearchList.length > 0 && SearchList.map((item,index)=>{
-                            if('title' in item){
-                                return <Link legacyBehavior key={index} passHref href={`/truyen/${item.slug}`}><a>
-                                            <li className="px-3 py-2">
-                                                <b>{item.title}</b>
-                                                <br/>
-                                                <i>truyện</i>
-                                            </li>
-                                        </a></Link>
-                            }else{
-                                return <Link legacyBehavior key={index} passHref href={`/tac-gia/${item.slug}`}><a><li className="px-3 py-2">
-                                            <b>{item.name}</b>
-                                            <br/>
-                                            <i>tác giả</i>
-                                        </li></a></Link>    
-                                }
-                        })
-                    }
-                </ul>
-            </div>
-            <ul className="flex list-none px-3 leading-8">
-                    {
-                        listmap.map((item: string,index: number) => {
-                            if(currentPage == index){
-                                return <li key={index} className="px-3 first-letter:uppercase text-center rounded-lg bg-sky-700 text-white"><a href='#'>{item}</a></li>
-                            }
-                            return <li key={index} className="px-3 first-letter:uppercase text-center text-amber-400"><a href='#'>{item}</a></li>
-                        })
-                    }
-                
-                </ul>
-           
-        </div>
-        
-      </div>
-      <div className={`w-full max-w-[375px] md:max-w-full relative ${openMenu ? 'block' : 'hidden'} md:block ${ blackbg  && 'bg-black' } ${ route.pathname == '/' && 'mt-[30px] md:mt-0'}`}>
-        <VscGitPullRequestClosed onClick={()=>setOpenMenu(false)} className={`absolute top-1 right-1 z-40 md:hidden`} size={30} color="orange"/>
-        <div className="mx-auto sticky top-0 text-gray-300 container flex flex-col md:flex-row items-center justify-between md:h-7 w-full bg-gray-800 md:bg-transparent">
-            <ul className="md:text-sm font-bold md:font-normal flex flex-col md:flex-row h-full list-none gap-y-1 py-5 md:py-0">
-            <li className="px-2 flex items-center hover:text-yellow-500"><Link legacyBehavior passHref href='/'><a className="flex items-center"><AiFillHome size={20}/><b className="md:hidden text-yellow-600 text-2xl ml-1">trang chủ</b></a></Link></li>
-            <li className="group leading-7 h-full relative px-2 first-letter:uppercase">Thể loại
-                            <ul className=" md:absolute md:invisible group-hover:visible hover:visible md:top-7 py-3 px-4 flex md:w-[700px] flex-wrap list-none bg-gray-800 text-teal-600 italic md:text-slate-200">
+    }, [])
+    useEffect(() => {
+        if (userId && userId.length > 0) {
+            refetch();
+            ck.refetch();
+            noti.refetch();
+        }
+    }, [userId])
+    useEffect(() => {
+        setOpenMenu(false);
+    }, [route.asPath]);
+    return (
+        <>
+            {
+                !openMenu && <CgMenuGridO onClick={() => setOpenMenu(true)} className={`fixed top-1 left-1 z-[120] md:hidden opacity-60`} size={40} color="orange" />
+            }
+            <div className="w-full md:sticky z-30 md:block fixed max-h-screen overflow-x-hidden md:overflow-x-visible overflow-y-auto md:overflow-y-visible">
+
+
+                <div className={`container ${route.pathname == '/' ? 'md:flex md:flex-nowrap md:justify-between' : 'hidden'} mx-auto w-full md:h-14`}>
+                    <p className="w-36 h-full text-center text-2xl font-bold leading-[56px] text-primary-400 hidden md:block">Your Book</p>
+                    <div className="flex h-14 items-center">
+                        <div className="relative flex flex-nowrap h-8 w-full md:w-96 min-w-[280px] ring-2 bg-white ring-gray-200 rounded-lg overflow-hidden shadow-sm hover:ring-primary-400 transition-all duration-200">
+                            <FiSearch className='self-center w-8 text-gray-400 pl-2' />
+                            <input name="search" value={searchText || ''} onChange={(e: ChangeEvent<HTMLInputElement>) => searchNow(e.target.value)} type="text" className="flex-1 outline-none pr-3 placeholder-gray-400 text-sm" placeholder='Tìm kiếm truyện, tác giả...' />
+                            <ul className="absolute z-50 top-8 left-0 w-full bg-white border border-gray-200 rounded-b-lg shadow-lg text-sm max-h-96 overflow-y-auto">
                                 {
-                                    allCates.isSuccess && allCates.data.map((item,index)=>{
-                                        return <li key={index} className="px-2 py-1 w-1/2 md:w-3/12 first-letter:uppercase hover:text-yellow-500"><Link legacyBehavior passHref href={`/tonghop/${item.slug}`}><a>{item.cate}</a></Link></li>
+                                    SearchList.length > 0 && SearchList.map((item, index) => {
+                                        if ('title' in item) {
+                                            return <Link legacyBehavior key={index} passHref href={`/truyen/${item.slug}`}><a>
+                                                <li className="px-3 py-2">
+                                                    <b>{item.title}</b>
+                                                    <br />
+                                                    <i>truyện</i>
+                                                </li>
+                                            </a></Link>
+                                        } else {
+                                            return <Link legacyBehavior key={index} passHref href={`/tac-gia/${item.slug}`}><a><li className="px-3 py-2">
+                                                <b>{item.name}</b>
+                                                <br />
+                                                <i>tác giả</i>
+                                            </li></a></Link>
+                                        }
                                     })
                                 }
                             </ul>
-                        </li>
-            {
-                listMenu.map((item, index)=>{
-                    return <li key={index} className="px-2 leading-7 first-letter:uppercase hover:text-yellow-500"><Link legacyBehavior passHref href={`/lua-chon/${item.slug}/1`}><a>{item.headding}</a></Link></li>
-                })
-            }
-            </ul>
-            
-                <div className="flex items-center text-black relative">
-                    <span className='text-blue-400 ml-3 p-3 text-sm'>{ isSuccess ? <Link legacyBehavior passHref href="/user/account"><a>{data?.username}</a></Link> : <Link legacyBehavior passHref href="/login"><a>Đăng nhập</a></Link>}</span>
-                    
-                    
-                    {
-                        isSuccess && <span onClick = {()=>{
-                            if(!showNoti){
-                                turnToReaded();
-                            }
-                            setShowNoti(!showNoti);
-                        }} className="text-blue-500 relative cursor-pointer"><IoIosNotifications size={20}/>{ notRead > 0 && <b className="absolute text-red-500 bg-white text-sm w-4 h-4 rounded-full text-center top-0 left-1/2">{notRead}</b>}</span>
-                    }
-                    <span className='ml-4 text-xl text-blue-200'><MdDarkMode/></span>
-                    {
-                        noti.isSuccess && showNoti && <ul className="bg-white box-shadow-md absolute top-10 w-[200px] rounded-md">
-                            
-                            <li className="px-2 py-1 font-bold w-full text-center">thông báo mới</li>
-                            <hr/>
+                        </div>
+                        <ul className="flex list-none px-3 leading-8">
                             {
-                                noti.data.notis.length <= 0 && <li className={`px-2 py-1 text-sm line-clamp-2 mb-2 `}>bạn không có thông báo nào</li>
-                            }
-                            {
-                                NotiList.map((item,index)=>{
-                                    if(item.type == 'newmess'){
-                                        return <Link legacyBehavior key={index} passHref href={`/user/messbox`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>một tin nhắn mới từ <b>{item.sender}</b></li></a></Link>
+                                listmap.map((item: string, index: number) => {
+                                    if (currentPage == index) {
+                                        return <li key={index} className="px-3 first-letter:uppercase text-center rounded-lg bg-primary-600 text-white"><a href='#'>{item}</a></li>
                                     }
-                                    return <Link legacyBehavior key={index} passHref href={`/truyen/${item.novel?.slug}/${item.chap}`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>truyện <b className="text-blue-500">{item.novel?.title}</b> chương <b className="text-blue-500">{item.chap}</b> vừa xuất thế</li></a></Link>
+                                    return <li key={index} className="px-3 first-letter:uppercase text-center text-primary-500"><a href='#'>{item}</a></li>
                                 })
                             }
-                            <Link legacyBehavior passHref href='/user/notifications'><a><li className="px-2 py-1 font-bold w-full text-center text-blue-500 mb-1">xem tất cả</li></a></Link>
+
                         </ul>
-                    }
+
+                    </div>
+
                 </div>
-                
+                <div className={`w-full max-w-[375px] md:max-w-full relative ${openMenu ? 'block' : 'hidden'} md:block ${blackbg && 'bg-black'} ${route.pathname == '/' && 'mt-[30px] md:mt-0'}`}>
+                    <VscGitPullRequestClosed onClick={() => setOpenMenu(false)} className={`absolute top-1 right-1 z-40 md:hidden`} size={30} color="orange" />
+                    <div className="mx-auto sticky top-0 text-gray-300 md:text-gray-800 container flex flex-col md:flex-row items-center justify-between md:h-7 w-full bg-gray-800 md:bg-transparent">
+                        <ul className="md:text-sm font-bold md:font-normal flex flex-col md:flex-row h-full list-none gap-y-1 py-5 md:py-0">
+                            <li className="px-2 flex items-center hover:text-yellow-500"><Link legacyBehavior passHref href='/'><a className="flex items-center"><AiFillHome size={20} /><b className="md:hidden text-yellow-600 text-2xl ml-1">trang chủ</b></a></Link></li>
+                            <li className="group leading-7 h-full relative px-2 first-letter:uppercase">Thể loại
+                                <ul className=" md:absolute md:invisible group-hover:visible hover:visible md:top-7 py-3 px-4 flex md:w-[700px] flex-wrap list-none bg-gray-800 text-teal-600 italic md:text-slate-200">
+                                    {
+                                        allCates.isSuccess && allCates.data.map((item, index) => {
+                                            return <li key={index} className="px-2 py-1 w-1/2 md:w-3/12 first-letter:uppercase hover:text-yellow-500"><Link legacyBehavior passHref href={`/tonghop/${item.slug}`}><a>{item.cate}</a></Link></li>
+                                        })
+                                    }
+                                </ul>
+                            </li>
+                            {
+                                listMenu.map((item, index) => {
+                                    return <li key={index} className="px-2 leading-7 first-letter:uppercase hover:text-yellow-500"><Link legacyBehavior passHref href={`/lua-chon/${item.slug}/1`}><a>{item.headding}</a></Link></li>
+                                })
+                            }
+                        </ul>
+
+                        <div className="flex items-center text-black relative">
+                            <span className='text-secondary-400 ml-3 p-3 text-sm'>{isSuccess ? <Link legacyBehavior passHref href="/user/account"><a>{data?.username}</a></Link> : <Link legacyBehavior passHref href="/login"><a>Đăng nhập</a></Link>}</span>
+
+
+                            {
+                                isSuccess && <span onClick={() => {
+                                    if (!showNoti) {
+                                        turnToReaded();
+                                    }
+                                    setShowNoti(!showNoti);
+                                }} className="text-secondary-500 relative cursor-pointer"><IoIosNotifications size={20} />{notRead > 0 && <b className="absolute text-red-500 bg-white text-sm w-4 h-4 rounded-full text-center top-0 left-1/2">{notRead}</b>}</span>
+                            }
+                            <span className='ml-4 text-xl text-primary-300 cursor-pointer hover:text-primary-400 transition-colors'><MdDarkMode /></span>
+                            {
+                                noti.isSuccess && showNoti && <ul className="bg-white box-shadow-md absolute top-10 w-[200px] rounded-md">
+
+                                    <li className="px-2 py-1 font-bold w-full text-center">thông báo mới</li>
+                                    <hr />
+                                    {
+                                        noti.data.notis.length <= 0 && <li className={`px-2 py-1 text-sm line-clamp-2 mb-2 `}>bạn không có thông báo nào</li>
+                                    }
+                                    {
+                                        NotiList.map((item, index) => {
+                                            if (item.type == 'newmess') {
+                                                return <Link legacyBehavior key={index} passHref href={`/user/messbox`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>một tin nhắn mới từ <b>{item.sender}</b></li></a></Link>
+                                            }
+                                            return <Link legacyBehavior key={index} passHref href={`/truyen/${item.novel?.slug}/${item.chap}`}><a><li className={`px-2 py-1 text-sm line-clamp-2 mb-1 border-b-2 w-full ${!item.read && 'bg-gray-200'}`}>truyện <b className="text-blue-500">{item.novel?.title}</b> chương <b className="text-blue-500">{item.chap}</b> vừa xuất thế</li></a></Link>
+                                        })
+                                    }
+                                    <Link legacyBehavior passHref href='/user/notifications'><a><li className="px-2 py-1 font-bold w-full text-center text-blue-500 mb-1">xem tất cả</li></a></Link>
+                                </ul>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+
             </div>
-      </div>
-      
-    
-  </div>
-     </>
-  
- );
-  
+        </>
+
+    );
+
 };
 
 export default Navigation;
