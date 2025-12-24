@@ -17,7 +17,11 @@ const Login:React.FC = () => {
       try {
         const res = await getMe();
         if(res.username){
-          router.push('/user/account');
+          if (res.role === 'admin') {
+            router.push('/admin');
+          } else {
+            router.push('/user/account');
+          }
         }
       } catch (error) {
         setLoading(false);
@@ -28,10 +32,16 @@ const Login:React.FC = () => {
   const signIn = async () => {
     try {
       const res = await login(username,password);
-      if(res.status === 200){
-        localStorage.setItem('jwtToken',res.data.token);
-        localStorage.setItem('userInfo',JSON.stringify(res.data.user));
-        router.push('/');
+      if(res.status === 200 || res.status === 201){
+        if (res.data.access_token) {
+          localStorage.setItem('jwtToken',res.data.access_token);
+          localStorage.setItem('userInfo',JSON.stringify(res.data.user));
+          if (res.data.user.role === 'admin') {
+            router.push('/admin');
+          } else {
+            router.push('/');
+          }
+        }
       }
     } catch (error) {
       alert('đã xảy ra lỗi khi đăng nhập');

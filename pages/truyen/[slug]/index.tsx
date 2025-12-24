@@ -24,15 +24,6 @@ const NovelPage: React.FC<NovelProps> = ({novel}:NovelProps) => {
   return <>
     <Titlebanner novel={novel}/>
     <MainNovels novel={novel}/>
-    <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              rtl={false}
-              draggable
-              pauseOnFocusLoss={false}
-        />
   </>
 };
 
