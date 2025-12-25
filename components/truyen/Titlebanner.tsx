@@ -100,7 +100,7 @@ const Titlebanner: React.FC<TitlebannerProps> = ({novel}:TitlebannerProps) => {
             <ul className="md:w-[calc(100%_-_250px)] h-full py-5 px-5 md:px-10 text-slate-500">
               <li className='w-full capitalize font-bold text-slate-400 text-2xl md:text-3xl lg:text-4xl'>{novel.title}</li>
               <li className="flex h-8 text-xl mt-4 items-center"><span><BsStackOverflow/></span><span className='ml-2'>{novel.category.cate}</span></li>
-              <li className="flex h-8 text-xl mt-4 items-center"><span><BsPersonFill/></span><span className='ml-2'>{novel.author.name}</span></li>
+              <li className="flex h-8 text-xl mt-4 items-center"><span><BsPersonFill/></span><span className='ml-2'>{novel.author?.name || 'Đang cập nhật'}</span></li>
               <li className="flex h-8 text-xl mt-4 items-center"><span><BsWifi/></span><span className='ml-2'>{novel.status}</span></li>
               <li className="flex h-8 text-xl mt-4 items-cente"><span><RiFilePaperFill/></span><span className='ml-2'>{`chương ${novel.chapCount}`}</span></li>
               <li className='flex h-8 text-xl mt-4 items-cente'>

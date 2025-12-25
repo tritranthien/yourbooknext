@@ -1,12 +1,20 @@
 import { ReactElement, useEffect, useState } from 'react'
 import AdminLayout from '../../components/adminLayout/AdminLayout'
-import { getAllAuthors, storeNewAuthor, updateAuthor, deleteAuthor } from '../../libs/api/authorAPI'
+import { getAllAuthors, storeNewAuthor, updateAuthor, deleteAuthor, getNovelsByAuthor } from '../../libs/api/authorAPI'
+import { upLoadPoster } from '../../libs/api/uploadFile'
 import { toast } from 'react-toastify'
-import { AiOutlinePlus, AiOutlineEdit, AiOutlineDelete, AiOutlineUser, AiOutlineClose, AiOutlineWarning, AiOutlineBook } from 'react-icons/ai'
+import { AiOutlinePlus, AiOutlineEdit, AiOutlineDelete, AiOutlineUser, AiOutlineClose, AiOutlineWarning, AiOutlineBook, AiOutlineCamera, AiOutlineSearch, AiOutlineFilter, AiOutlineReload } from 'react-icons/ai'
+import Image from 'next/image'
+import debounce from 'lodash.debounce'
+import { useCallback } from 'react'
 
 const AdminAuthors = () => {
     const [authors, setAuthors] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    
+    // Filters
+    const [searchName, setSearchName] = useState('');
+    const [searchNovel, setSearchNovel] = useState('');
     
     // Create/Edit Modal
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,6 +22,9 @@ const AdminAuthors = () => {
     const [name, setName] = useState('');
     const [slug, setSlug] = useState('');
     const [des, setDes] = useState('');
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Delete Confirmation Modal
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -21,20 +32,54 @@ const AdminAuthors = () => {
     const [relatedNovels, setRelatedNovels] = useState<any[]>([]);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const fetchAuthors = async () => {
+    // Hover Novels logic
+    const [hoveredAuthorId, setHoveredAuthorId] = useState<string | null>(null);
+    const [authorNovelsCache, setAuthorNovelsCache] = useState<Record<string, any[]>>({});
+    const [fetchingAuthors, setFetchingAuthors] = useState<Record<string, boolean>>({});
+
+    const handleAuthorHover = async (authorId: string) => {
+        setHoveredAuthorId(authorId);
+        if (!authorNovelsCache[authorId] && !fetchingAuthors[authorId]) {
+            setFetchingAuthors(prev => ({ ...prev, [authorId]: true }));
+            try {
+                const novels = await getNovelsByAuthor(authorId);
+                setAuthorNovelsCache(prev => ({ ...prev, [authorId]: novels }));
+            } catch (error) {
+                console.error("Error fetching author novels:", error);
+            } finally {
+                setFetchingAuthors(prev => ({ ...prev, [authorId]: false }));
+            }
+        }
+    };
+
+    const fetchAuthors = useCallback(async (name?: string, novel?: string) => {
         try {
-            const data = await getAllAuthors();
+            setLoading(true);
+            const data = await getAllAuthors(name, novel);
             setAuthors(data);
         } catch (error) {
+            console.error("Error fetching authors:", error);
             toast.error("Lỗi khi tải danh sách tác giả");
         } finally {
             setLoading(false);
         }
-    }
+    }, []);
+
+    const debouncedFetch = useCallback(
+        debounce((name: string, novel: string) => {
+            fetchAuthors(name, novel);
+        }, 500),
+        [fetchAuthors]
+    );
 
     useEffect(() => {
-        fetchAuthors();
-    }, []);
+        debouncedFetch(searchName, searchNovel);
+    }, [searchName, searchNovel, debouncedFetch]);
+
+    const handleResetFilters = () => {
+        setSearchName('');
+        setSearchNovel('');
+    }
 
     const generateSlug = (text: string) => {
         return text.toLowerCase()
@@ -53,29 +98,67 @@ const AdminAuthors = () => {
             setName(author.name);
             setSlug(author.slug);
             setDes(author.des || '');
+            setPreviewUrl(author.image || null);
         } else {
             setEditData(null);
             setName('');
             setSlug('');
             setDes('');
+            setPreviewUrl(null);
         }
+        setImageFile(null);
         setIsModalOpen(true);
+    }
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setImageFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
         try {
+            let finalImageUrl = previewUrl;
+
+            // If there's a new file, upload it first
+            if (imageFile) {
+                const formData = new FormData();
+                formData.append('poster', imageFile);
+                const uploadRes = await upLoadPoster(formData);
+                if (uploadRes.secure_url) {
+                    finalImageUrl = uploadRes.secure_url;
+                }
+            }
+
+            const authorData = { 
+                name, 
+                slug, 
+                des, 
+                image: finalImageUrl || undefined
+            };
+
             if (editData) {
-                await updateAuthor(editData._id, { name, slug, des });
+                await updateAuthor(editData._id, authorData);
                 toast.success("Cập nhật thành công");
             } else {
-                await storeNewAuthor({ name, slug, des });
+                await storeNewAuthor(authorData);
                 toast.success("Thêm mới thành công");
             }
             setIsModalOpen(false);
             fetchAuthors();
         } catch (error) {
+            console.error(error);
             toast.error("Có lỗi xảy ra");
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -131,11 +214,48 @@ const AdminAuthors = () => {
                 </button>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            {/* Filters Section */}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-8 mt-2">
+                <div className="flex flex-col md:flex-row gap-6 items-end">
+                    <div className="flex-1 space-y-2 w-full">
+                        <label className="text-[13px] font-bold text-slate-400 uppercase tracking-wider ml-1 flex items-center">
+                            <AiOutlineSearch className="mr-2" /> Tìm theo tên tác giả
+                        </label>
+                        <input 
+                            type="text"
+                            value={searchName}
+                            onChange={(e) => setSearchName(e.target.value)}
+                            placeholder="Nhập tên tác giả..."
+                            className="w-full px-5 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 placeholder:text-slate-300"
+                        />
+                    </div>
+                    <div className="flex-1 space-y-2 w-full">
+                        <label className="text-[13px] font-bold text-slate-400 uppercase tracking-wider ml-1 flex items-center">
+                            <AiOutlineFilter className="mr-2" /> Tìm theo tên truyện
+                        </label>
+                        <input 
+                            type="text"
+                            value={searchNovel}
+                            onChange={(e) => setSearchNovel(e.target.value)}
+                            placeholder="Nhập tên tác phẩm..."
+                            className="w-full px-5 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 placeholder:text-slate-300"
+                        />
+                    </div>
+                    <button 
+                        onClick={handleResetFilters}
+                        className="px-6 py-3.5 bg-slate-100 text-slate-500 rounded-2xl hover:bg-slate-200 transition-all font-bold flex items-center justify-center min-w-[140px]"
+                    >
+                        <AiOutlineReload className="mr-2" /> Làm mới
+                    </button>
+                </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead className="bg-slate-50 border-b border-slate-100">
                             <tr>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Ảnh</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Tên tác giả</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Slug</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-center whitespace-nowrap">Số truyện</th>
@@ -151,7 +271,51 @@ const AdminAuthors = () => {
                             ) : authors.map((author) => (
                                 <tr key={author._id} className="hover:bg-slate-50/50 transition-colors">
                                     <td className="px-6 py-4">
-                                        <div className="font-semibold text-slate-700">{author.name}</div>
+                                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-slate-100 relative bg-slate-50">
+                                            {author.image ? (
+                                                <Image src={author.image} layout="fill" objectFit="cover" alt={author.name} />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                                    <AiOutlineUser size={24} />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 relative">
+                                        <div 
+                                            className="font-semibold text-slate-700 cursor-help hover:text-indigo-600 transition-colors inline-block"
+                                            onMouseEnter={() => handleAuthorHover(author._id)}
+                                            onMouseLeave={() => setHoveredAuthorId(null)}
+                                        >
+                                            {author.name}
+                                        </div>
+                                        {hoveredAuthorId === author._id && (
+                                            <div className="absolute left-full top-0 ml-4 z-50 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 p-5 origin-left transition-all animate-fade-in-right">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center">
+                                                    <AiOutlineBook className="mr-2 text-indigo-500" size={14} /> Tác phẩm ({authorNovelsCache[author._id]?.length || 0})
+                                                </h4>
+                                                {fetchingAuthors[author._id] && !authorNovelsCache[author._id] ? (
+                                                    <div className="flex items-center space-x-2">
+                                                        <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                                                        <span className="text-xs text-slate-400 italic">Đang tải...</span>
+                                                    </div>
+                                                ) : authorNovelsCache[author._id]?.length > 0 ? (
+                                                    <ul className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                                        {authorNovelsCache[author._id].map((novel: any) => (
+                                                            <li key={novel._id} className="text-[13px] text-slate-600 font-semibold hover:text-indigo-600 transition-colors flex items-start group/item">
+                                                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-slate-200 group-hover/item:bg-indigo-400 mt-1.5 mr-2.5 shrink-0 transition-colors" />
+                                                                {novel.title}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                ) : (
+                                                    <div className="text-xs text-slate-400 italic py-2">Chưa có tác phẩm nào</div>
+                                                )}
+                                                
+                                                {/* Tooltip arrow */}
+                                                <div className="absolute top-6 -left-2 w-4 h-4 bg-white border-l border-b border-slate-100 rotate-45" />
+                                            </div>
+                                        )}
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className="px-2 py-1 bg-slate-100 text-slate-500 rounded font-mono text-[11px] font-bold uppercase tracking-tighter">
@@ -167,7 +331,7 @@ const AdminAuthors = () => {
                                         {author.des || 'Chưa có mô tả'}
                                     </td>
                                     <td className="px-6 py-4 text-right whitespace-nowrap">
-                                        {!['an-danh', 'khong-ten-tac-gia'].includes(author.slug) && (
+                                        {author.editable !== false && (
                                             <>
                                                 <button 
                                                     onClick={() => handleOpenModal(author)}
@@ -232,6 +396,37 @@ const AdminAuthors = () => {
                                     />
                                 </div>
                             </div>
+
+                            <div className="space-y-4">
+                                <label className="text-[13px] font-bold text-slate-500 uppercase tracking-wider ml-1">Ảnh tác giả</label>
+                                <div className="flex items-center gap-6">
+                                    <div className="relative w-32 h-32 rounded-3xl overflow-hidden border-4 border-slate-50 shadow-inner bg-slate-50 group">
+                                        {previewUrl ? (
+                                            <Image src={previewUrl} layout="fill" objectFit="cover" alt="Preview" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                                <AiOutlineUser size={48} />
+                                            </div>
+                                        )}
+                                        <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                            <AiOutlineCamera className="text-white" size={32} />
+                                            <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                                        </label>
+                                    </div>
+                                    <div className="flex-1 space-y-1">
+                                        <p className="text-sm font-medium text-slate-600">Thay đổi ảnh đại diện</p>
+                                        <p className="text-xs text-slate-400">Hỗ trợ JPG, PNG. Dung lượng tối đa 2MB.</p>
+                                        <button 
+                                            type="button"
+                                            onClick={() => document.querySelector<HTMLInputElement>('input[type="file"]')?.click()}
+                                            className="mt-2 px-4 py-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors border border-indigo-100"
+                                        >
+                                            Chọn ảnh từ máy tính
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="space-y-2">
                                 <label className="text-[13px] font-bold text-slate-500 uppercase tracking-wider ml-1">Giới thiệu ngắn</label>
                                 <textarea 
@@ -244,8 +439,16 @@ const AdminAuthors = () => {
                             </div>
                             <div className="flex gap-3 pt-4">
                                 <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 text-slate-500 font-bold hover:bg-slate-50 rounded-2xl transition-all">Hủy bỏ</button>
-                                <button type="submit" className="flex-[2] py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
-                                    {editData ? 'Lưu thay đổi' : 'Tạo tác giả'}
+                                <button 
+                                    type="submit" 
+                                    disabled={isSubmitting}
+                                    className="flex-[2] py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 disabled:opacity-50 flex items-center justify-center"
+                                >
+                                    {isSubmitting ? (
+                                        <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                    ) : (
+                                        editData ? 'Lưu thay đổi' : 'Tạo tác giả'
+                                    )}
                                 </button>
                             </div>
                         </form>
@@ -286,7 +489,7 @@ const AdminAuthors = () => {
                                 disabled={isDeleting}
                                 className="w-full py-4 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-2xl transition-all flex items-center justify-center border border-blue-100 disabled:opacity-50"
                             >
-                                1. Chuyển tác phẩm sang "Ẩn danh" & Xóa tác giả
+                                1. Chuyển tác phẩm sang "Không tên tác giả" & Xóa tác giả
                             </button>
                             <button 
                                 onClick={() => finalDelete('delete')}

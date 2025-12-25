@@ -17,7 +17,7 @@ const UserBookCard:React.FC<CardProps> = ({novel} :CardProps) => {
         </div>
         <div className="w-[calc(100%_-_70px)] md:w-full pl-2 md:pl-0">
         <span className="font-bold text-orange-900 p-1 first-letter:uppercase line-clamp-2">{novel.title}</span>
-        <span className="text-gray-500 truncate px-1 first-letter:uppercase line-clamp-2">{novel.author.name}</span>
+        <span className="text-gray-500 truncate px-1 first-letter:uppercase line-clamp-2">{novel.author?.name || 'Đang cập nhật'}</span>
         <div className="flex justify-between text-xs">
             <span className="p-1 text-violet-600 ">{novel.category.cate}</span>
             <span className="p-1 bg-blue-500 text-white rounded-sm">{`${novel.chapCount} chương`}</span>

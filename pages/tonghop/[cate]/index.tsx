@@ -40,7 +40,13 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
                   return <li key={index} className='text-gray-400 w-full flex justify-between items-center py-2 border-b-[1px]'> 
                       <span className='first-letter:uppercase one-line-hidden hidden  lg:block w-20'>{item.category.cate}</span>
                       <span className='capitalize text-gray-800 ml-3 min-w-[120px] one-line-hidden w-11/12 lg:w-[calc(100%_-_400px)]'><Link legacyBehavior passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
-                      <span className='text-xs w-[120px] ml-3 one-line-hidden hidden lg:block'><Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link></span>
+                      <span className='text-xs w-[120px] ml-3 one-line-hidden hidden lg:block'>
+                        {item.author?.slug ? (
+                          <Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link>
+                        ) : (
+                          item.author?.name || 'Đang cập nhật'
+                        )}
+                      </span>
                       <span className='text-xs w-[100px] ml-3 one-line-hidden'><Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`Chương ${item.chapCount}`}</a></Link></span>
                       <span className='text-xs md:w-[100px] ml-3 one-line-hidden hidden w-1/12 lg:block'>{format(parseISO(item.updatedAt),'yyyy-MM-dd')}</span>
                   </li>
@@ -65,7 +71,7 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
               <span className="absolute top-2 right-2 rounded-md block px-3 py-1 text-white bg-violet-700">{`Chương ${novelsBestViews[0].chapCount}`}</span>
               <div className="absolute bottom-3 left-2 right-2 bg-white py-1">
                 <span className="block px-3 w-full line-clamp-2">{novelsBestViews[0].title}</span>
-                <span className='text-orange-700 px-3'>{novelsBestViews[0].author.name}</span>
+                <span className='text-orange-700 px-3'>{novelsBestViews[0].author?.name || 'Đang cập nhật'}</span>
 
               </div>
               

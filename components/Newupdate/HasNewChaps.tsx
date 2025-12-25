@@ -31,10 +31,10 @@ const HasNewChaps: React.FC<HasNewChapsProps> = ({ hasnews, newnovels }: HasNewC
                                 </NovelTooltip>
                             </span>
                             <span className='text-xs w-[120px] ml-3 one-line-hidden '>
-                                {item.author.slug ? (
+                                {item.author?.slug ? (
                                     <Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link>
                                 ) : (
-                                    item.author.name
+                                    item.author?.name || 'Đang cập nhật'
                                 )}
                             </span>
                             <span className='text-xs w-[100px] ml-3 one-line-hidden hidden md:block'><Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`Chương ${item.chapCount}`}</a></Link></span>

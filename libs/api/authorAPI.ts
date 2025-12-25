@@ -17,8 +17,16 @@ export const storeNewAuthor = async (newAuthor: AuthorWithOutId) => {
     return res.data;
 }
 
-export const getAllAuthors = async () => {
-    const res = await API.get<Author[]>(`/author/all`);
+export const getAllAuthors = async (name?: string, novel?: string) => {
+    let url = '/author/all';
+    const params = new URLSearchParams();
+    if (name) params.append('name', name);
+    if (novel) params.append('novel', novel);
+    
+    const queryString = params.toString();
+    if (queryString) url += `?${queryString}`;
+    
+    const res = await API.get<Author[]>(url);
     return res.data;
 }
 
@@ -32,6 +40,11 @@ export const deleteAuthor = async (id: string, mode?: string) => {
     const authHeader = getAuthHeader();
     const url = mode ? `/author/${id}?mode=${mode}` : `/author/${id}`;
     const res = await API.delete(url, authHeader);
+    return res.data;
+}
+
+export const getNovelsByAuthor = async (id: string) => {
+    const res = await API.get(`/author/${id}/novels`);
     return res.data;
 }
 

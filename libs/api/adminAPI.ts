@@ -8,9 +8,17 @@ export const getAdminStats = async () => {
     return res.data;
 }
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (filters: { search?: string, role?: string, page?: number, limit?: number } = {}) => {
     const authHeader = getAuthHeader();
-    const res = await API.get<UserFind[]>(`/admin/users`, authHeader);
+    const params = {
+        page: 1,
+        limit: 20,
+        ...filters
+    };
+    const res = await API.get<{ users: UserFind[], total: number }>(`/admin/users`, {
+        ...authHeader,
+        params
+    });
     return res.data;
 }
 

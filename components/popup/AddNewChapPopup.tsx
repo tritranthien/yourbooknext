@@ -41,9 +41,9 @@ const AddNewChapPopup:React.FC<PopupProps> = ({novel,closeChap}:PopupProps) => {
       <div className="w-[850px] bg-white p-10 overflow-y-auto">
         <div className="w-full">
           <span className="block font-bold text-blue-700 text-2xl">{novel.title}</span>
-          <span className="block text-gray-400">{novel.author.name}</span>
+          <span className="block text-gray-400">{novel.author?.name || 'Đang cập nhật'}</span>
           <div className="flex mb-10">
-            <span className="block rounded-md text-lime-7000">{`${novel.category.cate}`}</span>
+            <span className="block rounded-md text-lime-7000">{(novel.category && typeof novel.category === 'object') ? (novel.category as any).cate : 'Chưa phân loại'}</span>
             <span className="block rounded-md ml-5 text-purple-700">{`${novel.chapCount} chương`}</span>
           </div>
         </div>

@@ -14,7 +14,7 @@ interface MainNovels{
 const MainNovels:React.FC<MainNovels> = ({novel}:MainNovels) => {
   const [act,setAct] = useState<number>(0);
   const [isLoged, setLoged] = useState(false);
-  const {data, isSuccess,error} = useAuthorNovels(novel.author._id);
+  const {data, isSuccess,error} = useAuthorNovels(novel.author?._id || '');
   useEffect(()=>{
     if(localStorage && localStorage.getItem('userInfo')){
       setLoged(true);
@@ -34,15 +34,21 @@ const MainNovels:React.FC<MainNovels> = ({novel}:MainNovels) => {
           { act == 2 && <Ratting loged={isLoged} novel={novel}/> }
         </div>
         <div id='cmt' className="w-full mb-5">
-          <Cmt novel={novel} loged={isLoged}/>
+          {novel && <Cmt novel={novel} loged={isLoged}/>}
         </div>
       </div>
       <div className=" w-full md:w-1/4">
         <span className="font-bold text-xl block px-2 py-1 ">tác giả</span>
         <div className="flex w-full mt-2 rounded-md relative h-[250px] bg-slate-300 min-h-[100px]">
-          <Image src={novel.author.image} layout='fill' objectFit='cover' alt='avatar' />
+          {novel.author?.image && <Image src={novel.author.image} layout='fill' objectFit='cover' alt='avatar' />}
         </div>
-        <span className='block w-full p-2 text-center border-b-2 text-blue-500 font-bold'><Link legacyBehavior passHref href={`/tac-gia/${novel.author.slug}`}><a>{novel.author.name}</a></Link></span>
+        <span className='block w-full p-2 text-center border-b-2 text-blue-500 font-bold'>
+          {novel.author?.slug ? (
+            <Link legacyBehavior passHref href={`/tac-gia/${novel.author.slug}`}><a>{novel.author.name}</a></Link>
+          ) : (
+            novel.author?.name || 'Đang cập nhật'
+          )}
+        </span>
         <span className="w-full text-center block px-2 py-1 font-bold">truyện khác cùng tác giả</span>
         {
           isSuccess && data?.map((item,index)=>{

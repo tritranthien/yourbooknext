@@ -35,7 +35,7 @@ const ColNovels: React.FC<ColNovelsProps> = ({ Coltitle, Coldata }: ColNovelsPro
                                         </NovelTooltip>
                                     </span>
                                     <span className="text-xs text-gray-400 mb-1 block">
-                                        {item.author.name}
+                                        {item.author?.name || 'Đang cập nhật'}
                                     </span>
                                     <span className="text-xs text-secondary-500 font-medium bg-gray-50 px-2 py-0.5 rounded w-fit">
                                         <Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}>

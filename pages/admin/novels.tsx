@@ -6,9 +6,97 @@ import { getAllAuthors } from '../../libs/api/authorAPI'
 import { SerVerNovel } from '../../interface/_Novel'
 import { Category } from '../../interface/_Category'
 import { Author } from '../../interface/_Author'
-import { AiOutlineSearch, AiOutlineFilter, AiOutlineReload, AiOutlineLeft, AiOutlineRight, AiOutlineEdit, AiOutlineDelete, AiOutlineClose } from 'react-icons/ai'
+import { AiOutlineSearch, AiOutlineFilter, AiOutlineReload, AiOutlineLeft, AiOutlineRight, AiOutlineEdit, AiOutlineDelete, AiOutlineClose, AiOutlineCheck, AiOutlineDown } from 'react-icons/ai'
 import ReactPaginate from 'react-paginate'
 import { toast } from 'react-toastify'
+import { useRef } from 'react'
+
+const MultiSelect = ({ label, options, selectedValues, onChange, placeholder }: { 
+    label: string, 
+    options: { id: string, label: string }[], 
+    selectedValues: string[], 
+    onChange: (values: string[]) => void, 
+    placeholder: string 
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const toggleOption = (id: string) => {
+        if (selectedValues.includes(id)) {
+            onChange(selectedValues.filter(v => v !== id));
+        } else {
+            onChange([...selectedValues, id]);
+        }
+    };
+
+    return (
+        <div className="space-y-2 relative" ref={containerRef}>
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">{label}</label>
+            <div 
+                className={`w-full px-4 py-2 rounded-lg border flex items-center justify-between cursor-pointer bg-white text-sm transition-all ${isOpen ? 'ring-2 ring-blue-500 border-blue-500' : 'border-slate-200'}`}
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                <div className="truncate flex-1 text-slate-700">
+                    {selectedValues.length > 0 
+                        ? `${selectedValues.length} đã chọn`
+                        : placeholder}
+                </div>
+                <AiOutlineDown size={12} className={`text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+            </div>
+            
+            {isOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-100 rounded-lg shadow-xl z-[100] max-h-80 overflow-y-auto animate-fade-in-up">
+                    {/* Selected Tags Section */}
+                    {selectedValues.length > 0 && (
+                        <div className="sticky top-0 z-10 p-2 border-b border-slate-100 flex flex-wrap gap-1.5 bg-slate-50/95 backdrop-blur-sm max-h-[100px] overflow-y-auto custom-scrollbar">
+                            {selectedValues.map(valId => {
+                                const opt = options.find(o => o.id === valId);
+                                if (!opt) return null;
+                                return (
+                                    <span key={valId} className="inline-flex items-center px-1.5 py-0.5 bg-white border border-blue-100 text-blue-600 rounded text-[10px] font-bold shadow-sm animate-fade-in-right">
+                                        {opt.label}
+                                        <button 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleOption(valId);
+                                            }}
+                                            className="ml-1 hover:text-red-500 transition-colors"
+                                        >
+                                            <AiOutlineClose size={8} />
+                                        </button>
+                                    </span>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {options.length === 0 ? (
+                        <div className="px-4 py-2 text-xs text-slate-400 italic">Không có lựa chọn nào</div>
+                    ) : options.map(opt => (
+                        <div 
+                            key={opt.id}
+                            className={`px-4 py-2 hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${selectedValues.includes(opt.id) ? 'bg-blue-50/50' : ''}`}
+                            onClick={() => toggleOption(opt.id)}
+                        >
+                            <span className={`text-sm ${selectedValues.includes(opt.id) ? 'text-blue-600 font-semibold' : 'text-slate-600'}`}>{opt.label}</span>
+                            {selectedValues.includes(opt.id) && <AiOutlineCheck size={14} className="text-blue-600" />}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
 
 const AdminNovels = () => {
     const [novels, setNovels] = useState<SerVerNovel[]>([]);
@@ -19,9 +107,11 @@ const AdminNovels = () => {
     
     // Filter states
     const [title, setTitle] = useState('');
-    const [categoryId, setCategoryId] = useState('');
-    const [status, setStatus] = useState('');
+    const [selectedCates, setSelectedCates] = useState<string[]>([]);
+    const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+    const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
     const [page, setPage] = useState(1);
+    const [hoveredAuthorId, setHoveredAuthorId] = useState<string | null>(null);
     const limit = 15;
 
     // Modal Edit state
@@ -40,8 +130,9 @@ const AdminNovels = () => {
         try {
             const filters: any = { page: currentPage, limit };
             if (title.trim()) filters.title = title.trim();
-            if (categoryId) filters.categoryId = categoryId;
-            if (status) filters.status = status;
+            if (selectedCates.length > 0) filters.categoryId = selectedCates.join(',');
+            if (selectedStatuses.length > 0) filters.status = selectedStatuses.join(',');
+            if (selectedAuthors.length > 0) filters.authorId = selectedAuthors.join(',');
 
             const data = await getAllNovels(filters);
             setNovels(data.novels || []);
@@ -82,8 +173,9 @@ const AdminNovels = () => {
 
     const handleReset = () => {
         setTitle('');
-        setCategoryId('');
-        setStatus('');
+        setSelectedCates([]);
+        setSelectedStatuses([]);
+        setSelectedAuthors([]);
         setPage(1);
         setLoading(true);
         getAllNovels({ page: 1, limit }).then(data => {
@@ -118,8 +210,8 @@ const AdminNovels = () => {
         setEditForm({
             title: novel.title,
             status: novel.status,
-            category: typeof novel.category === 'object' ? (novel.category as any)._id : novel.category,
-            author: typeof novel.author === 'object' ? (novel.author as any)._id : novel.author,
+            category: (novel.category && typeof novel.category === 'object') ? (novel.category as any)._id : (novel.category || ''),
+            author: (novel.author && typeof novel.author === 'object') ? (novel.author as any)._id : (novel.author || ''),
             description: novel.description || ''
         });
         setIsEditModalOpen(true);
@@ -147,7 +239,7 @@ const AdminNovels = () => {
             
             {/* Filter Section */}
             <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 mb-8">
-                <form onSubmit={handleFilter} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <form onSubmit={handleFilter} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
                     <div className="space-y-2">
                         <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tìm kiếm tên</label>
                         <div className="relative">
@@ -162,32 +254,33 @@ const AdminNovels = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Thể loại</label>
-                        <select 
-                            className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm"
-                            value={categoryId}
-                            onChange={(e) => setCategoryId(e.target.value)}
-                        >
-                            <option value="">Tất cả thể loại</option>
-                            {categories.map(cat => (
-                                <option key={cat._id} value={cat._id}>{cat.cate}</option>
-                            ))}
-                        </select>
-                    </div>
+                    <MultiSelect 
+                        label="Thể loại"
+                        placeholder="Tất cả thể loại"
+                        options={categories.map(cat => ({ id: cat._id, label: cat.cate }))}
+                        selectedValues={selectedCates}
+                        onChange={setSelectedCates}
+                    />
 
-                    <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Trạng thái</label>
-                        <select 
-                            className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm"
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
-                        >
-                            <option value="">Tất cả</option>
-                            <option value="continue">Đang ra</option>
-                            <option value="completed">Hoàn thành</option>
-                        </select>
-                    </div>
+                    <MultiSelect 
+                        label="Trạng thái"
+                        placeholder="Tất cả trạng thái"
+                        options={[
+                            { id: 'continue', label: 'Đang ra' },
+                            { id: 'completed', label: 'Hoàn thành' },
+                            { id: 'drop', label: 'Tạm ngưng' }
+                        ]}
+                        selectedValues={selectedStatuses}
+                        onChange={setSelectedStatuses}
+                    />
+
+                    <MultiSelect 
+                        label="Tác giả"
+                        placeholder="Tất cả tác giả"
+                        options={authors.map(auth => ({ id: auth._id, label: auth.name }))}
+                        selectedValues={selectedAuthors}
+                        onChange={setSelectedAuthors}
+                    />
 
                     <div className="flex gap-2">
                         <button 
@@ -208,8 +301,9 @@ const AdminNovels = () => {
                 </form>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-x-auto">
-                <table className="w-full text-left">
+            <div className="bg-white rounded-xl shadow-sm border border-slate-100">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left font-sans">
                     <thead className="bg-slate-50 border-b border-slate-100">
                         <tr>
                             <th className="px-6 py-4 font-semibold text-slate-600 text-sm">Tên truyện</th>
@@ -246,10 +340,55 @@ const AdminNovels = () => {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full uppercase font-bold">
-                                        {typeof novel.category === 'object' ? (novel.category as any)?.cate : 'Chưa phân loại'}
+                                        {(novel.category && typeof novel.category === 'object') ? (novel.category as any).cate : 'Chưa phân loại'}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-slate-600 text-sm whitespace-nowrap">{typeof novel.author === 'object' ? (novel.author as any)?.name : 'Ẩn danh'}</td>
+                                 <td className="px-6 py-4 text-slate-600 text-sm whitespace-nowrap relative">
+                                    {(novel.author && typeof novel.author === 'object') ? (
+                                        <>
+                                            <div 
+                                                className="cursor-help hover:text-indigo-600 transition-colors inline-block font-medium"
+                                                onMouseEnter={() => setHoveredAuthorId(`${novel._id}-${(novel.author as any)._id}`)}
+                                                onMouseLeave={() => setHoveredAuthorId(null)}
+                                            >
+                                                {(novel.author as any).name}
+                                            </div>
+                                            {hoveredAuthorId === `${novel._id}-${(novel.author as any)._id}` && (
+                                                <div className="absolute left-full top-0 ml-4 z-50 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 p-5 origin-left transition-all animate-fade-in-right whitespace-normal">
+                                                    <div className="flex items-start space-x-4">
+                                                        <div className="w-16 h-20 bg-slate-100 rounded-xl overflow-hidden shrink-0 shadow-inner">
+                                                            <img 
+                                                                src={(novel.author as any).image || '/images/tt3.jpg'} 
+                                                                alt={(novel.author as any).name} 
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <h4 className="text-sm font-bold text-slate-800 mb-1 truncate">
+                                                                {(novel.author as any).name}
+                                                            </h4>
+                                                            <p className="text-[11px] text-slate-500 line-clamp-4 leading-relaxed italic">
+                                                                {(novel.author as any).des || (novel.author as any).description || 'Chưa có thông tin giới thiệu về tác giả này.'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="mt-4 pt-4 border-t border-slate-50 flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                                        <span>Thông tin tác giả</span>
+                                                        <span className="text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-full">
+                                                            ID: {(novel.author as any)._id.slice(-6)}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Tooltip arrow */}
+                                                    <div className="absolute top-6 -left-2 w-4 h-4 bg-white border-l border-b border-slate-100 rotate-45" />
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
+                                        'Không tên tác giả'
+                                    )}
+                                </td>
                                 <td className="px-6 py-4 text-center font-semibold text-slate-700">{(novel as any).chapCount || 0}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span className={`text-xs px-2 py-1 rounded-full font-bold ${
@@ -280,15 +419,16 @@ const AdminNovels = () => {
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            {/* Pagination UI */}
-            {!loading && total > limit && (
-                <div className="mt-8 flex justify-center">
-                    <ReactPaginate
-                        breakLabel="..."
-                        nextLabel={<AiOutlineRight />}
-                        onPageChange={handlePageClick}
-                        pageRangeDisplayed={3}
+        {/* Pagination UI */}
+        {!loading && total > limit && (
+            <div className="mt-8 flex justify-center">
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel={<AiOutlineRight />}
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
                         marginPagesDisplayed={2}
                         pageCount={pageCount}
                         previousLabel={<AiOutlineLeft />}

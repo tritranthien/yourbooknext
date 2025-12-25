@@ -24,7 +24,7 @@ const Authorpage:React.FC<AuthorpageProps> = ({author}:AuthorpageProps) => {
           <div className="w-full md:w-1/4 mb-5 md:mb-0">
           <span className="block  text-white text-2xl uppercase px-3 py-1 bg-stone-900">tác giả: <b className="text-orange-500">{author.name}</b></span>
             <div className="w-full relative h-[250px]">
-              <Image src={author.image} objectFit='cover' layout="fill" alt={author.slug}/>
+              <Image src={author.image || '/images/tt3.jpg'} objectFit='cover' layout="fill" alt={author.slug}/>
             </div>
             <div className="px-3 py-1">
               <span className="text-orange-700 block"><b>số truyện: </b>{author.novelCount}</span>

@@ -30,12 +30,12 @@ const TopNovels: React.FC<TopNovelsProps> = ({ novels, title }: TopNovelsProps) 
                         </span>
                         <span className="text-secondary-600 text-xs px-2 mb-1">{`${novels[0].chapCount} chương`}</span>
                     </div>
-                    {novels[0].author.slug ? (
+                    {novels[0].author?.slug ? (
                         <Link legacyBehavior passHref href={`/tac-gia/${novels[0].author.slug}`}>
                             <a className="text-secondary-500 hover:text-secondary-700 px-2 mb-1 block text-sm font-medium">{novels[0].author.name}</a>
                         </Link>
                     ) : (
-                        <span className="text-secondary-500 px-2 mb-1 block text-sm font-medium">{novels[0].author.name}</span>
+                        <span className="text-secondary-500 px-2 mb-1 block text-sm font-medium">{novels[0].author?.name || 'Đang cập nhật'}</span>
                     )}
                     <p className="text-sm text-gray-500 line-clamp-3 px-2 mb-4 leading-relaxed">{novels[0].description}</p>
                 </div>
@@ -71,10 +71,10 @@ const TopNovels: React.FC<TopNovelsProps> = ({ novels, title }: TopNovelsProps) 
                                     </span>
 
                                     <span className="w-full text-xs text-secondary-500 font-medium mb-1 truncate">
-                                        {item.author.slug ? (
+                                        {item.author?.slug ? (
                                             <Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link>
                                         ) : (
-                                            item.author.name
+                                            item.author?.name || 'Đang cập nhật'
                                         )}
                                     </span>
 
