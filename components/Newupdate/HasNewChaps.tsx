@@ -15,30 +15,36 @@ const HasNewChaps: React.FC<HasNewChapsProps> = ({ hasnews, newnovels }: HasNewC
             <ul className="text-sm w-full">
                 {
                     hasnews.map((item, index) => {
-                        return <li key={index} className='text-gray-400 dark:text-slate-500 w-full flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800/50'>
-                            <span className='first-letter:uppercase one-line-hidden w-20'>
+                        return <li key={index} className='text-gray-400 dark:text-slate-500 w-full flex items-center py-2.5 border-b border-slate-100 dark:border-slate-800/50 group h-10'>
+                            <span className='first-letter:uppercase one-line-hidden w-20 flex-shrink-0 text-xs md:text-[13px] flex items-center'>
                                 {item.category?.slug ? (
-                                    <Link legacyBehavior passHref href={`/tonghop/${item.category.slug}`}><a>{item.category.cate}</a></Link>
+                                    <Link legacyBehavior passHref href={`/tonghop/${item.category.slug}`}><a className="hover:text-primary-500 transition-colors uppercase font-bold text-[11px] leading-none">{item.category.cate}</a></Link>
                                 ) : (
-                                    item.category?.cate || 'Chưa phân loại'
+                                    <span className="leading-none">{item.category?.cate || 'Chưa phân loại'}</span>
                                 )}
                             </span>
-                            <span className='capitalize text-gray-800 dark:text-slate-200 ml-3 min-w-[120px] w-full md:w-[calc(100%_-_400px)] block font-medium'>
-                                <NovelTooltip novel={item} className="w-full">
-                                    <div className="one-line-hidden w-full">
+                            <span className='capitalize text-gray-800 dark:text-slate-200 ml-3 flex-1 font-medium transition-all duration-200 flex items-center h-full'>
+                                <NovelTooltip novel={item} className="w-full flex items-center h-full">
+                                    <span className="one-line-hidden w-full block leading-none">
                                         <Link legacyBehavior passHref href={`/truyen/${item.slug}`}><a className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">{item.title}</a></Link>
-                                    </div>
+                                    </span>
                                 </NovelTooltip>
                             </span>
-                            <span className='text-xs w-[120px] ml-3 one-line-hidden '>
+                            <span className='text-xs w-[120px] ml-3 one-line-hidden flex-shrink-0 hidden md:flex items-center'>
                                 {item.author?.slug ? (
-                                    <Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link>
+                                    <Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}><a className="leading-none">{item.author.name}</a></Link>
                                 ) : (
-                                    item.author?.name || 'Đang cập nhật'
+                                    <span className="leading-none">{item.author?.name || 'Đang cập nhật'}</span>
                                 )}
                             </span>
-                            <span className='text-xs w-[100px] ml-3 one-line-hidden hidden md:block'><Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`Chương ${item.chapCount}`}</a></Link></span>
-                            <span className='text-xs w-[100px] ml-3 one-line-hidden hidden md:block opacity-60'>{format(parseISO(item.updatedAt), 'yyyy-MM-dd')}</span>
+                            <span className='text-xs w-[80px] ml-3 one-line-hidden hidden md:flex items-center justify-end flex-shrink-0 text-right opacity-60'>
+                                <Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}>
+                                    <a className="leading-none">{`${item.chapCount} Ch`}</a>
+                                </Link>
+                            </span>
+                            <span className='text-xs w-[60px] ml-3 one-line-hidden hidden md:flex items-center justify-end flex-shrink-0 text-right opacity-40 leading-none'>
+                                {format(parseISO(item.updatedAt), 'dd/MM')}
+                            </span>
                         </li>
                     })
                 }
@@ -49,19 +55,19 @@ const HasNewChaps: React.FC<HasNewChapsProps> = ({ hasnews, newnovels }: HasNewC
             <ul className='text-sm tracking-tight leading-5 mt-2'>
                 {
                     newnovels.map((item, index) => {
-                        return <li className="w-full flex flex-nowrap p-2 h-[41px] border-b border-dashed border-slate-100 dark:border-slate-800 last:border-0" key={index}>
-                            <span className='w-3/4 text-gray-800 dark:text-slate-200 block font-medium'>
-                                <NovelTooltip novel={item} className="w-full">
-                                    <div className="one-line-hidden w-full">
+                        return <li className="w-full flex items-center py-2.5 px-2 border-b border-dashed border-slate-100 dark:border-slate-800 last:border-0 group h-10" key={index}>
+                            <span className='flex-1 min-w-0 text-gray-800 dark:text-slate-200 font-medium h-full flex items-center'>
+                                <NovelTooltip novel={item} className="w-full flex items-center h-full">
+                                    <span className="one-line-hidden w-full block leading-none">
                                         <Link legacyBehavior passHref href={`/truyen/${item.slug}`}><a className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">{item.title}</a></Link>
-                                    </div>
+                                    </span>
                                 </NovelTooltip>
                             </span>
-                            <span className='w-1/4 text-zinc-400 dark:text-slate-500 one-line-hidden text-right'>
+                            <span className='w-20 flex-shrink-0 text-zinc-400 dark:text-slate-500 one-line-hidden text-right text-[12px] flex items-center justify-end'>
                                 {item.category?.slug ? (
-                                    <Link legacyBehavior passHref href={`/tonghop/${item.category.slug}`}><a>{item.category.cate}</a></Link>
+                                    <Link legacyBehavior passHref href={`/tonghop/${item.category.slug}`}><a className="leading-none">{item.category.cate}</a></Link>
                                 ) : (
-                                    item.category?.cate || 'Chưa phân loại'
+                                    <span className="leading-none">{item.category?.cate || 'Chưa phân loại'}</span>
                                 )}
                             </span>
                         </li>

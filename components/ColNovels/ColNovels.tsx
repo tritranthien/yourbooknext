@@ -46,7 +46,7 @@ const ColNovels: React.FC<ColNovelsProps> = ({ Coltitle, Coldata }: ColNovelsPro
                             </li>
                         )
                     }
-                    return <li key={index} className="flex py-2 w-full border-b border-dashed border-slate-100 dark:border-slate-800/50 last:border-0 items-baseline group">
+                    return <li key={index} className="flex py-2 w-full border-b border-dashed border-slate-100 dark:border-slate-800/50 last:border-0 items-center group">
                         <span className={`w-[24px] flex-shrink-0 text-xs font-semibold ${index < 3 ? 'text-primary-500' : 'text-slate-300 dark:text-slate-600'}`}>{index + 1}</span>
                         <span className="flex-1 min-w-0 text-sm text-slate-600 dark:text-slate-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors pr-2 block">
                             <NovelTooltip novel={item} className="w-full">

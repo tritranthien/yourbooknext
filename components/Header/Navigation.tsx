@@ -122,7 +122,7 @@ const NavigationContent = () => {
             {
                 !openMenu && <CgMenuGridO onClick={() => setOpenMenu(true)} className={`fixed top-1 left-1 z-[120] md:hidden opacity-60`} size={40} color="orange" />
             }
-            <div className="w-full md:sticky z-30 md:block fixed max-h-screen overflow-x-hidden md:overflow-x-visible overflow-y-auto md:overflow-y-visible">
+            <div className="w-full md:sticky z-30 md:block fixed max-h-screen overflow-x-hidden md:overflow-x-visible overflow-y-auto md:overflow-y-visible mb-6 md:mb-10">
                 <div className={`container ${router.pathname == '/' ? 'md:flex md:flex-nowrap md:justify-between' : 'hidden'} mx-auto w-full md:h-14`}>
                     <p className="w-36 h-full text-center text-2xl font-bold leading-[56px] text-primary-400 hidden md:block">Your Book</p>
                     <div className="flex h-14 items-center">
@@ -165,8 +165,8 @@ const NavigationContent = () => {
                 </div>
                 <div className={`w-full max-w-[375px] md:max-w-full relative ${openMenu ? 'block' : 'hidden'} md:block ${blackbg && 'bg-black'} ${router.pathname == '/' && 'mt-[30px] md:mt-0'} bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800`}>
                     <VscGitPullRequestClosed onClick={() => setOpenMenu(false)} className={`absolute top-1 right-1 z-40 md:hidden`} size={30} color="orange" />
-                    <div className="mx-auto sticky top-0 text-gray-300 md:text-gray-800 dark:md:text-slate-200 container flex flex-col md:flex-row items-center justify-between md:h-7 w-full bg-gray-800 md:bg-transparent">
-                        <ul className="md:text-sm font-bold md:font-normal flex flex-col md:flex-row h-full list-none gap-y-1 py-5 md:py-0">
+                    <div className="mx-auto sticky top-0 text-gray-300 md:text-gray-800 dark:md:text-slate-200 container flex flex-col md:flex-row items-center justify-between w-full bg-gray-800 md:bg-transparent">
+                        <ul className="md:text-sm font-bold md:font-normal flex flex-col md:flex-row h-full list-none gap-y-1 py-5 md:pt-0 md:pb-2">
                             <li className="px-2 flex items-center hover:text-yellow-500"><Link legacyBehavior passHref href='/'><a className="flex items-center"><AiFillHome size={20} /><b className="md:hidden text-yellow-600 text-2xl ml-1">trang chủ</b></a></Link></li>
                             <li className="group leading-7 h-full relative px-2 first-letter:uppercase">Thể loại
                                 <ul className=" md:absolute md:invisible group-hover:visible hover:visible md:top-7 py-3 px-4 flex md:w-[700px] flex-wrap list-none bg-gray-800 text-teal-600 italic md:text-slate-200 dark:bg-slate-800">
