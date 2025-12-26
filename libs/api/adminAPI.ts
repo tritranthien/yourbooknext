@@ -22,7 +22,7 @@ export const getAllUsers = async (filters: { search?: string, role?: string, pag
     return res.data;
 }
 
-export const getAllNovels = async (filters: { title?: string, categoryId?: string, status?: string, page?: number, limit?: number } = {}) => {
+export const getAllNovels = async (filters: { title?: string, categoryId?: string | string[], status?: string | string[], authorId?: string | string[], tagIds?: string | string[], page?: number, limit?: number } = {}) => {
     const authHeader = getAuthHeader();
     const params = {
         page: 1,

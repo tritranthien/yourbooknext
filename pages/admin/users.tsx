@@ -36,12 +36,12 @@ const MultiSelect = ({ label, options, selectedValues, onChange, placeholder }: 
 
     return (
         <div className="space-y-2 relative" ref={containerRef}>
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">{label}</label>
+            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{label}</label>
             <div 
-                className={`w-full px-4 py-2 rounded-lg border flex items-center justify-between cursor-pointer bg-white text-sm transition-all ${isOpen ? 'ring-2 ring-blue-500 border-blue-500' : 'border-slate-200'}`}
+                className={`w-full px-4 py-2 rounded-lg border flex items-center justify-between cursor-pointer bg-white dark:bg-slate-800 text-sm transition-all ${isOpen ? 'ring-2 ring-blue-500 border-blue-500' : 'border-slate-200 dark:border-slate-700'}`}
                 onClick={() => setIsOpen(!isOpen)}
             >
-                <div className="truncate flex-1 text-slate-700">
+                <div className="truncate flex-1 text-slate-700 dark:text-slate-200">
                     {selectedValues.length > 0 
                         ? `${selectedValues.length} đã chọn`
                         : placeholder}
@@ -50,14 +50,14 @@ const MultiSelect = ({ label, options, selectedValues, onChange, placeholder }: 
             </div>
             
             {isOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-100 rounded-lg shadow-xl z-[100] max-h-80 overflow-y-auto animate-fade-in-up custom-scrollbar">
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-lg shadow-xl z-[100] max-h-80 overflow-y-auto animate-fade-in-up custom-scrollbar">
                     {selectedValues.length > 0 && (
-                        <div className="sticky top-0 z-10 p-2 border-b border-slate-100 flex flex-wrap gap-1.5 bg-slate-50/95 backdrop-blur-sm max-h-[100px] overflow-y-auto custom-scrollbar">
+                        <div className="sticky top-0 z-10 p-2 border-b border-slate-100 dark:border-slate-800 flex flex-wrap gap-1.5 bg-slate-50/95 dark:bg-slate-800/95 backdrop-blur-sm max-h-[100px] overflow-y-auto custom-scrollbar">
                             {selectedValues.map(valId => {
                                 const opt = options.find(o => o.id === valId);
                                 if (!opt) return null;
                                 return (
-                                    <span key={valId} className="inline-flex items-center px-1.5 py-0.5 bg-white border border-blue-100 text-blue-600 rounded text-[10px] font-bold shadow-sm animate-fade-in-right">
+                                    <span key={valId} className="inline-flex items-center px-1.5 py-0.5 bg-white dark:bg-slate-700 border border-blue-100 dark:border-blue-900/50 text-blue-600 dark:text-blue-400 rounded text-[10px] font-bold shadow-sm animate-fade-in-right">
                                         {opt.label}
                                         <button 
                                             onClick={(e) => {
@@ -78,11 +78,11 @@ const MultiSelect = ({ label, options, selectedValues, onChange, placeholder }: 
                     ) : options.map(opt => (
                         <div 
                             key={opt.id}
-                            className={`px-4 py-2 hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${selectedValues.includes(opt.id) ? 'bg-blue-50/50' : ''}`}
+                            className={`px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between cursor-pointer transition-colors ${selectedValues.includes(opt.id) ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''}`}
                             onClick={() => toggleOption(opt.id)}
                         >
-                            <span className={`text-sm ${selectedValues.includes(opt.id) ? 'text-blue-600 font-semibold' : 'text-slate-600'}`}>{opt.label}</span>
-                            {selectedValues.includes(opt.id) && <AiOutlineCheck size={14} className="text-blue-600" />}
+                            <span className={`text-sm ${selectedValues.includes(opt.id) ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-slate-600 dark:text-slate-400'}`}>{opt.label}</span>
+                            {selectedValues.includes(opt.id) && <AiOutlineCheck size={14} className="text-blue-600 dark:text-blue-400" />}
                         </div>
                     ))}
                 </div>
@@ -152,18 +152,18 @@ const AdminUsers = () => {
 
     return (
         <div className="relative">
-            <h1 className="text-3xl font-bold text-slate-800 mb-8">Quản lý người dùng</h1>
+            <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-8 transition-colors">Quản lý người dùng</h1>
             
             {/* Filter Section */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 mb-8">
+            <div className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 mb-8 transition-colors">
                 <form onSubmit={handleFilter} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                     <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tìm kiếm</label>
+                        <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tìm kiếm</label>
                         <div className="relative">
                             <AiOutlineSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input 
                                 type="text"
-                                className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
+                                className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200"
                                 placeholder="Username hoặc Email..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
@@ -186,14 +186,14 @@ const AdminUsers = () => {
                     <div className="flex gap-2">
                         <button 
                             type="submit"
-                            className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center shadow-md shadow-blue-100"
+                            className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center shadow-md shadow-blue-100 dark:shadow-none"
                         >
                             <AiOutlineFilter className="mr-2" /> Lọc
                         </button>
                         <button 
                             type="button"
                             onClick={handleReset}
-                            className="px-4 py-2 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-center text-xl"
+                            className="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center text-xl"
                             title="Làm mới"
                         >
                             <AiOutlineReload />
@@ -202,19 +202,19 @@ const AdminUsers = () => {
                 </form>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100">
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead className="bg-slate-50 border-b border-slate-100">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
                             <tr>
-                                <th className="px-6 py-4 font-semibold text-slate-600 text-sm">ID</th>
-                                <th className="px-6 py-4 font-semibold text-slate-600 text-sm">Username</th>
-                                <th className="px-6 py-4 font-semibold text-slate-600 text-sm">Email</th>
-                                <th className="px-6 py-4 font-semibold text-slate-600 text-sm">Vai trò</th>
-                                <th className="px-6 py-4 font-semibold text-slate-600 text-sm text-right">Thao tác</th>
+                                <th className="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400 text-sm">ID</th>
+                                <th className="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400 text-sm">Username</th>
+                                <th className="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400 text-sm">Email</th>
+                                <th className="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400 text-sm">Vai trò</th>
+                                <th className="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400 text-sm text-right">Thao tác</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
                             {loading ? (
                                 <tr>
                                     <td colSpan={5} className="px-6 py-10 text-center text-slate-400">Đang tải dữ liệu...</td>
@@ -224,22 +224,22 @@ const AdminUsers = () => {
                                     <td colSpan={5} className="px-6 py-10 text-center text-slate-400">Không tìm thấy người dùng nào</td>
                                 </tr>
                             ) : users.map((user) => (
-                                <tr key={user._id} className="hover:bg-slate-50 transition-colors">
-                                    <td className="px-6 py-4 text-slate-500 text-xs font-mono">{user._id}</td>
-                                    <td className="px-6 py-4 font-medium text-slate-800">{user.username}</td>
-                                    <td className="px-6 py-4 text-slate-600 text-sm">{user.email}</td>
+                                <tr key={user._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                    <td className="px-6 py-4 text-slate-500 dark:text-slate-500 text-xs font-mono">{user._id}</td>
+                                    <td className="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">{user.username}</td>
+                                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm">{user.email}</td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                                            user.role === 'admin' ? 'bg-amber-100 text-amber-700' : 
-                                            user.role === 'mod' ? 'bg-purple-100 text-purple-700' :
-                                            'bg-blue-100 text-blue-700'
+                                            user.role === 'admin' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400' : 
+                                            user.role === 'mod' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400' :
+                                            'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                                         }`}>
                                             {user.role || 'user'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        <button className="text-blue-600 hover:bg-blue-50 px-3 py-1 rounded-lg transition-colors font-semibold text-xs mr-2">Sửa</button>
-                                        <button className="text-red-600 hover:bg-red-50 px-3 py-1 rounded-lg transition-colors font-semibold text-xs">Khóa</button>
+                                        <button className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 px-3 py-1 rounded-lg transition-colors font-semibold text-xs mr-2">Sửa</button>
+                                        <button className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 px-3 py-1 rounded-lg transition-colors font-semibold text-xs">Khóa</button>
                                     </td>
                                 </tr>
                             ))}
@@ -261,11 +261,11 @@ const AdminUsers = () => {
                         previousLabel={<AiOutlineLeft />}
                         forcePage={page - 1}
                         containerClassName="flex items-center gap-1 list-none select-none"
-                        pageLinkClassName="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-blue-50 hover:border-blue-200 transition-all font-medium text-sm"
-                        activeLinkClassName="!bg-blue-600 !text-white !border-blue-600 shadow-md shadow-blue-100"
-                        previousLinkClassName="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all ml-2"
-                        nextLinkClassName="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all mr-2"
-                        disabledLinkClassName="opacity-30 cursor-not-allowed hover:bg-white border-slate-100"
+                        pageLinkClassName="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-200 dark:hover:border-blue-700 transition-all font-medium text-sm"
+                        activeLinkClassName="!bg-blue-600 !text-white !border-blue-600 shadow-md shadow-blue-100 dark:shadow-none"
+                        previousLinkClassName="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all ml-2"
+                        nextLinkClassName="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all mr-2"
+                        disabledLinkClassName="opacity-30 cursor-not-allowed hover:bg-white dark:hover:bg-slate-900 border-slate-100 dark:border-slate-800"
                         breakLinkClassName="w-10 h-10 flex items-center justify-center text-slate-400"
                     />
                 </div>

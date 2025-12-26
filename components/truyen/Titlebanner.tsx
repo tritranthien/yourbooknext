@@ -150,6 +150,20 @@ const Titlebanner: React.FC<TitlebannerProps> = ({novel}:TitlebannerProps) => {
                     </div>
                   </div>
 
+                  {/* Tags Section */}
+                  {novel.tags && novel.tags.length > 0 && (
+                    <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-10 overflow-hidden">
+                      {novel.tags.map((tag: any) => (
+                        <span 
+                          key={tag.tagId} 
+                          className="px-3 py-1 bg-slate-100/50 dark:bg-slate-800/50 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 rounded-full text-[10px] font-medium tracking-wider border border-slate-200/50 dark:border-slate-700/50 hover:border-primary-200 dark:hover:border-primary-800 transition-all cursor-pointer"
+                        >
+                          # {tag.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
                   <div className="flex flex-wrap justify-center md:justify-start gap-4">
                     <button 
                       onClick={followed ? cancelFollow : followNow} 

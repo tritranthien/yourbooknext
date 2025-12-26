@@ -132,6 +132,13 @@ const AdminLayoutContent: React.FC<{ children: React.ReactNode }> = ({ children 
                                 </a>
                             </Link>
 
+                            <Link legacyBehavior passHref href="/admin/tags">
+                                <a className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all group ${router?.pathname === '/admin/tags' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
+                                    <AiOutlineTag size={20} />
+                                    <span className="font-semibold">Tags</span>
+                                </a>
+                            </Link>
+
                             <p className="px-3 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mt-8 mb-3">Hệ thống</p>
 
                             <Link legacyBehavior passHref href="/admin/settings">

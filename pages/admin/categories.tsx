@@ -323,7 +323,7 @@ const AdminCategories = () => {
     return (
         <div className="max-w-4xl mx-auto">
             <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold text-slate-800 flex items-center">
+                <h1 className="text-3xl font-bold text-slate-800 dark:text-white flex items-center transition-colors">
                     <AiOutlineTag className="mr-3 text-pink-500" /> Quản lý thể loại
                 </h1>
                 <button 
@@ -334,20 +334,20 @@ const AdminCategories = () => {
                 </button>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden transition-colors">
                 <table className="w-full text-left">
-                    <thead className="bg-slate-50 border-b border-slate-100">
+                    <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-400">
                         <tr>
-                            <th className="px-6 py-4 text-sm font-semibold text-slate-600 uppercase">Tên thể loại</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-slate-600 uppercase">Slug</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-slate-600 uppercase text-center">Số lượng truyện</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-slate-600 uppercase text-right">Thao tác</th>
+                            <th className="px-6 py-4 text-sm font-semibold uppercase">Tên thể loại</th>
+                            <th className="px-6 py-4 text-sm font-semibold uppercase">Slug</th>
+                            <th className="px-6 py-4 text-sm font-semibold uppercase text-center">Số lượng truyện</th>
+                            <th className="px-6 py-4 text-sm font-semibold uppercase text-right">Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
                         {categories.map((cate) => (
-                            <tr key={cate._id} className="hover:bg-slate-50 transition-colors">
-                                <td className="px-6 py-4 font-medium text-slate-800 flex items-center">
+                            <tr key={cate._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                <td className="px-6 py-4 font-medium text-slate-800 dark:text-slate-200 flex items-center">
                                     {cate.icon && (
                                         isUrl(cate.icon) ? (
                                             <Image src={cate.icon} alt="" width={32} height={32} unoptimized className="w-8 h-8 rounded object-cover mr-3 bg-slate-100" />
@@ -390,18 +390,18 @@ const AdminCategories = () => {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl scale-in">
-                        <h2 className="text-xl font-bold text-slate-800 mb-6 border-b pb-4">
+                <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-md p-6 shadow-2xl scale-in border border-slate-100 dark:border-slate-800 transition-colors">
+                        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-6 border-b border-slate-50 dark:border-slate-800 pb-4 transition-colors">
                             {editData ? 'Chỉnh sửa thể loại' : 'Thêm thể loại mới'}
                         </h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-slate-600">Tên thể loại</label>
+                                <label className="text-sm font-semibold text-slate-600 dark:text-slate-400 transition-colors">Tên thể loại</label>
                                 <input 
                                     type="text"
                                     required
-                                    className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 transition-all"
                                     value={name}
                                     onChange={(e) => {
                                         setName(e.target.value);
@@ -411,11 +411,11 @@ const AdminCategories = () => {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-slate-600">Slug</label>
+                                <label className="text-sm font-semibold text-slate-600 dark:text-slate-400 transition-colors">Slug</label>
                                 <input 
                                     type="text"
                                     required
-                                    className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                                    className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 transition-all"
                                     value={slug}
                                     onChange={(e) => setSlug(e.target.value)}
                                     placeholder="tien-hiep"
@@ -423,7 +423,7 @@ const AdminCategories = () => {
                             </div>
                             <div className="space-y-2">
                                 <div className="flex gap-4 items-start">
-                                    <div className="w-16 h-16 rounded-lg border-2 border-dashed border-slate-200 flex items-center justify-center bg-slate-50 overflow-hidden relative group shrink-0">
+                                    <div className="w-16 h-16 rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50 overflow-hidden relative group shrink-0 transition-colors">
                                         {icon ? (
                                             isUrl(icon) ? (
                                                 <>
@@ -440,7 +440,7 @@ const AdminCategories = () => {
                                                 </>
                                             ) : (
                                                 <div className="relative group w-full h-full flex items-center justify-center">
-                                                    <div className="text-3xl text-slate-700">
+                                                    <div className="text-3xl text-slate-700 dark:text-slate-300">
                                                         {getIconComponent(icon)}
                                                     </div>
                                                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -455,7 +455,7 @@ const AdminCategories = () => {
                                                 </div>
                                             )
                                         ) : (
-                                            <AiOutlinePicture className="text-slate-300 text-xl" />
+                                            <AiOutlinePicture className="text-slate-300 dark:text-slate-600 text-xl" />
                                         )}
                                     </div>
                                     <div className="flex-1 space-y-2">
@@ -463,18 +463,18 @@ const AdminCategories = () => {
                                              <button 
                                                 type="button"
                                                 onClick={() => setShowIconPicker(true)}
-                                                className="flex-1 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-semibold flex items-center justify-center transition-colors"
+                                                className="flex-1 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded-lg text-sm font-semibold flex items-center justify-center transition-colors border border-blue-100 dark:border-blue-900/50"
                                             >
                                                 <AiOutlineStar className="mr-2" /> Chọn Icon
                                             </button>
                                         </div>
                                         <div className="relative">
-                                            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-slate-200"></div>
-                                            <span className="relative z-10 bg-white px-2 text-xs text-slate-400 block w-fit mx-auto">HOẶC DÙNG ẢNH</span>
+                                            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-slate-200 dark:bg-slate-700"></div>
+                                            <span className="relative z-10 bg-white dark:bg-slate-900 px-2 text-xs text-slate-400 dark:text-slate-500 block w-fit mx-auto transition-colors">HOẶC DÙNG ẢNH</span>
                                         </div>
                                         <input 
                                             type="text" 
-                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 transition-all"
                                             value={icon}
                                             onChange={(e)=>setIcon(e.target.value)}
                                             placeholder="URL icon..."
@@ -483,11 +483,11 @@ const AdminCategories = () => {
                                             <button 
                                                 type="button"
                                                 onClick={() => setOpenLibrary(true)}
-                                                className="flex-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center justify-center transition-colors"
+                                                className="flex-1 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold flex items-center justify-center transition-colors"
                                             >
                                                 <AiOutlinePicture className="mr-1.5" /> Thư viện
                                             </button>
-                                            <label className="flex-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center justify-center transition-colors cursor-pointer">
+                                            <label className="flex-1 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold flex items-center justify-center transition-colors cursor-pointer mr-0">
                                                 <AiOutlineCloudUpload className="mr-1.5" /> Upload
                                                 <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} />
                                             </label>
@@ -499,13 +499,13 @@ const AdminCategories = () => {
                                 <button 
                                     type="button"
                                     onClick={() => setIsModalOpen(false)}
-                                    className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                                    className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
                                 >
                                     Hủy
                                 </button>
                                 <button 
                                     type="submit"
-                                    className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200"
+                                    className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 dark:shadow-none"
                                 >
                                     {editData ? 'Cập nhật' : 'Thêm mới'}
                                 </button>
@@ -522,13 +522,12 @@ const AdminCategories = () => {
                 />
             )}
 
-            {/* Icon Picker Modal */}
             {showIconPicker && (
-                <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl w-full max-w-2xl p-6 shadow-2xl scale-in max-h-[80vh] flex flex-col">
-                        <div className="flex justify-between items-center mb-6 pb-4 border-b">
-                            <h2 className="text-xl font-bold text-slate-800">Chọn Icon</h2>
-                            <button onClick={() => setShowIconPicker(false)} className="text-slate-400 hover:text-slate-600">
+                <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-2xl p-6 shadow-2xl scale-in border border-slate-100 dark:border-slate-800 transition-colors max-h-[80vh] flex flex-col">
+                        <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-50 dark:border-slate-800 transition-colors">
+                            <h2 className="text-xl font-bold text-slate-800 dark:text-white">Chọn Icon</h2>
+                            <button onClick={() => setShowIconPicker(false)} className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
                                 <AiOutlineClose size={24} />
                             </button>
                         </div>
@@ -540,10 +539,10 @@ const AdminCategories = () => {
                                         <button 
                                             key={item.name}
                                             onClick={() => handleSelectIcon(item.name)}
-                                            className={`flex flex-col items-center justify-center p-3 aspect-square rounded-xl border border-slate-100 hover:border-blue-500 hover:bg-blue-50 transition-all group ${icon === item.name ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-200' : 'bg-slate-50'}`}
+                                            className={`flex flex-col items-center justify-center p-3 aspect-square rounded-xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500/50 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all group ${icon === item.name ? 'bg-blue-50 dark:bg-blue-900/50 border-blue-500 ring-2 ring-blue-200 dark:ring-blue-900/50' : 'bg-slate-50 dark:bg-slate-800/30'}`}
                                             title={item.name}
                                         >
-                                            <Icon className="text-2xl text-slate-600 group-hover:text-blue-600 mb-2 transition-colors" />
+                                            <Icon className="text-2xl text-slate-600 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 mb-2 transition-colors" />
                                             {/* <span className="text-[10px] text-slate-400 truncate w-full px-2 text-center group-hover:text-blue-500">{item.name}</span> */}
                                         </button>
                                     )
@@ -555,43 +554,43 @@ const AdminCategories = () => {
             )}
             {/* Delete Option Modal */}
             {deleteConfirm && deleteConfirm.isOpen && (
-                <div className="fixed inset-0 z-[1200] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl scale-in">
+                <div className="fixed inset-0 z-[1200] flex items-center justify-center p-4 bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-md p-6 shadow-2xl scale-in border border-slate-100 dark:border-slate-800 transition-colors">
                         <div className="text-center mb-6">
-                            <div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                                <AiFillWarning className="text-red-600 text-2xl" />
+                            <div className="mx-auto w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-4 transition-colors">
+                                <AiFillWarning className="text-red-600 dark:text-red-400 text-2xl" />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-800 mb-2">Xử lý truyện liên quan</h3>
-                            <p className="text-slate-600 text-sm">
-                                Thể loại <span className="font-bold text-slate-800">&quot;{deleteConfirm.cateName}&quot;</span> hiện đang có <span className="font-bold text-blue-600">{deleteConfirm.novelCount}</span> truyện.
+                            <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 transition-colors">Xử lý truyện liên quan</h3>
+                            <p className="text-slate-600 dark:text-slate-400 text-sm transition-colors">
+                                Thể loại <span className="font-bold text-slate-800 dark:text-slate-200">&quot;{deleteConfirm.cateName}&quot;</span> hiện đang có <span className="font-bold text-blue-600 dark:text-blue-400">{deleteConfirm.novelCount}</span> truyện.
                                 Bạn muốn xử lý như thế nào?
                             </p>
                         </div>
                         <div className="space-y-3">
                             <button
                                 onClick={() => handleConfirmDeleteAction('reassign')}
-                                className="w-full flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all group"
+                                className="w-full flex items-center justify-between p-4 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-blue-500 dark:hover:border-blue-500/50 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all group"
                             >
                                 <div className="text-left">
-                                    <span className="block font-semibold text-slate-700 group-hover:text-blue-700">Chuyển sang &quot;Khác&quot;</span>
-                                    <span className="text-xs text-slate-500">Giữ lại truyện, chỉ đổi thể loại</span>
+                                    <span className="block font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-700 dark:group-hover:text-blue-400">Chuyển sang &quot;Khác&quot;</span>
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">Giữ lại truyện, chỉ đổi thể loại</span>
                                 </div>
                                 <AiOutlineTag className="text-slate-400 group-hover:text-blue-500 text-xl" />
                             </button>
                             <button
                                 onClick={() => handleConfirmDeleteAction('delete_novels')}
-                                className="w-full flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all group"
+                                className="w-full flex items-center justify-between p-4 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-red-500 dark:hover:border-red-500/50 hover:bg-red-50 dark:hover:bg-red-900/30 transition-all group"
                             >
                                 <div className="text-left">
-                                    <span className="block font-semibold text-slate-700 group-hover:text-red-700">Xóa tất cả truyện</span>
-                                    <span className="text-xs text-slate-500">Cảnh báo: Không thể khôi phục</span>
+                                    <span className="block font-semibold text-slate-700 dark:text-slate-200 group-hover:text-red-700 dark:group-hover:text-red-400">Xóa tất cả truyện</span>
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">Cảnh báo: Không thể khôi phục</span>
                                 </div>
                                 <AiOutlineDelete className="text-slate-400 group-hover:text-red-500 text-xl" />
                             </button>
                         </div>
                         <button
                             onClick={() => setDeleteConfirm(null)}
-                            className="w-full mt-4 py-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors text-sm font-medium"
+                            className="w-full mt-4 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-sm font-medium"
                         >
                             Hủy bỏ
                         </button>

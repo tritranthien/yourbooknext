@@ -8,7 +8,8 @@ export interface Novel<TAuthor,TCate>{
     status: 'continue' | 'completed' | 'drop',
     description: string,
     image: string,
-    category: TCate
+    category: TCate,
+    tags?: any[]
 }
 export interface SerVerNovel extends Novel<Author,Category>{
     _id: string,

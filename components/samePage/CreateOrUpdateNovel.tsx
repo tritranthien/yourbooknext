@@ -8,7 +8,9 @@ import { useGetAllCates } from '../../customHooks/reactQuery/Categoris';
 import { Author } from '../../interface/_Author';
 import { Novel, SerVerNovel } from '../../interface/_Novel';
 import { getAuthors } from '../../libs/api/authorAPI';
+import { getAllTags } from '../../libs/api/tagAPI';
 import { addnewNovel, updateNovel } from '../../libs/api/novelAPI';
+import MultiSelect from '../common/MultiSelect';
 import { upLoadPoster } from '../../libs/api/uploadFile';
 import CreateAuthorPopUp from '../popup/CreateAuthorPopUp';
 import CreateCategoryPopup from '../popup/CreateCategoryPopup';
@@ -43,8 +45,9 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
     category: '',
     description: '',
     status: 'continue',
-    image: ''
-  } as Novel<string,string>;
+    image: '',
+    tags: []
+  } as Novel<string,string> & { tags: string[] };
 
   if (novelData) {
     initNovel = {
@@ -53,12 +56,26 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
         category: (novelData.category as any)?._id || (novelData.category as any) || '',
         description: novelData.description,
         status: novelData.status,
-        image: novelData.image
-    };
+        image: novelData.image,
+        tags: novelData.tags ? novelData.tags.map((t: any) => t.tagId) : []
+    } as any;
   }
 
-  const [novel,setNovel] = useState<Novel<string,string>>(initNovel);
+  const [novel,setNovel] = useState<Novel<string,string> & { tags: string[] }>(initNovel as any);
   const [authList,setAuthList] = useState<Author[]>([]);
+  const [tagList, setTagList] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const data = await getAllTags();
+        setTagList(data || []);
+      } catch (error) {
+        console.error("Failed to fetch tags", error);
+      }
+    };
+    fetchTags();
+  }, []);
 
   useEffect(() => {
     if (novelData) {
@@ -70,8 +87,9 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
             category: (novelData.category as any)?._id || (novelData.category as any) || '',
             description: novelData.description,
             status: novelData.status,
-            image: novelData.image
-        });
+            image: novelData.image,
+            tags: novelData.tags ? novelData.tags.map((t: any) => t.tagId) : []
+        } as any);
     } else {
         setNovel({
             title: '',
@@ -79,8 +97,9 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
             category: '',
             description: '',
             status: 'continue',
-            image: ''
-        });
+            image: '',
+            tags: []
+        } as any);
     }
   }, [novelData]);
 
@@ -184,7 +203,7 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
 
   return (
     <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-950/20 p-4 md:p-8">
-      <div className="max-w-5xl mx-auto bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800/50 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="max-w-5xl mx-auto bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800/50 overflow-visible animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30">
           <div>
             <h1 className="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-wider">
@@ -299,6 +318,17 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Mô tả tác phẩm</label>
                 <textarea name="description" value={novel.description || ''} onChange={handleInputChange} className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 outline-none rounded-2xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 transition-all min-h-[160px] resize-none leading-relaxed" placeholder="Tóm tắt ngắn gọn về nội dung truyện..."/>
+              </div>
+
+              <div className="space-y-2">
+                <MultiSelect 
+                  label="Tags (Nhãn)"
+                  placeholder="Chọn các tag cho truyện"
+                  options={tagList.map(t => ({ id: t._id, label: t.name }))}
+                  selectedValues={novel.tags || []}
+                  onChange={(vals) => setNovel(pre => ({ ...pre, tags: vals }))}
+                  creatable={true}
+                />
               </div>
 
               <div className="flex gap-4 pt-4">
