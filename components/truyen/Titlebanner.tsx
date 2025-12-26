@@ -89,7 +89,7 @@ const Titlebanner: React.FC<TitlebannerProps> = ({novel}:TitlebannerProps) => {
             <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-950 via-white/80 dark:via-slate-950/80 to-slate-950/40"></div>
           </div>
 
-          <div className="container relative z-10 mx-auto px-6 py-12 md:py-20">
+          <div className="container relative z-10 mx-auto px-6 pt-4 pb-12 md:pt-6 md:pb-20">
             <div className="flex flex-col md:flex-row gap-10 items-center md:items-start">
                 {/* Book Cover with Premium Shadow */}
                 <div className="w-[180px] md:w-[240px] aspect-[3/4] relative flex-shrink-0 group">
