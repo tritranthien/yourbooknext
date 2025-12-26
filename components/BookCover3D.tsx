@@ -52,7 +52,7 @@ const BookCover3D: React.FC<BookCover3DProps> = ({ src, alt, className = "" }) =
                     {/* 2. SIDE PANEL (PAGES THICKNESS) - RIGHT SIDE */}
                     {/* Dịch ra ngoài (left: 100%) để nối tiếp với hình ảnh */}
                     <div
-                        className="absolute top-[2%] left-[100%] bottom-[2%] w-[35%] bg-gray-200 z-[20]"
+                        className="absolute top-[2%] left-[100%] bottom-[2%] w-[35%] bg-slate-200 dark:bg-slate-700 z-[20]"
                         style={{
                             transformOrigin: 'left',
                             transform: 'rotateY(90deg)', // Xoay 90 độ ra phía sau để tạo độ dày

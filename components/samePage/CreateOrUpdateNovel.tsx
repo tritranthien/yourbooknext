@@ -32,21 +32,25 @@ export const toastConfig:ToastOptions = {
 
 const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:NovelPageProps) => {
   const [imgfile,setIMG] = useState<File | null>(null);
-  // const [authpicked,setAuthPicked] = useState(false);
-  // const [status,setStatus] = useState<'continue' | 'drop' | 'completed'>('continue');
   const [authorSearch,setAuthorSearch] = useState('');
   const [preShow,setPreshow] = useState<string | null>();
   const [openPopup,setOpenPopup] = useState<'none' | 'images' | 'createAuthor' | 'createCategory'>('none');
-/////////////// input state ////////////
+  
   const allCates = useGetAllCates();
-  let initNovel = {} as Novel<string,string>;
+  let initNovel = {
+    title: '',
+    author: '',
+    category: '',
+    description: '',
+    status: 'continue',
+    image: ''
+  } as Novel<string,string>;
 
   if (novelData) {
     initNovel = {
         title: novelData.title,
-        author: novelData.author._id,
-        category: novelData.category._id,
-        // chapCount: novelData.chapCount,
+        author: novelData.author?._id || '',
+        category: (novelData.category as any)?._id || (novelData.category as any) || '',
         description: novelData.description,
         status: novelData.status,
         image: novelData.image
@@ -54,92 +58,99 @@ const NovelPage:React.FC<NovelPageProps> = ({isUpdate,novelData,closePopup}:Nove
   }
 
   const [novel,setNovel] = useState<Novel<string,string>>(initNovel);
-
   const [authList,setAuthList] = useState<Author[]>([]);
-  useEffect(()=>{
+
+  useEffect(() => {
     if (novelData) {
-        setAuthorSearch(novelData.author.name);
+        setAuthorSearch(novelData.author?.name || '');
         setPreshow(novelData.image);
-    }       
-    setNovel(initNovel);
-    console.log('preShow',preShow);
-    console.log('novelimg',novel.image);
-    
-  },[]);
+        setNovel({
+            title: novelData.title,
+            author: novelData.author?._id || '',
+            category: (novelData.category as any)?._id || (novelData.category as any) || '',
+            description: novelData.description,
+            status: novelData.status,
+            image: novelData.image
+        });
+    } else {
+        setNovel({
+            title: '',
+            author: '',
+            category: '',
+            description: '',
+            status: 'continue',
+            image: ''
+        });
+    }
+  }, [novelData]);
+
   const handleReset = () => {
-    
     setNovel(initNovel);
+    setAuthorSearch('');
     setPreshow(null);
     setIMG(null);
   }
 
+  const handleInputChange = (e:ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | FocusEvent<HTMLTextAreaElement>)=>{
+    const {name,value} = e.target;
+    setNovel(pre=>({...pre, [name]: value}));
+  }
 
+  const debouncedSave = useCallback(
+    debounce( async (nextValue:string) => {
+        if(nextValue.length > 0) {
+            const res = await getAuthors(nextValue);
+            setAuthList([...res]); 
+        }else{
+            setAuthList([]);
+        }
+    }, 1000),
+    [],
+  );
 
-const handleInputChange = (e:ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | FocusEvent<HTMLTextAreaElement>)=>{
-  const {name,value} = e.target;
-  setNovel(pre=>({...pre, [name]: value}));
-    console.log(value);
-}
-const debouncedSave = useCallback(
-  debounce( async (nextValue:string) => {
-      if(nextValue.length > 0) {
-          const res = await getAuthors(nextValue);
-          setAuthList([...res]); 
-      }else{
-          setAuthList([]);
-      }
-  }, 1000),
-  [], // will be created only once initially
-);
-const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
-  setNovel(pre=>({...pre,author:''}));
-  setAuthorSearch(e.target.value);
-  debouncedSave(e.target.value);
-}
-
+  const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
+    setNovel(pre=>({...pre,author:''}));
+    setAuthorSearch(e.target.value);
+    debouncedSave(e.target.value);
+  }
 
   const addNewPoster = async () => {
     if (!imgfile ) {
-        if(preShow){
-            await isUpdate ? editNovel(novel) : uploadNovel(novel);
+        if(preShow || novel.image){
+            isUpdate ? await editNovel(novel) : await uploadNovel(novel);
             return
         } 
-        if(!preShow){
-            alert('vui lòng chọn ảnh poster');
-            return
-        }
+        alert('Vui lòng chọn ảnh bìa cho truyện');
         return
     }
    
     const formData = new FormData();
     formData.append('poster',imgfile);
-    const imgToast = toast.loading('Đang tải ảnh lên');
+    const imgToast = toast.loading('Đang tải ảnh lên hệ thống...');
     try {
       const posterUploaded = await upLoadPoster(formData);
       if (posterUploaded.secure_url) {
-        const newNovel = {...novel};
-        newNovel.image = posterUploaded.secure_url;
-        setNovel(pre=>({...pre,image: posterUploaded.secure_url}));
-        toast.update(imgToast,{ render: "Tải ảnh thành công", type: "success", isLoading: false, autoClose: 5000 });
-        await isUpdate ? editNovel(newNovel) : uploadNovel(newNovel);
+        const updatedNovel = {...novel, image: posterUploaded.secure_url};
+        setNovel(updatedNovel);
+        toast.update(imgToast,{ render: "Tải ảnh thành công", type: "success", isLoading: false, autoClose: 3000 });
+        isUpdate ? await editNovel(updatedNovel) : await uploadNovel(updatedNovel);
       }
     } catch (error) {
-      toast.update(imgToast,{ render: "Tải ảnh thất bại", type: "error", isLoading: false, autoClose: 5000 })
+      toast.update(imgToast,{ render: "Tải ảnh thất bại", type: "error", isLoading: false, autoClose: 3000 })
     }
   }
+
   const uploadNovel = async (newNovel:Novel<string,string>) => {
-
-   let NovelToastUpload = toast.loading('Đang đăng tải truyện');
+    let uploadToast = toast.loading('Đang khởi tạo truyện mới...');
     try {
-      const res = await addnewNovel(newNovel);
-      toast.update(NovelToastUpload,{ render: "Đăng thành công", type: "success", isLoading: false, autoClose: 5000 });
+      await addnewNovel(newNovel);
+      toast.update(uploadToast,{ render: "Thêm truyện thành công!", type: "success", isLoading: false, autoClose: 5000 });
       handleReset();
-      
     } catch (error) {
-      toast.update(NovelToastUpload,{ render: "Lỗi đăng tải truyện", type: "error", isLoading: false, autoClose: 5000 })
-
+      toast.update(uploadToast,{ render: "Lỗi khi thêm truyện mới", type: "error", isLoading: false, autoClose: 5000 })
     }
   }
+
   const handleFile = async (e:ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setIMG(e.target.files[0]);
@@ -149,156 +160,181 @@ const handleFindAuthor = (e:ChangeEvent<HTMLInputElement>) => {
       }
       Reader.readAsDataURL(e.target.files[0]);
     }
-    
   }
+
   const getImageFromPopup = (imgFromPopup: string) => {
     setPreshow(imgFromPopup);
     setNovel(pre=>({...pre,image: imgFromPopup}));
     setIMG(null);
     setOpenPopup('none');
   }
+
   const editNovel = async (newNovel:Novel<string,string>) => {
-    let updateToast = toast.loading('đang update thông tin');
+    let updateToast = toast.loading('Đang cập nhật thông tin...');
     try {
       if (novelData?._id) {
-        const res = await updateNovel(novelData._id,newNovel);
-        if (res.status = 200) {
-        toast.update(updateToast,{ render: "chỉnh sửa thành công", type: "success", isLoading: false, autoClose: 5000, pauseOnFocusLoss:false });      
-        if (closePopup) {
-          closePopup(); 
-        } 
-      }
+        await updateNovel(novelData._id,newNovel);
+        toast.update(updateToast,{ render: "Cập nhật thành công!", type: "success", isLoading: false, autoClose: 3000 });      
+        if (closePopup) setTimeout(closePopup, 500);
       }
     } catch (error) {
-      toast.update(updateToast,{ render: "thay đổi thất bại", type: "error", isLoading: false, autoClose: 5000 });
-      
+      toast.update(updateToast,{ render: "Cập nhật thất bại", type: "error", isLoading: false, autoClose: 3000 });
     }
   }
-    return (
-        <div className="w-full min-h-screen">
-            <div className="w-full min-h-screen bg-white">
-            <span className="w-full block px-5 py-3 text-2xl font-bold relative">
-              {isUpdate ? 'chỉnh sửa nội dung truyện' : 'Thêm truyện mới'}
-            </span>
-            <div className="w-full p-3 md:p-5 bg-white">
-            {
-              isUpdate && <div className="flex justify-center mb-7">
-              <div>
-                <div className="form-check">
-                  <input name='status' value='continue' onChange={handleInputChange} className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" checked={novel.status == 'continue'}/>
-                  <label className="form-check-label inline-block text-gray-800">
-                    còn tiếp
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input name='status' value='completed' onChange={handleInputChange} className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" checked={novel.status == 'completed'}/>
-                  <label className="form-check-label inline-block text-gray-800" >
-                    Hoàn thành
-                  </label>
-                </div>
-              </div>
-            </div>
-            }
-              <div className="md:flex items-center mb-7 ">
-                <label htmlFor="novelname" className=" w-[200px] px-3 hidden md:block">tên truyện</label>
-                <input name="title" value={novel.title || ''} onChange={handleInputChange} type="text" className="w-full md:w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md " placeholder="nhập vào tên truyện"/>
-              </div>
-              <div className="flex items-center mb-7 ">
-                <label htmlFor="author" className=" w-[200px] px-3 hidden md:block">tác giả</label>
-                <div className="flex relative border border-width-1 w-[calc(100%_-_50px)] rounded-md md:min-w-[500px]">
-                  <input name="author" autoComplete="off" value={ authorSearch || '' } onChange={handleFindAuthor} type="text" className="w-[350px] outline-none px-2 py-1 rounded-md" placeholder="thêm vào tác giả"/>
-                    <div className="w-[120px]">
-                      { 
-                        (authorSearch != '' && novel.author == '')&&<span className='block text-red-600 text-center py-1'>không tồn tại</span>
-                      }
-                    
+
+  return (
+    <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-950/20 p-4 md:p-8">
+      <div className="max-w-5xl mx-auto bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800/50 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30">
+          <div>
+            <h1 className="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-wider">
+              {isUpdate ? 'Chỉnh sửa truyện' : 'Thêm truyện mới'}
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mt-1">Quản lý nội dung và thông tin tác phẩm</p>
+          </div>
+          {closePopup && (
+            <button onClick={closePopup} className="p-2 hover:bg-white dark:hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-slate-600 dark:hover:text-white">
+               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          )}
+        </div>
+
+        <div className="p-8 md:p-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            {/* Left Column: Image Upload */}
+            <div className="lg:col-span-4 flex flex-col items-center">
+               <div className="w-full aspect-[3/4] relative rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800 group bg-slate-100 dark:bg-slate-800/50">
+                  { (preShow || novel.image) ? (
+                    <Image className="object-cover transition-transform duration-700 group-hover:scale-105" alt="Poster" src={ preShow || novel.image } layout="fill"/>
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 dark:text-slate-600">
+                       <svg className="w-16 h-16 mb-2 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                       <span className="text-xs font-bold uppercase tracking-widest">Chưa có ảnh bìa</span>
                     </div>
+                  )}
+                  <input onChange={handleFile} type="file" className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                  <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent translate-y-full group-hover:translate-y-0 transition-transform">
+                     <p className="text-white text-[10px] font-bold text-center uppercase tracking-widest">Nhấp để thay đổi ảnh</p>
+                  </div>
+               </div>
+               
+               <button 
+                  onClick={() => setOpenPopup('images')} 
+                  className="mt-6 w-full py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-primary-600 hover:text-white text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-slate-200 dark:border-slate-700"
+               >
+                 Thư viện Poster có sẵn
+               </button>
+            </div>
 
-                  <ul className="absolute top-[34px] w-full md:w-[500px] shadow-md bg-white">
-                    {
-                      authList.map((item,index)=>{
-                        return <li onClick={()=>{
-                          setNovel(pre=>({...pre,author: item._id}))
-                          setAuthorSearch(item.name);
-                          // setAuthPicked(true);
-                          setAuthList([])
-                        }} className="w-full px-3 py-1 cursor-pointer font-bold text-blue-500" key={index}>{item.name}</li>
-                      })
-                    }
-                  </ul>
-                  
+            {/* Right Column: Form Fields */}
+            <div className="lg:col-span-8 space-y-8">
+              {isUpdate && (
+                <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-3xl border border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                  <span className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Trạng thái phẩm phẩm</span>
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <input name='status' value='continue' onChange={handleInputChange} type="radio" checked={novel.status == 'continue'} className="w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
+                      <span className={`text-sm font-bold transition-colors ${novel.status === 'continue' ? 'text-primary-600' : 'text-slate-400 group-hover:text-slate-600'}`}>Còn tiếp</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <input name='status' value='completed' onChange={handleInputChange} type="radio" checked={novel.status == 'completed'} className="w-4 h-4 text-green-600 bg-slate-100 border-slate-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
+                      <span className={`text-sm font-bold transition-colors ${novel.status === 'completed' ? 'text-green-600' : 'text-slate-400 group-hover:text-slate-600'}`}>Hoàn thành</span>
+                    </label>
+                  </div>
                 </div>
-                <button onClick={()=>setOpenPopup('createAuthor')} className="py-1 px-2 bg-white text-green-600"><IoMdAddCircle className='text-2xl'/></button>
-                
-              </div>
-              <div className="flex items-center mb-7 ">
-                <label htmlFor="category" className=" w-[200px] px-3 hidden md:block">danh mục</label>
-                <select value={ novel.category || ''} onChange={handleInputChange} name="category" className="w-[calc(100%_-_50px)] md:w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md" placeholder="">
-                  <option value="">---- vui lòng chọn thể loại ----</option>
-                  {
-                    allCates.isSuccess && allCates.data.map((item,index)=>{
-                      return <option key={index} value={item._id}>{item.cate}</option>
-                    })
-                  }
-            
-                </select>
-                <button onClick={()=>setOpenPopup('createCategory')} className="py-1 px-2 bg-white text-green-600"><IoMdAddCircle className='text-2xl'/></button>
-              </div>
-              <div className="flex items-center mb-7 ">
-                <label htmlFor="description" className=" w-[200px] px-3 hidden md:block ">mô tả vắn tắt</label>
-                <textarea name="description" value={novel.description || ''} onBlur={handleInputChange} onChange={handleInputChange} className="w-[500px] outline-none border border-width-1 px-2 py-1 rounded-md min-h-[200px]" placeholder="thêm vào mô tả về truyện"/>
-              </div>
-              
-              <div className="flex flex-wrap mb-7 ">
-                <label htmlFor="image" className=" w-[200px] px-3 hidden md:block">ảnh bìa</label>
-                <div className="w-[200px] h-[230px] relative overflow-hidden border-2">
-                  
-                { 
-                  (preShow || novel.image) && <Image className="absolute object-cover" alt="hinh duoc chon" src={ preShow || novel.image } layout="fill"/>
-                }
-                <input onChange={handleFile} type="file" className="opacity-20 w-[200px] h-[200px] relative after:w-full after:h-full after:absolute after:content-['chọn_từ_thiết_bị'] after:bg-white after:left-0 after:top-0 after:flex after:justify-center after:items-center after:text-xl after:border-2 after:cursor-pointer after:text-wrap"/>
+              )}
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tên tác phẩm</label>
+                  <input name="title" value={novel.title || ''} onChange={handleInputChange} type="text" className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 outline-none rounded-2xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 transition-all font-bold" placeholder="Nhập tên truyện..."/>
                 </div>
-                <button onClick={()=>setOpenPopup('images')} className="px-2 py-1 bg-blue-500 text-white h-[100px] w-[100px] ml-4 self-center"> hoặc chọn poster có sẵn tại đây</button>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Thể loại</label>
+                  <div className="flex gap-2">
+                    <select value={(novel.category as any) || ''} onChange={handleInputChange} name="category" className="flex-1 px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 outline-none rounded-2xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 transition-all font-bold appearance-none">
+                      <option value="">-- Chọn thể loại --</option>
+                      {allCates.isSuccess && allCates.data.map((item,index)=>(
+                        <option key={index} value={item._id}>{item.cate}</option>
+                      ))}
+                    </select>
+                    <button onClick={()=>setOpenPopup('createCategory')} className="p-4 bg-slate-100 dark:bg-slate-800 text-primary-500 rounded-2xl hover:bg-primary-500 hover:text-white transition-all">
+                      <IoMdAddCircle size={24}/>
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="flex mb-7 mt-7 justify-center md:w-[500px]">
-                {
-                 isUpdate ? <button onClick={addNewPoster} className="px-2 py-1 text-white bg-blue-500">chỉnh sửa</button>
-                  :
-                  <button onClick={addNewPoster} className="px-2 py-1 text-white bg-blue-500">Thêm truyện</button>
-                }
-                <button onClick={handleReset} className="ml-5 px-2 py-1 bg-gray-200">làm mới</button>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tác giả</label>
+                <div className="flex gap-2 relative">
+                  <div className="flex-1 relative">
+                    <input name="author" autoComplete="off" value={ authorSearch || '' } onChange={handleFindAuthor} type="text" className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 outline-none rounded-2xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 transition-all font-bold" placeholder="Tìm kiếm tác giả..."/>
+                    { (authorSearch != '' && novel.author == '') && (
+                      <span className='absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-red-500 uppercase bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-md'>Không tồn tại</span>
+                    )}
+                    
+                    {authList.length > 0 && (
+                      <ul className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 py-2 max-h-60 overflow-y-auto overflow-x-hidden">
+                        {authList.map((item,index)=>(
+                          <li key={index} onClick={()=>{
+                            setNovel(pre=>({...pre,author: item._id}))
+                            setAuthorSearch(item.name);
+                            setAuthList([])
+                          }} className="w-full px-6 py-3 cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                            <span className="font-bold text-slate-700 dark:text-slate-200">{item.name}</span>
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 block">Tác phẩm: {item.novelCount || 0}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                  <button onClick={()=>setOpenPopup('createAuthor')} className="p-4 bg-slate-100 dark:bg-slate-800 text-primary-500 rounded-2xl hover:bg-primary-500 hover:text-white transition-all">
+                    <IoMdAddCircle size={24}/>
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Mô tả tác phẩm</label>
+                <textarea name="description" value={novel.description || ''} onChange={handleInputChange} className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 outline-none rounded-2xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500/20 transition-all min-h-[160px] resize-none leading-relaxed" placeholder="Tóm tắt ngắn gọn về nội dung truyện..."/>
+              </div>
+
+              <div className="flex gap-4 pt-4">
+                <button onClick={addNewPoster} className="flex-1 py-4 bg-primary-600 hover:bg-primary-700 text-white font-black rounded-2xl shadow-xl shadow-primary-500/25 transition-all active:scale-95 text-lg">
+                  {isUpdate ? 'Cập nhật thông tin' : 'Tạo truyện mới'}
+                </button>
+                <button onClick={handleReset} className="px-8 py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 font-black rounded-2xl transition-all hover:bg-slate-200 dark:hover:bg-slate-700">
+                  Làm mới
+                </button>
               </div>
             </div>
-            
+          </div>
         </div>
-        
-        {
-          openPopup == 'createAuthor' && (
-            <CreateAuthorPopUp showToast = {()=>{
-              toast.success('tạo tác giả thành công',toastConfig);
-              setOpenPopup('none');
-            }} closePopup={()=>setOpenPopup('none')}/>
-          )
-        }
-        
-        {
-          openPopup == 'createCategory' && (
-            <CreateCategoryPopup showToast = {()=>{
-              toast.success('thêm thể loại thành công',toastConfig);
-              setOpenPopup('none');
-              allCates.refetch();
-            }} closePopup={()=>setOpenPopup('none')}/>
-          )
-        }
-        {
-          openPopup == 'images' &&(
-            <PosterPopup choonseImage={getImageFromPopup} closePopup={()=>setOpenPopup('none')}/>
-          )
-        }
-        
-        </div>
-    )
+      </div>
+
+      {/* Popups */}
+      {openPopup == 'createAuthor' && (
+        <CreateAuthorPopUp showToast={() => {
+          toast.success('Tạo tác giả thành công', toastConfig);
+          setOpenPopup('none');
+        }} closePopup={() => setOpenPopup('none')} />
+      )}
+      
+      {openPopup == 'createCategory' && (
+        <CreateCategoryPopup showToast={() => {
+          toast.success('Thêm thể loại thành công', toastConfig);
+          setOpenPopup('none');
+          allCates.refetch();
+        }} closePopup={() => setOpenPopup('none')} />
+      )}
+      
+      {openPopup == 'images' && (
+        <PosterPopup choonseImage={getImageFromPopup} closePopup={() => setOpenPopup('none')} />
+      )}
+    </div>
+  )
 }
 
 export default NovelPage;

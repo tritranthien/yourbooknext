@@ -11,66 +11,73 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Maincomponent } from '../../interface/_Maincomponent';
 import BookCover3D from '../BookCover3D';
 
-const EditorRecomened: React.FC<Maincomponent> = ({ data }: Maincomponent) => {
+const EditorRecomenedContent: React.FC<Maincomponent> = ({ data }: Maincomponent) => {
   const [show, setShow] = useState(0)
-  const [mounted, setMounted] = React.useState(false);
-  const [isPaused, setIsPaused] = React.useState(false); // New state for pause
+  const [isPaused, setIsPaused] = React.useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    setMounted(true);
     const timer = setInterval(() => {
-      // Only advance slide if not paused
       if (!isPaused) {
         setShow((prev) => (prev + 1) % data.length);
       }
     }, 5000);
     return () => clearInterval(timer);
-  }, [data.length, isPaused]); // Added isPaused to dep array
+  }, [data.length, isPaused]);
 
-  if (!mounted || !data || data.length === 0) return null;
-
-  return <div className="flex flex-col w-full border border-gray-200 p-3">
-    {/* <span className='text-primary-600 text-xl py-2 font-bold border-b-2 border-primary-200'>Biên tập viên đề cử</span> */}
-    {/* Pause on hover by updating isPaused state */}
+  return <div className="flex flex-col w-full border border-slate-100 dark:border-slate-800/50 p-4 rounded-2xl bg-white dark:bg-slate-900/50 shadow-sm transition-colors duration-300">
     <div
-      className="flex flex-wrap md:flex-nowrap w-full gap-4"
+      className="flex flex-wrap md:flex-nowrap w-full gap-6"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Hero Card with Qidian-style Book Layout */}
-      {
-        data.map((item, index) => {
-          return <div
-            key={index}
-            className={`${index === show ? "flex" : "hidden"} relative w-full md:w-[calc(100%_-_250px)] h-[320px] md:h-auto overflow-hidden shadow-lg group bg-gray-900 transition-all duration-300 cursor-pointer`}
-            onClick={() => router.push(`/truyen/${item.slug}`)}
-          >
-            <Image
-              src={item.image}
-              alt={item.title}
-              layout="fill"
-              objectFit="cover"
-              className="group-hover:scale-105 transition-transform duration-700"
-            />
-          </div>
-        })
-      }
+      <div className="relative w-full md:w-[calc(100%_-_250px)] h-[320px] md:h-[380px] overflow-hidden rounded-xl shadow-lg ring-1 ring-slate-200 dark:ring-slate-800 transition-all duration-300">
+        {
+          data.map((item, index) => {
+            return <div
+              key={index}
+              className={`${index === show ? "opacity-100 translate-x-0" : "opacity-0 absolute translate-x-4"} top-0 left-0 w-full h-full group bg-slate-900 transition-all duration-500 cursor-pointer overflow-hidden`}
+              onClick={() => router.push(`/truyen/${item.slug}`)}
+            >
+              <Image
+                src={item.image}
+                alt={item.title}
+                layout="fill"
+                objectFit="cover"
+                className="group-hover:scale-105 transition-transform duration-1000"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-8">
+                <span className="text-primary-400 text-sm font-bold uppercase tracking-widest mb-2 opacity-80">Biên tập viên đề cử</span>
+                <h3 className="text-white text-3xl font-bold mb-3 drop-shadow-lg">{item.title}</h3>
+                <p className="text-slate-300 line-clamp-2 max-w-2xl text-sm leading-relaxed mb-4 drop-shadow-md">{item.description}</p>
+                <div className="flex items-center gap-4">
+                  <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg text-white text-xs font-bold border border-white/20">
+                    {item.category?.cate}
+                  </span>
+                  <span className="text-white/60 text-xs font-medium">#{item.author?.name}</span>
+                </div>
+              </div>
+            </div>
+          })
+        }
+      </div>
 
-      {/* List on the right - Click to switch slide instead of navigate */}
-      <ul className="w-full text-sm md:w-[230px] flex flex-col gap-y-1.5 justify-center py-2 mt-2 md:mt-0">
+      <ul className="w-full text-sm md:w-[250px] flex flex-col gap-y-2 justify-start py-2 mt-4 md:mt-0 md:h-[380px] overflow-y-auto custom-scrollbar pr-1">
+        <div className="mb-2 px-1">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tiếp theo</span>
+        </div>
         {
           data.map((item, index) => {
             return (
               <li
                 key={index}
-                className="flex items-center gap-2 px-1 cursor-pointer group/item"
-                onClick={() => setShow(index)} // Switch slide on click
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer group/item transition-all duration-300 ${index === show ? 'bg-primary-50 dark:bg-primary-900/20 shadow-sm' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                onClick={() => setShow(index)}
               >
-                <span className={`flex-shrink-0 w-6 h-6 ${index === show ? 'bg-primary-500' : 'bg-gray-200 text-gray-500'} text-xs text-center text-white rounded-sm leading-6 font-normal transition-colors duration-200`}>
+                <span className={`flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold transition-all duration-300 ${index === show ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30 rotate-12' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover/item:rotate-12'}`}>
                   {index + 1}
                 </span>
-                <span className={`flex-1 min-w-0 line-clamp-1 group-hover/item:text-primary-500 transition-colors duration-200 ${index === show ? 'text-primary-500' : 'text-gray-600'}`}>
+                <span className={`flex-1 min-w-0 line-clamp-1 font-semibold transition-colors duration-200 ${index === show ? 'text-primary-600 dark:text-primary-400' : 'text-slate-600 dark:text-slate-400 group-hover/item:text-slate-900 dark:group-hover/item:text-slate-200'}`}>
                   {item.title}
                 </span>
               </li>
@@ -78,12 +85,19 @@ const EditorRecomened: React.FC<Maincomponent> = ({ data }: Maincomponent) => {
           })
         }
       </ul>
-
     </div>
+  </div>;
+};
 
+const EditorRecomened: React.FC<Maincomponent> = ({ data }: Maincomponent) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  </div>
+  if (!mounted || !data || data.length === 0) return null;
 
+  return <EditorRecomenedContent data={data} />;
 };
 
 export default EditorRecomened;

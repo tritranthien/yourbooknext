@@ -2,7 +2,7 @@
 export interface Author {
     _id: string;
     name: string;
-    slug: string;
+    slug?: string;
     birth?: string | null;
     des?: string;
     description?: string;

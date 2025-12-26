@@ -466,7 +466,7 @@ const AdminAuthors = () => {
                             </div>
                             <h2 className="text-2xl font-bold text-slate-800">Cảnh báo: Tác giả có tác phẩm</h2>
                             <p className="text-slate-500 mt-2 max-w-md">
-                                Tác giả <span className="font-bold text-slate-700">"{authorToDelete?.name}"</span> đang gắn liền với <span className="font-bold text-indigo-600">{relatedNovels.length}</span> tác phẩm. Bạn cần xử lý các tác phẩm này trước khi xóa.
+                                Tác giả <span className="font-bold text-slate-700">&quot;{authorToDelete?.name}&quot;</span> đang gắn liền với <span className="font-bold text-indigo-600">{relatedNovels.length}</span> tác phẩm. Bạn cần xử lý các tác phẩm này trước khi xóa.
                             </p>
                         </div>
 
@@ -489,7 +489,7 @@ const AdminAuthors = () => {
                                 disabled={isDeleting}
                                 className="w-full py-4 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-2xl transition-all flex items-center justify-center border border-blue-100 disabled:opacity-50"
                             >
-                                1. Chuyển tác phẩm sang "Không tên tác giả" & Xóa tác giả
+                                1. Chuyển tác phẩm sang &quot;Không tên tác giả&quot; &amp; Xóa tác giả
                             </button>
                             <button 
                                 onClick={() => finalDelete('delete')}

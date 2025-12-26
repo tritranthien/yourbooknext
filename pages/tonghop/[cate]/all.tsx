@@ -37,66 +37,138 @@ const All:React.FC<AllPageProps> = ({novels,cateName,cateId,total}:AllPageProps)
     useEffect(()=>{
         refetch();
         window.scrollTo(0, 0);
-    },[statusNovel,chapNumNovel,sortNovel,page])
+    },[statusNovel,chapNumNovel,sortNovel,page,refetch])
 
   return (
-    <div className="">
-        <div className="w-full h-[250px] md:h-48 relative">
-            {
-                novels.length > 0 && <Image objectFit='cover' alt="tong hop top" src={novels[0].image} layout="fill"/>
-            }
-           <span className="absolute text-2xl md:text-3xl uppercase font-bold flex justify-center items-center text-white w-full h-full bg-black/70">{`truyện ${cateName}`}</span>
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/20 animate-in fade-in duration-700">
+        <div className="relative w-full h-[250px] overflow-hidden group">
+            <Image 
+              objectFit='cover' 
+              alt={cateName} 
+              src={novels.length > 0 ? novels[0].image : '/images/tt3.jpg'} 
+              layout="fill"
+              className="transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+            <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6">
+                <span className="text-primary-400 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Danh sách</span>
+                <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">{`Truyện ${cateName}`}</h1>
+            </div>
         </div>
-        <div className="container flex flex-col md:flex-row flex-nowrap">
-            <div className=" w-full md:w-1/4 p-2">
-                <div className='sticky top-0'>
-                    <span className="font-bold w-full block mb-2">Tình trạng</span>
-                    <button onClick={()=>setStatusNovel('all')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'all' && `bg-orange-300`}`}>tất cả</button>
-                    <button onClick={()=>setStatusNovel('continue')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'continue' && `bg-orange-300`}`}>đang ra</button>
-                    <button onClick={()=>setStatusNovel('completed')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${statusNovel == 'completed' && `bg-orange-300`}`}>hoàn thành</button>
-                    <span className="font-bold w-full block mt-5 mb-2">Số chương</span>
-                    <button onClick={()=>setchapNumNovel(0)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 0 && `bg-orange-300`}`}>tất cả</button>
-                    <button onClick={()=>setchapNumNovel(300)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 300 && `bg-orange-300`}`}>{`< 300`}</button>
-                    <button onClick={()=>setchapNumNovel(1000)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 1000 && `bg-orange-300`}`}>{`300-1000`}</button>
-                    <button onClick={()=>setchapNumNovel(2000)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 2000 && `bg-orange-300`}`}>{`1000-2000`}</button>
-                    <button onClick={()=>setchapNumNovel(2001)} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${chapNumNovel == 2001 && `bg-orange-300`}`}>{`> 2000`}</button>
-                    <span className="font-bold w-full block mt-5 mb-2">Sắp xếp</span>
-                    <button onClick={()=>setsortNovel('updatedAt')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${sortNovel === 'updatedAt' && `bg-orange-300`}`}>vừa cập nhật</button>
-                    <button onClick={()=>setsortNovel('likes')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${sortNovel === 'likes' && `bg-orange-300`}`}>yêu thích</button>
-                    <button onClick={()=>setsortNovel('views')} className={`border-2 border-orange-200 py-1 px-3 mr-1 mb-1 rounded-md ${sortNovel === 'views' && `bg-orange-300`}`}>xem nhiều</button>
-                    
+
+        <div className="container px-4 py-12">
+            <div className="flex flex-col lg:flex-row gap-8">
+                {/* Filter Sidebar */}
+                <div className="w-full lg:w-72 shrink-0 space-y-8">
+                    <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-8 border border-slate-100 dark:border-slate-800/50 shadow-sm sticky top-24">
+                        <div className="space-y-8">
+                            <div>
+                                <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                   <span className="w-1.5 h-1.5 rounded-full bg-primary-500"></span>
+                                   Tình trạng
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {[
+                                      { id: 'all', label: 'Tất cả' },
+                                      { id: 'continue', label: 'Đang ra' },
+                                      { id: 'completed', label: 'Hoàn thành' }
+                                    ].map(btn => (
+                                      <button 
+                                        key={btn.id}
+                                        onClick={()=>setStatusNovel(btn.id)} 
+                                        className={`px-4 py-2 text-xs font-bold rounded-xl border transition-all ${statusNovel === btn.id ? 'bg-primary-600 border-primary-600 text-white shadow-lg shadow-primary-500/20' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-primary-500'}`}
+                                      >
+                                        {btn.label}
+                                      </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                   <span className="w-1.5 h-1.5 rounded-full bg-secondary-500"></span>
+                                   Số chương
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {[
+                                      { val: 0, label: 'Tất cả' },
+                                      { val: 300, label: '< 300' },
+                                      { val: 1000, label: '300-1000' },
+                                      { val: 2000, label: '1000-2000' },
+                                      { val: 2001, label: '> 2000' }
+                                    ].map(btn => (
+                                      <button 
+                                        key={btn.val}
+                                        onClick={()=>setchapNumNovel(btn.val)} 
+                                        className={`px-4 py-2 text-xs font-bold rounded-xl border transition-all ${chapNumNovel === btn.val ? 'bg-secondary-600 border-secondary-600 text-white shadow-lg shadow-secondary-500/20' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-secondary-500'}`}
+                                      >
+                                        {btn.label}
+                                      </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                                   Sắp xếp theo
+                                </h3>
+                                <div className="flex flex-col gap-2">
+                                    {[
+                                      { id: 'updatedAt', label: 'Vừa cập nhật' },
+                                      { id: 'likes', label: 'Được yêu thích' },
+                                      { id: 'views', label: 'Xem nhiều nhất' }
+                                    ].map(btn => (
+                                      <button 
+                                        key={btn.id}
+                                        onClick={()=>setsortNovel(btn.id as any)} 
+                                        className={`px-4 py-3 text-xs font-bold rounded-xl border transition-all text-left flex justify-between items-center ${sortNovel === btn.id ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-indigo-500'}`}
+                                      >
+                                        {btn.label}
+                                        {sortNovel === btn.id && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>}
+                                      </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-            </div>
-                
-            
-            <div className="w-full md:w-3/4">
-                {
-                    novelList.map((item, index)=>{
-                        return <VerticalCard key={index} novel={item}/>
-                    })
-                }
-                {
-                    novelList.length <= 0 && <span className="font-bold block p-4 text-2xl"><i>không tìm thấy truyện đủ điều kiện</i></span>
-                }
-                {
-                    totalFull > 15 && <ReactPaginate
-                    className="flex w-full justify-center my-4"
-                    pageClassName='w-7 h-7 text-center leading-7 text-black bg-white border border-width-[1px] border-white border-[1px] border-gray-300 -ml-[1px] '
-                    breakLabel="..."
-                    breakClassName='w-7 h-7 text-center leading-7 text-black bg-white border-[1px] border-white border-2 border-gray-300 -ml-[1px]'
-                    previousClassName="w-7 h-7 text-center leading-7 text-black bg-white border-[1px] border-white border-2 border-gray-300 -ml-[1px]"
-                    nextClassName="w-7 h-7 text-center leading-7 text-black bg-white border-[1px] border-gray-300 -ml-[1px]"
-                    activeClassName="bg-orange-300"
-                    pageLinkClassName="text-orange-200"
-                    nextLabel=">"
-                    onPageChange={select=>setPage(select.selected + 1)}
-                    pageRangeDisplayed={3}
-                    pageCount={Math.ceil(totalFull/15)}
-                    previousLabel="<"
-                    // renderOnZeroPageCount={null}
-                />
-                }
+                {/* Content Area */}
+                <div className="flex-1 min-w-0">
+                    <div className="grid grid-cols-1 gap-2">
+                        {novelList.map((item, index) => (
+                            <VerticalCard key={index} novel={item}/>
+                        ))}
+                    </div>
+
+                    {novelList.length <= 0 && (
+                        <div className="py-20 text-center bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
+                           <p className="text-xl font-bold text-slate-400 dark:text-slate-600 px-6">Hic, không tìm thấy truyện nào đủ điều kiện rồi!</p>
+                           <button onClick={() => {setStatusNovel('all'); setchapNumNovel(0); setsortNovel('updatedAt');}} className="mt-4 text-primary-500 font-bold hover:underline">Xóa bộ lọc</button>
+                        </div>
+                    )}
+
+                    {totalFull > 15 && (
+                        <div className="mt-12 flex justify-center">
+                            <ReactPaginate
+                                breakLabel="..."
+                                nextLabel={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7"/></svg>}
+                                previousLabel={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7"/></svg>}
+                                onPageChange={select=>setPage(select.selected + 1)}
+                                pageRangeDisplayed={3}
+                                marginPagesDisplayed={2}
+                                pageCount={Math.ceil(totalFull/15)}
+                                className="flex items-center gap-2"
+                                activeClassName="!bg-primary-600 !text-white !border-primary-600 shadow-lg shadow-primary-500/25 scale-110"
+                                pageClassName="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:border-primary-500 transition-all font-black text-sm"
+                                previousClassName="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:border-primary-500 transition-all font-black"
+                                nextClassName="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:border-primary-500 transition-all font-black"
+                                breakClassName="w-10 h-10 flex items-center justify-center text-slate-400 font-bold"
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     </div>

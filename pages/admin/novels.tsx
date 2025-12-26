@@ -1,4 +1,5 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState, useCallback } from 'react'
+import Image from 'next/image'
 import AdminLayout from '../../components/adminLayout/AdminLayout'
 import { getAllNovels, updateNovel, deleteNovel } from '../../libs/api/adminAPI'
 import { getAllCates } from '../../libs/api/category'
@@ -125,7 +126,7 @@ const AdminNovels = () => {
         description: ''
     });
 
-    const fetchNovels = async (currentPage: number) => {
+    const fetchNovels = useCallback(async (currentPage: number) => {
         setLoading(true);
         try {
             const filters: any = { page: currentPage, limit };
@@ -143,7 +144,7 @@ const AdminNovels = () => {
         } finally {
             setLoading(false);
         }
-    }
+    }, [title, selectedCates, selectedStatuses, selectedAuthors, limit]);
 
     useEffect(() => {
         const fetchMetadata = async () => {
@@ -163,7 +164,7 @@ const AdminNovels = () => {
 
     useEffect(() => {
         fetchNovels(1);
-    }, []);
+    }, [fetchNovels]);
 
     const handleFilter = (e: React.FormEvent) => {
         e.preventDefault();
@@ -330,7 +331,7 @@ const AdminNovels = () => {
                                     <div className="flex items-center min-w-[200px]">
                                         <div className="w-10 h-14 bg-slate-100 rounded mr-3 overflow-hidden flex-shrink-0">
                                             {novel.image ? (
-                                                <img src={novel.image} alt={novel.title} className="w-full h-full object-cover" />
+                                                <Image src={novel.image} alt={novel.title} width={40} height={56} unoptimized className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center text-[10px] text-slate-400">No Image</div>
                                             )}
@@ -356,11 +357,13 @@ const AdminNovels = () => {
                                             {hoveredAuthorId === `${novel._id}-${(novel.author as any)._id}` && (
                                                 <div className="absolute left-full top-0 ml-4 z-50 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 p-5 origin-left transition-all animate-fade-in-right whitespace-normal">
                                                     <div className="flex items-start space-x-4">
-                                                        <div className="w-16 h-20 bg-slate-100 rounded-xl overflow-hidden shrink-0 shadow-inner">
-                                                            <img 
+                                                        <div className="w-16 h-20 bg-slate-100 rounded-xl overflow-hidden shrink-0 shadow-inner relative">
+                                                            <Image 
                                                                 src={(novel.author as any).image || '/images/tt3.jpg'} 
                                                                 alt={(novel.author as any).name} 
-                                                                className="w-full h-full object-cover"
+                                                                layout="fill"
+                                                                objectFit="cover"
+                                                                unoptimized
                                                             />
                                                         </div>
                                                         <div className="flex-1 min-w-0">

@@ -1,4 +1,5 @@
 module.exports = {
+  darkMode: 'class',
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
@@ -44,6 +45,9 @@ module.exports = {
           700: '#A21CAF',
           800: '#86198F',
           900: '#701A75',
+        },
+        slate: {
+          950: '#020617',
         },
       },
     },

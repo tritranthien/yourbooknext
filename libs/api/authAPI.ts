@@ -88,3 +88,9 @@ export const readNotiInNav = async (NotiNotRead: string[]) => {
     const res = await API.post(`auth/readnotisinnav`,NotiNotRead,authHeader);
     return res.data;
 }
+
+export const updateProfile = async (data: any) => {
+    const authHeader = getAuthHeader();
+    const res = await API.patch(`/auth/update`, data, authHeader);
+    return res.data;
+}

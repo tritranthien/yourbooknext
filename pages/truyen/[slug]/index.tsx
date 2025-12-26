@@ -17,7 +17,7 @@ interface NovelProps{
 const NovelPage: React.FC<NovelProps> = ({novel}:NovelProps) => {
   const  [isLoged, setLoged] = useState(false);
   useEffect(()=>{
-    if( localStorage && localStorage.getItem('userInfo') ){
+    if(typeof window !== 'undefined' && localStorage.getItem('userInfo') ){
       setLoged(true);
     }
   },[])

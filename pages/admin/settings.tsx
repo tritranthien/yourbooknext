@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react'
+import Image from 'next/image'
 import AdminLayout from '../../components/adminLayout/AdminLayout'
 import { getSiteSettings, updateSiteSettings } from '../../libs/api/settingsAPI'
 import { upLoadPoster, upLoadFont } from '../../libs/api/uploadFile'
@@ -178,7 +179,7 @@ const AdminSettings = () => {
                                 <div className="w-24 h-24 rounded-lg border-2 border-dashed border-slate-200 flex items-center justify-center bg-slate-50 overflow-hidden relative group">
                                     {settings.logo ? (
                                         <>
-                                            <img src={settings.logo} className="w-full h-full object-contain" alt="Logo preview" />
+                                            <Image src={settings.logo} width={96} height={96} unoptimized className="w-full h-full object-contain" alt="Logo preview" />
                                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button 
                                                     type="button"
@@ -224,7 +225,7 @@ const AdminSettings = () => {
                                 <div className="w-full h-32 md:h-40 rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center bg-slate-50 overflow-hidden relative group">
                                     {settings.banner ? (
                                         <>
-                                            <img src={settings.banner} className="w-full h-full object-cover" alt="Banner preview" />
+                                            <Image src={settings.banner} width={800} height={160} unoptimized className="w-full h-full object-cover" alt="Banner preview" />
                                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button 
                                                     type="button"
@@ -439,7 +440,7 @@ const AdminSettings = () => {
                                     fontSize: `${settings.defaultFontSize}px`,
                                     lineHeight: '1.6'
                                 }}>
-                                    "Cảnh giới cao nhất của sự mạnh mẽ là chấp nhận. Khi nào chúng ta có thể chấp nhận mọi việc xảy đến với mình, đó là lúc chúng ta mạnh mẽ nhất. Đọc sách không chỉ là để thu nạp kiến thức, mà còn là để rèn luyện tâm hồn."
+                                    &quot;Cảnh giới cao nhất của sự mạnh mẽ là chấp nhận. Khi nào chúng ta có thể chấp nhận mọi việc xảy đến với mình, đó là lúc chúng ta mạnh mẽ nhất. Đọc sách không chỉ là để thu nạp kiến thức, mà còn là để rèn luyện tâm hồn.&quot;
                                 </p>
                                 <p className="mt-4 text-xs opacity-50 italic text-right">
                                     Font: {settings.defaultFont} | Size: {settings.defaultFontSize}px

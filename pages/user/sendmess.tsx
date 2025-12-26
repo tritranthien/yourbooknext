@@ -30,9 +30,9 @@ const Userdata = () => {
     setFindUser('');
   }
   const removeThis = (index:number) => {
-    const newArr = revicerList;
+    const newArr = [...revicerList];
     newArr.splice(index, 1);
-    setReciver([...newArr]);
+    setReciver(newArr);
   }
   const handleInputFindChange = async (e:ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;

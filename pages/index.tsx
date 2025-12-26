@@ -30,7 +30,7 @@ interface serverProps {
 
 const Home: NextPage<serverProps> = ({ errorFetch, newestList, modVotesList, hasNewList, newNovelsList, mostLikesList, mostViewsList, mostFollowsList, bestRateList, bestVotesList, categories }: serverProps) => {
   const [show, setShow] = useState(0);
-  const router = useRouter();
+  // const router = useRouter();
   useEffect(() => {
     let to0 = setTimeout(() => {
       setShow(show === 2 ? 0 : show + 1);
@@ -80,11 +80,6 @@ const Home: NextPage<serverProps> = ({ errorFetch, newestList, modVotesList, has
           mostFollows={mostFollowsList || []}
           bestRates={bestRateList || []}
         />
-        {/* <TopNovels/> */}
-
-        {/* <Recomened/> */}
-        {/* <Banner link='#' imgs='/images/banner1.jpg'/> */}
-        {/* <NewNovels/> */}
       </div>
 
 

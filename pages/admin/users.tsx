@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState, useRef } from 'react'
+import { ReactElement, useEffect, useState, useRef, useCallback } from 'react'
 import AdminLayout from '../../components/adminLayout/AdminLayout'
 import { getAllUsers } from '../../libs/api/adminAPI'
 import { UserFind } from '../../interface/_User'
@@ -102,7 +102,7 @@ const AdminUsers = () => {
     const [search, setSearch] = useState('');
     const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 
-    const fetchUsers = async (currentPage: number) => {
+    const fetchUsers = useCallback(async (currentPage: number) => {
         setLoading(true);
         try {
             const filters: any = { page: currentPage, limit };
@@ -118,11 +118,11 @@ const AdminUsers = () => {
         } finally {
             setLoading(false);
         }
-    }
+    }, [search, selectedRoles, limit]);
 
     useEffect(() => {
         fetchUsers(1);
-    }, []);
+    }, [fetchUsers]);
 
     const handleFilter = (e: React.FormEvent) => {
         e.preventDefault();

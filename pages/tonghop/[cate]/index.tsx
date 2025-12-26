@@ -1,7 +1,7 @@
 import { format, parseISO } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import React from 'react'
 import TopNovels from '../../../components/TopNovels/TopNovels'
 import { SerVerNovel } from '../../../interface/_Novel'
@@ -22,112 +22,212 @@ interface TpageProps{
 
 }
 const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestViews,cateName}:TpageProps) => {
-  const router = useRouter();
-  const { cate } = router.query;
+  const router = useRouter(); 
+  
+  if(router.isFallback){
+     return <div>Loading...</div>
+  }
   return (
-    <div className="w-full">
-      <div className="relative w-full h-[250px] md:h-48">
-        <Image layout='fill' alt="tong hop top 1" src={novelsUpdated.length > 0 ? novelsUpdated[0].image : '/images/tt3.jpg'} objectFit='cover'/>
-        <span className="absolute top-0 left-0 w-full h-full bg-black/70 text-2xl font-bold flex justify-center items-center uppercase text-white">{cateName}</span>
+    <div className="w-full space-y-12 animate-in fade-in duration-700">
+      <div className="relative w-full h-[300px] overflow-hidden group">
+        <Image 
+          layout='fill' 
+          alt={cateName} 
+          src={novelsUpdated.length > 0 ? novelsUpdated[0].image : '/images/tt3.jpg'} 
+          objectFit='cover'
+          className="transition-transform duration-1000 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6">
+          <span className="text-primary-400 text-xs font-black uppercase tracking-[0.3em] mb-3 animate-in slide-in-from-top-4 duration-700">Thể loại</span>
+          <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight animate-in slide-in-from-bottom-4 duration-700 delay-100">{cateName}</h1>
+          <div className="mt-6 flex items-center gap-3 animate-in fade-in duration-700 delay-300">
+            <span className="h-[1px] w-8 bg-white/30"></span>
+            <span className="text-white/60 text-sm font-medium">{novelsUpdated.length} Tác phẩm</span>
+            <span className="h-[1px] w-8 bg-white/30"></span>
+          </div>
+        </div>
       </div>
-      <div className="container py-2">
-      <span className="font-bold text-xl text-sky-600">{`Truyện ${cateName} vừa cập nhật`}</span>
-      <div className="flex w-full flex-wrap md:flex-nowrap">
-        <ul className="text-sm w-full mb-4 md:mb-0 md:w-3/5 lg:w-4/5 py-2 md:pr-4">
-          { 
-              novelsUpdated.length > 0 ?
-              novelsUpdated.map((item, index)=>{
-                  return <li key={index} className='text-gray-400 w-full flex justify-between items-center py-2 border-b-[1px]'> 
-                      <span className='first-letter:uppercase one-line-hidden hidden  lg:block w-20'>{item.category.cate}</span>
-                      <span className='capitalize text-gray-800 ml-3 min-w-[120px] one-line-hidden w-11/12 lg:w-[calc(100%_-_400px)]'><Link legacyBehavior passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
-                      <span className='text-xs w-[120px] ml-3 one-line-hidden hidden lg:block'>
+
+      <div className="container px-4">
+        <div className="flex flex-col lg:flex-row gap-12">
+          {/* Main List */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 mb-8">
+              <span className="w-1.5 h-6 bg-primary-500 rounded-full"></span>
+              <h2 className="font-bold text-xl text-slate-800 dark:text-white uppercase tracking-wider">Vừa cập nhật</h2>
+            </div>
+
+            <ul className="space-y-1">
+              {novelsUpdated.length > 0 ? (
+                novelsUpdated.map((item, index) => (
+                  <li key={index} className='group flex items-center gap-6 py-4 border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 dark:hover:bg-slate-900/40 px-4 rounded-2xl transition-all cursor-default'> 
+                    <span className='hidden lg:flex items-center justify-center text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-800/50 w-24 py-1.5 rounded-full border border-slate-100 dark:border-slate-800 group-hover:border-primary-500/30 transition-colors'>
+                      {item.category.cate}
+                    </span>
+                    
+                    <div className="flex-1 min-w-0">
+                      <Link legacyBehavior passHref href={`/truyen/${item.slug}`}>
+                        <a className='text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors block truncate'>
+                          {item.title}
+                        </a>
+                      </Link>
+                    </div>
+
+                    <div className='hidden md:flex items-center gap-2 w-48 shrink-0'>
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700"></span>
+                      <span className='text-xs text-slate-500 dark:text-slate-500 truncate'>
                         {item.author?.slug ? (
-                          <Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}><a>{item.author.name}</a></Link>
+                          <Link legacyBehavior passHref href={`/tac-gia/${item.author.slug}`}>
+                            <a className="hover:text-slate-900 dark:hover:text-slate-300 transition-colors">{item.author.name}</a>
+                          </Link>
                         ) : (
                           item.author?.name || 'Đang cập nhật'
                         )}
                       </span>
-                      <span className='text-xs w-[100px] ml-3 one-line-hidden'><Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`Chương ${item.chapCount}`}</a></Link></span>
-                      <span className='text-xs md:w-[100px] ml-3 one-line-hidden hidden w-1/12 lg:block'>{format(parseISO(item.updatedAt),'yyyy-MM-dd')}</span>
+                    </div>
+
+                    <div className='w-32 shrink-0 flex justify-end lg:justify-start'>
+                      <Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}>
+                        <a className='text-[10px] font-black tracking-widest uppercase bg-primary-50 dark:bg-primary-950/30 text-primary-600 dark:text-primary-400 px-3 py-1.5 rounded-lg border border-primary-100 dark:border-primary-900/30 group-hover:bg-primary-600 group-hover:text-white transition-all'>
+                          {`Ch. ${item.chapCount}`}
+                        </a>
+                      </Link>
+                    </div>
+
+                    <span className='hidden lg:block text-[10px] font-bold text-slate-400 dark:text-slate-600 w-24 shrink-0 text-right uppercase tracking-tighter'>
+                      {format(parseISO(item.updatedAt),'dd/MM/yyyy')}
+                    </span>
                   </li>
-              })
-              :
-              <span className="font-bold">Thể loại này chưa có truyện nào được đăng cả :( hãy quay lại <i className='text-sky-500'><Link legacyBehavior passHref href='/'><a>trang chủ</a></Link></i> tìm truyện khác</span>
-          }
-          { novelsUpdated.length > 0 && <button onClick={()=>router.push(`/tonghop/${cate}/all`)} className='text-2xl w-full py-1 px-2 block bg-sky-500 text-white mb-2'>xem đầy đủ</button>}
-        </ul>
-        <div className="w-full mb-4 md:mb-0 md:2/5 lg:w-1/4 ">
-          
-            {
-              novelsBestViews.length > 0 && <>
-              <span className="font-bold block mb-2"><i>{`Truyện ${cateName} xem nhiều`}</i></span>
-              <Link legacyBehavior passHref href={`/truyen/${novelsBestViews[0].slug}`}><a>
-              <div className="w-full relative text-sm">
-                <div className="relative w-full h-[220px] md:h-[280px]">
-                <Image layout="fill" objectFit='cover' alt={novelsBestViews[0].title} src={novelsBestViews[0].image}/>
-
+                ))
+              ) : (
+                <div className="text-center py-20 bg-slate-50 dark:bg-slate-900/50 rounded-[2.5rem] border border-dashed border-slate-200 dark:border-slate-800">
+                  <p className="font-bold text-slate-400 dark:text-slate-600">Thể loại này chưa có truyện nào được đăng cả :(</p>
+                  <Link legacyBehavior passHref href='/'>
+                    <a className='text-primary-500 hover:underline mt-4 inline-block font-bold'>Tìm truyện khác tại trang chủ</a>
+                  </Link>
                 </div>
-              <span className="absolute top-2 left-2 rounded-full block w-6 h-6 text-center leading-6 text-white bg-green-500">1</span>
-              <span className="absolute top-2 right-2 rounded-md block px-3 py-1 text-white bg-violet-700">{`Chương ${novelsBestViews[0].chapCount}`}</span>
-              <div className="absolute bottom-3 left-2 right-2 bg-white py-1">
-                <span className="block px-3 w-full line-clamp-2">{novelsBestViews[0].title}</span>
-                <span className='text-orange-700 px-3'>{novelsBestViews[0].author?.name || 'Đang cập nhật'}</span>
-
-              </div>
-              
-            </div>
-            </a></Link>
-            {
-              novelsBestViews.map((item,index)=>{
-                if (index == 0) {
-                  return
-                }
-                return <div key={index} className="w-full mt-2 flex flex-nowrap text-sm">
-                <span className="block w-6 h-6 text-center leading-6 text-white bg-green-300 rounded-full">{index+1}</span>
-                <span className="px-2 line-clamp-1 w-[calc(100%_-_55px)]"><Link legacyBehavior passHref href={`/truyen/${item.slug}`}><a>{item.title}</a></Link></span>
-                <span className="px-2 w-[25px]"><Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}><a>{`C.${item.chapCount}`}</a></Link></span>
-              </div>
-              })
-            }
+              )}
+            </ul>
             
-              </>
-            }
+            {novelsUpdated.length > 0 && (
+              <button 
+                onClick={()=>Router.push(`/tonghop/${router.query.cate}/all`)} 
+                className='mt-10 w-full py-4 bg-slate-100 dark:bg-slate-800 hover:bg-primary-600 hover:text-white text-slate-600 dark:text-slate-400 font-black uppercase tracking-[0.2em] rounded-2xl transition-all active:scale-[0.98] text-xs'
+              >
+                Xem tất cả danh sách
+              </button>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:w-80 shrink-0">
+            {novelsBestViews.length > 0 && (
+              <div className="space-y-8 sticky top-24">
+                <div className="flex items-center gap-3">
+                  <span className="w-1.5 h-6 bg-secondary-500 rounded-full"></span>
+                  <h2 className="font-bold text-xl text-slate-800 dark:text-white uppercase tracking-wider">Xem nhiều nhất</h2>
+                </div>
+
+                <div className="space-y-6">
+                  {/* Top 1 Highlight */}
+                  <Link legacyBehavior passHref href={`/truyen/${novelsBestViews[0].slug}`}>
+                    <a className="block group relative rounded-[2rem] overflow-hidden shadow-xl border border-white dark:border-slate-800">
+                      <div className="relative aspect-[3/4] w-full">
+                        <Image layout="fill" objectFit='cover' alt={novelsBestViews[0].title} src={novelsBestViews[0].image} className="transition-transform duration-700 group-hover:scale-110"/>
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                      </div>
+                      
+                      <div className="absolute top-4 left-4 w-8 h-8 rounded-xl bg-secondary-500 text-white flex items-center justify-center font-black shadow-lg">1</div>
+                      <div className="absolute top-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg px-3 py-1 text-[10px] font-black text-white uppercase tracking-widest">{`Chương ${novelsBestViews[0].chapCount}`}</div>
+                      
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <h3 className="text-white font-bold text-lg leading-tight line-clamp-2 mb-2 group-hover:text-primary-400 transition-colors">{novelsBestViews[0].title}</h3>
+                        <p className='text-slate-400 text-xs font-bold uppercase tracking-wider'>{novelsBestViews[0].author?.name || 'Đang cập nhật'}</p>
+                      </div>
+                    </a>
+                  </Link>
+
+                  {/* Top 2-5 List */}
+                  <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-6 border border-slate-100 dark:border-slate-800/50 shadow-sm space-y-4">
+                    {novelsBestViews.map((item, index) => {
+                      if (index === 0) return null;
+                      return (
+                        <div key={index} className="flex items-center gap-4 group/item">
+                          <span className={`w-6 h-6 shrink-0 flex items-center justify-center rounded-lg text-xs font-black ${index < 3 ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'text-slate-300 dark:text-slate-600'}`}>{index + 1}</span>
+                          <div className="flex-1 min-w-0">
+                            <Link legacyBehavior passHref href={`/truyen/${item.slug}`}>
+                              <a className="text-sm font-bold text-slate-700 dark:text-slate-300 group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400 transition-colors block truncate">{item.title}</a>
+                            </Link>
+                          </div>
+                          <Link legacyBehavior passHref href={item.chapCount > 0 ? `/truyen/${item.slug}/${item.chapCount}` : `/truyen/${item.slug}`}>
+                            <a className="text-[10px] font-bold text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-100 dark:border-slate-700">{`${item.chapCount}C`}</a>
+                          </Link>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-        
+
+        {/* Bottom Section */}
+        <div className="mt-20 pt-12 border-t border-slate-100 dark:border-slate-800/50">
+          {novelsCompleted.length > 0 ? (
+            <TopNovels title={`Truyện ${cateName} đã hoàn thành`} novels={novelsCompleted || []}/>
+          ) : (
+            <div className="bg-slate-50 dark:bg-slate-900/40 rounded-[2.5rem] p-12 text-center border border-slate-100 dark:border-slate-800">
+               <p className="text-slate-500 dark:text-slate-400 italic font-medium">{`Chưa có tác phẩm ${cateName} nào hoàn thành tại thời điểm này.`}</p>
+            </div>
+          )}
+        </div>
       </div>
-      {
-        novelsCompleted.length > 0 ? <TopNovels title={`Truyện ${cateName} hoàn thành`} novels={novelsCompleted || []}/>
-        :
-        <span className="font-bold"><i>{`chưa có truyện ${cateName} nào hoàn thành cả, hic hic`}</i></span>
-      }
-      
     </div>
-    </div>
-  )
-}
+  );
+};
 
 export const getStaticPaths = async () => {
-    const cates = await getAllCates();
-    const paths = cates.map(item=>({
-      params: {cate: item.slug},
-    }))
-    return { paths, fallback: 'blocking' }
+    try {
+      const cates = await getAllCates();
+      const paths = cates.map(item=>({
+        params: {cate: item.slug},
+      }))
+      return { paths, fallback: 'blocking' }
+    } catch (error) {
+      console.error("Error fetching paths for cates:", error);
+      return { paths: [], fallback: 'blocking' }
+    }
 }
 
 export const getStaticProps = async ({params}:contextProps) => {
   const { cate } = params;
-  const myCate = await getBySlug(cate);
-  const novelsUpdated = await novelsBycate(myCate._id);
-  const novelsCompleted = await novelsCompletedByCate(myCate._id);
-  const novelsBestViews = await bestViewsInCate(myCate._id);
-  return {
-    props: {
-      novelsUpdated: novelsUpdated.novels,
-      novelsCompleted,
-      novelsBestViews,
-      cateName: myCate.cate,
-    },
-    revalidate: 600,
+  try {
+    const myCate = await getBySlug(cate);
+    const novelsUpdated = await novelsBycate(myCate._id);
+    const novelsCompleted = await novelsCompletedByCate(myCate._id);
+    const novelsBestViews = await bestViewsInCate(myCate._id);
+    return {
+      props: {
+        novelsUpdated: novelsUpdated.novels || [],
+        novelsCompleted: novelsCompleted || [],
+        novelsBestViews: novelsBestViews || [],
+        cateName: myCate.cate || cate,
+      },
+      revalidate: 60,
+    }
+  } catch (error) {
+    console.error(`Error fetching data for cate ${cate}:`, error);
+    return {
+      props: {
+        novelsUpdated: [],
+        novelsCompleted: [],
+        novelsBestViews: [],
+        cateName: cate,
+      },
+      revalidate: 60,
+    }
   }
 }
 

@@ -17,37 +17,51 @@ const CreateAuthorPopUp:React.FC<PopUpProps> = ({showToast,closePopup}: PopUpPro
   const [authorDes,setAuthorDes] = useState('');
 
   const addNewAuthor = async () => {
+    if (!authorName.trim()) {
+        alert('Vui lòng nhập tên tác giả');
+        return;
+    }
+
     const newAuthor:AuthorWithOutId = {
         name: authorName,
-        birth: new Date(authorBirth).toISOString(),
+        birth: authorBirth ? new Date(authorBirth).toISOString() : null,
         des: authorDes
     }
     try {
         await storeNewAuthor(newAuthor);
         showToast();
+        closePopup();
     } catch (error) {
         alert('lỗi không tạo được tác giả');
     }
   }
 
   return (
-    <div className='fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black/10'>
-            <div className="px-5 py-3 flex flex-col items-center w-[400px] min-h-[400px] bg-white shadow-md relative">
-                <AiFillCloseSquare onClick={closePopup} className=' text-red-600 text-4xl absolute top-0 right-0 cursor-pointer' />
-                <span className="text-xl font-bold">Tạo tác giả mới</span>
-                <div className="mt-2 w-5/6">
-                    <label className='w-full block py-1'>Tên tác giả(<b className='text-red-600'>*</b>)</label>
-                    <input name='name' value = {'' || authorName} onChange={(e:ChangeEvent<HTMLInputElement>)=>setAuthorName(e.target.value)} type="text" className=" w-full border border-width-1 py-1 px-2 outline-none rounded-md" />
+    <div className='fixed inset-0 z-[2000] flex justify-center items-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-300'>
+            <div className="flex flex-col items-center w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden relative animate-in zoom-in-95 duration-300">
+                <button onClick={closePopup} className='absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all'>
+                    <AiFillCloseSquare size={24} />
+                </button>
+                <div className="pt-10 pb-4 text-center">
+                    <h2 className="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-wider">Tác giả mới</h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Điền thông tin để thêm người sáng tạo</p>
                 </div>
-                <div className="mt-2 w-5/6">
-                    <label className='w-full block py-1'>Ngày sinh (nếu có)</label>
-                    <input name='birth' value={ '' || authorBirth } onChange={(e:ChangeEvent<HTMLInputElement>)=>setAuthorBitrh(e.target.value)} type="date" className="w-full border border-width-1 py-1 px-2 outline-none rounded-md" />
+                <div className="mt-4 w-full px-6">
+                    <label className='w-full block py-1 text-sm font-semibold text-slate-700 dark:text-slate-300'>Tên tác giả (<span className='text-red-500'>*</span>)</label>
+                    <input name='name' value={authorName} onChange={(e:ChangeEvent<HTMLInputElement>)=>setAuthorName(e.target.value)} type="text" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-4 outline-none rounded-xl focus:ring-2 focus:ring-primary-500/20 transition-all" placeholder="Nhập tên tác giả..." />
                 </div>
-                <div className="mt-2 w-5/6">
-                    <label className='w-full block py-1'>Mô tả sơ lược (nếu có)</label>
-                    <textarea name='des' className=" w-full h-[100px] border border-width-1 py-1 px-2 outline-none rounded-md" />
+                <div className="mt-4 w-full px-6">
+                    <label className='w-full block py-1 text-sm font-semibold text-slate-700 dark:text-slate-300'>Ngày sinh (nếu có)</label>
+                    <input name='birth' value={authorBirth} onChange={(e:ChangeEvent<HTMLInputElement>)=>setAuthorBitrh(e.target.value)} type="date" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-4 outline-none rounded-xl focus:ring-2 focus:ring-primary-500/20 transition-all" />
                 </div>
-                <button onClick={addNewAuthor} className='py-1 px-2 bg-blue-500 text-white rounded-sm mt-5 mb-5'>Thêm</button>
+                <div className="mt-4 w-full px-6">
+                    <label className='w-full block py-1 text-sm font-semibold text-slate-700 dark:text-slate-300'>Mô tả sơ lược (nếu có)</label>
+                    <textarea name='des' value={authorDes} onChange={(e)=>setAuthorDes(e.target.value)} className="w-full h-32 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-4 outline-none rounded-xl focus:ring-2 focus:ring-primary-500/20 transition-all resize-none" placeholder="Thông tin thêm về tác giả..." />
+                </div>
+                <div className="w-full px-6 py-6 mt-4 flex gap-3">
+                   <button onClick={closePopup} className='flex-1 py-3 text-slate-500 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all'>Hủy</button>
+                   <button onClick={addNewAuthor} className='flex-2 py-3 px-8 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-lg shadow-primary-500/20 transition-all active:scale-95'>Tạo tác giả</button>
+                </div>
         </div>
     </div>
   )
