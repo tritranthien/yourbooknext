@@ -81,111 +81,93 @@ const Titlebanner: React.FC<TitlebannerProps> = ({novel}:TitlebannerProps) => {
         refetch();
       }
     },[novel._id, refetch])
+  return <div className="w-full relative overflow-hidden font-sans">
+          {/* Background Layer - Enhanced with subtle atmospheric elements */}
+          <div className='absolute inset-0 z-0 overflow-hidden'>
+            <Image src={novel.image} className="opacity-20 blur-[100px] scale-110" objectFit="cover" layout='fill' alt="Background Blur"/>
+            
+            {/* Glowing Orbs for Depth */}
+            <div className="absolute -top-[10%] -right-[10%] w-[500px] h-[500px] bg-primary-500/10 dark:bg-primary-500/5 blur-[120px] rounded-full"></div>
+            <div className="absolute -bottom-[20%] -left-[10%] w-[600px] h-[600px] bg-orange-500/10 dark:bg-orange-500/5 blur-[150px] rounded-full"></div>
 
-  return <div className="w-full relative overflow-hidden">
-          {/* Background Layer with Blur and Dark Gradient */}
-          <div className='absolute inset-0 z-0'>
-            <Image src={novel.image} className="opacity-30 blur-2xl scale-110" objectFit="cover" layout='fill' alt="Background Blur"/>
-            <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-950 via-white/80 dark:via-slate-950/80 to-slate-950/40"></div>
+            {/* Geometric Pattern - Very subtle dots */}
+            <div className="absolute inset-0 opacity-[0.2] dark:opacity-[0.1]" style={{ backgroundImage: `radial-gradient(currentColor 1px, transparent 1px)`, backgroundSize: '40px 40px' }}></div>
+
+            <div className="absolute inset-0 bg-gradient-to-b from-white/40 dark:from-slate-950/40 via-white dark:via-slate-950 to-white dark:to-slate-950"></div>
           </div>
 
-          <div className="container relative z-10 mx-auto px-6 pt-4 pb-12 md:pt-6 md:pb-20">
-            <div className="flex flex-col md:flex-row gap-10 items-center md:items-start">
-                {/* Book Cover with Premium Shadow */}
-                <div className="w-[180px] md:w-[240px] aspect-[3/4] relative flex-shrink-0 group">
-                    <div className="absolute inset-0 bg-primary-500 rounded-xl blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <div className="relative w-full h-full rounded-xl overflow-hidden shadow-2xl shadow-slate-950/50 border border-white/20">
+          <div className="container relative z-10 mx-auto px-6 pt-8 pb-12 md:pb-20">
+            <div className="flex flex-col md:flex-row gap-12 items-center md:items-start lg:items-start">
+                
+                {/* Book Cover - Slimmer and more elegant */}
+                <div className="w-[160px] md:w-[220px] lg:w-[240px] aspect-[2/3] relative flex-shrink-0 group">
+                    {/* Decorative Offset Border (After Effect) */}
+                    <div className="absolute -right-3 -bottom-3 w-full h-full border border-slate-300 dark:border-slate-700 rounded-lg z-0"></div>
+                    
+                    <div className="relative w-full h-full rounded-lg overflow-hidden border border-white/40 dark:border-slate-800 transition-transform duration-700 ease-out group-hover:scale-[1.03] z-10 bg-white dark:bg-slate-900">
                         <Image src={novel.image} className='object-cover' layout='fill' alt={novel.title} priority/>
                     </div>
                 </div>
 
                 {/* Details Section */}
-                <div className="flex-1 flex flex-col text-center md:text-left">
-                  <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-4">
-                    <span className="px-3 py-1 bg-primary-500/10 text-primary-600 dark:text-primary-400 text-xs font-bold rounded-full border border-primary-500/20">
+                <div className="flex-1 flex flex-col text-center md:text-left pt-2">
+                  <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 mb-5">
+                    <span className="text-[11px] uppercase font-semibold tracking-[0.15em] text-primary-600 dark:text-primary-400">
                       {novel.category.cate}
                     </span>
-                    <span className={`px-3 py-1 text-xs font-bold rounded-full border ${novel.status === 'completed' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'}`}>
-                      {novel.status}
+                    <span className="w-1 h-1 bg-slate-300 dark:bg-slate-700 rounded-full"></span>
+                    <span className={`text-[11px] uppercase font-semibold tracking-[0.15em] ${novel.status === 'completed' ? 'text-emerald-500' : 'text-blue-500'}`}>
+                      {novel.status === 'completed' ? 'Đã hoàn thành' : 'Đang ra'}
                     </span>
                   </div>
 
-                  <h1 className='text-3xl md:text-5xl font-black text-slate-800 dark:text-white mb-6 leading-tight drop-shadow-sm'>
+                  <h1 className='text-2xl md:text-3xl lg:text-4xl font-normal text-slate-800 dark:text-white mb-8 leading-tight tracking-widest uppercase' style={{ fontFamily: "'Exo 2', sans-serif" }}>
                     {novel.title}
                   </h1>
 
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8 max-w-2xl">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
-                        <BsPersonFill size={20}/>
-                      </div>
-                      <div className="flex flex-col text-sm">
-                        <span className="text-slate-400 dark:text-slate-500 font-medium">Tác giả</span>
-                        <span className="text-slate-700 dark:text-slate-300 font-bold">{novel.author?.name || 'Đang cập nhật'}</span>
-                      </div>
+                  {/* Stats Row - Minimalist & Slim */}
+                  <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-10 gap-y-4 mb-10">
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase font-medium text-slate-400 tracking-widest mb-1">Tác giả</span>
+                        <span className="text-slate-700 dark:text-slate-200 font-normal text-base hover:text-primary-500 cursor-pointer transition-colors">
+                            {novel.author?.name || 'Đang cập nhật'}
+                        </span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
-                        <RiFilePaperFill size={20}/>
-                      </div>
-                      <div className="flex flex-col text-sm">
-                        <span className="text-slate-400 dark:text-slate-500 font-medium">Số chương</span>
-                        <span className="text-slate-700 dark:text-slate-300 font-bold">{novel.chapCount}</span>
-                      </div>
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase font-medium text-slate-400 tracking-widest mb-1">Số chương</span>
+                        <span className="text-slate-700 dark:text-slate-200 font-normal text-base">{novel.chapCount}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
-                        <AiOutlineEye size={20}/>
-                      </div>
-                      <div className="flex flex-col text-sm">
-                        <span className="text-slate-400 dark:text-slate-500 font-medium">Lượt xem</span>
-                        <span className="text-slate-700 dark:text-slate-300 font-bold">{novel.views.toLocaleString()}</span>
-                      </div>
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase font-medium text-slate-400 tracking-widest mb-1">Lượt xem</span>
+                        <span className="text-slate-700 dark:text-slate-200 font-normal text-base">{novel.views.toLocaleString()}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
-                        <FcLike size={20}/>
-                      </div>
-                      <div className="flex flex-col text-sm">
-                        <span className="text-slate-400 dark:text-slate-500 font-medium">Yêu thích</span>
-                        <span className="text-slate-700 dark:text-slate-300 font-bold">{novel.likes.toLocaleString()}</span>
-                      </div>
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase font-medium text-slate-400 tracking-widest mb-1">Đánh giá</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-slate-700 dark:text-slate-200 font-normal text-base">{novel.scores || 4.5}</span>
+                            <AiFillStar className="text-yellow-400 text-sm" />
+                        </div>
                     </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-8">
-                     {(() => {
-                       const RatingComponent = Rating as any;
-                       return (
-                        <RatingComponent 
-                          initialRating={novel.scores == 0 ? 4.5 : novel.scores}
-                          readonly
-                          fullSymbol={<AiFillStar className="text-xl md:text-2xl text-yellow-400 drop-shadow-sm"/>}
-                          emptySymbol={<AiOutlineStar className="text-xl md:text-2xl text-yellow-400/30"/>}
-                        />
-                       );
-                     })()}
-                      <span className="text-yellow-500 dark:text-yellow-400 font-black text-xl ml-1">{novel.scores || 4.5}</span>
-                      <span className="text-slate-400 dark:text-slate-600 text-sm ml-2">/ 5.0</span>
                   </div>
 
                   <div className="flex flex-wrap justify-center md:justify-start gap-4">
                     <button 
                       onClick={followed ? cancelFollow : followNow} 
                       disabled={!isLoged} 
-                      className={`flex items-center gap-2 px-8 py-3.5 rounded-2xl font-bold transition-all active:scale-95 shadow-lg ${followed ? 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200' : 'bg-orange-500 hover:bg-orange-600 text-white shadow-orange-500/25'}`}
+                      className={`px-8 py-3 rounded-full text-xs uppercase font-bold tracking-widest transition-all duration-300 active:scale-95 ${followed ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-200 border border-slate-200 dark:border-slate-700' : 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-500/20'}`}
                     >
-                      {followed ? 'Đã theo dõi' : 'Thêm vào kệ sách'}
-                    </button>
-                    <button 
-                      onClick={()=>setOpen(true)} 
-                      disabled={!isLoged} 
-                      className="px-8 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl transition-all active:scale-95 shadow-lg shadow-emerald-500/25"
-                    >
-                      Đề cử kim phiếu
+                      {followed ? 'Đã theo dõi' : 'Đọc truyện'}
                     </button>
                   </div>
                 </div>
+            </div>
+            {/* Decorative Flourish (Pattern Lines) - Moved one level outside for better alignment */}
+            <div className="absolute bottom-12 md:bottom-20 right-6 md:right-10 w-80 h-40 opacity-[0.05] dark:opacity-[0.08] pointer-events-none select-none">
+               <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-slate-900 dark:text-white">
+                  <path d="M0 100 H40 L80 60 H140" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M0 100 H45 L90 55 H155" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M0 100 H50 L100 50 H170" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+               </svg>
             </div>
           </div>
 
