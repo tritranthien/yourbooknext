@@ -4,7 +4,7 @@ import AdminLayout from '../../components/adminLayout/AdminLayout'
 import { getSiteSettings, updateSiteSettings } from '../../libs/api/settingsAPI'
 import { upLoadPoster, upLoadFont } from '../../libs/api/uploadFile'
 import { toast } from 'react-toastify'
-import { AiOutlineSetting, AiOutlineComment, AiOutlineRead, AiOutlineGlobal, AiOutlineCloudUpload, AiOutlinePicture, AiOutlineClose, AiOutlineDelete, AiOutlineFontSize } from 'react-icons/ai'
+import { AiOutlineSetting, AiOutlineComment, AiOutlineRead, AiOutlineGlobal, AiOutlineCloudUpload, AiOutlinePicture, AiOutlineClose, AiOutlineDelete, AiOutlineFontSize, AiOutlineCheckCircle } from 'react-icons/ai'
 import PosterPopup from '../../components/popup/PostersPopup'
 
 const AdminSettings = () => {
@@ -14,6 +14,7 @@ const AdminSettings = () => {
         banner: '',
         commentEnabled: true,
         commentPreApproval: false,
+        autoApproveNovel: false,
         defaultFont: 'Inter',
         defaultFontSize: 18,
         defaultNightMode: false,
@@ -377,6 +378,30 @@ const AdminSettings = () => {
                                     className="sr-only peer"
                                     checked={settings.commentPreApproval}
                                     onChange={(e)=>setSettings({...settings, commentPreApproval: e.target.checked})}
+                                />
+                                <div className="w-11 h-6 bg-gray-200 dark:bg-slate-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Moderation Settings */}
+                <div className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
+                    <h2 className="text-lg font-bold text-slate-800 dark:text-white mb-6 flex items-center border-b border-slate-100 dark:border-slate-800 pb-4">
+                        <AiOutlineCheckCircle className="mr-2 text-orange-500" /> Cấu hình duyệt truyện
+                    </h2>
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg transition-colors">
+                            <div>
+                                <h4 className="font-semibold text-slate-800 dark:text-slate-200">Tự động duyệt</h4>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">Truyện mới đăng sẽ được công khai ngay lập tức không cần admin duyệt</p>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    className="sr-only peer"
+                                    checked={settings.autoApproveNovel}
+                                    onChange={(e)=>setSettings({...settings, autoApproveNovel: e.target.checked})}
                                 />
                                 <div className="w-11 h-6 bg-gray-200 dark:bg-slate-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                             </label>

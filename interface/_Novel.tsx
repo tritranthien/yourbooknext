@@ -9,7 +9,8 @@ export interface Novel<TAuthor,TCate>{
     description: string,
     image: string,
     category: TCate,
-    tags?: any[]
+    tags?: any[],
+    poster?: any
 }
 export interface SerVerNovel extends Novel<Author,Category>{
     _id: string,

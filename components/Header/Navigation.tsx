@@ -175,8 +175,13 @@ const NavigationContent = () => {
                     <VscGitPullRequestClosed onClick={() => setOpenMenu(false)} className={`absolute top-1 right-1 z-40 md:hidden`} size={30} color="orange" />
                     <div className="mx-auto sticky top-0 text-slate-700 dark:text-slate-200 container flex flex-col md:flex-row items-center justify-between w-full bg-transparent">
                         <ul className="md:text-sm font-bold md:font-normal flex flex-col md:flex-row h-full list-none gap-y-1 py-5 md:py-0">
-                            <li className="px-2 flex items-center hover:text-yellow-500"><Link legacyBehavior passHref href='/'><a className="flex items-center"><AiFillHome size={20} /><b className="md:hidden text-yellow-600 text-2xl ml-1">trang chủ</b></a></Link></li>
-                            <li className="group leading-7 h-full relative px-2 first-letter:uppercase cursor-pointer">Thể loại
+                            <li className={`px-2 flex items-center transition-colors ${router.pathname === '/' ? 'text-primary-500' : 'hover:text-yellow-500'}`}>
+                                <Link legacyBehavior passHref href='/'>
+                                    <a className="flex items-center"><AiFillHome size={20} /><b className="md:hidden text-yellow-600 text-2xl ml-1">trang chủ</b></a>
+                                </Link>
+                            </li>
+                            <li className={`group leading-7 h-full relative px-2 first-letter:uppercase cursor-pointer transition-colors ${router.pathname.startsWith('/tonghop') ? 'text-primary-500 font-bold underline decoration-2 underline-offset-4' : ''}`}>
+                                Thể loại
                                 <ul className="md:absolute md:invisible group-hover:visible hover:visible md:top-7 py-3 px-4 flex md:w-[700px] flex-wrap list-none bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-200 border border-slate-100 dark:border-slate-700 shadow-xl rounded-b-xl">
                                     {
                                         allCates.isSuccess && allCates.data.map((item, index) => {
@@ -187,7 +192,12 @@ const NavigationContent = () => {
                             </li>
                             {
                                 listMenu.map((item, index) => {
-                                    return <li key={index} className="px-2 leading-7 first-letter:uppercase hover:text-yellow-500"><Link legacyBehavior passHref href={`/lua-chon/${item.slug}/1`}><a>{item.headding}</a></Link></li>
+                                    const isActive = router.query.turn === item.slug;
+                                    return (
+                                        <li key={index} className={`px-2 leading-7 first-letter:uppercase transition-colors ${isActive ? 'text-primary-500 font-bold underline decoration-2 underline-offset-4' : 'hover:text-yellow-500'}`}>
+                                            <Link legacyBehavior passHref href={`/lua-chon/${item.slug}/1`}><a>{item.headding}</a></Link>
+                                        </li>
+                                    );
                                 })
                             }
                         </ul>

@@ -135,3 +135,21 @@ export const searchAll = async (text:string) => {
     const res = await API.get<(NovelSearch | Author)[]>(`/novels/search/${text}`);
     return res.data;
 }
+
+export const getPendingNovels = async (page: number = 1) => {
+    const authHeader = getAuthHeader();
+    const res = await API.get<ServerNovelPaging>(`/novels/admin/pending?page=${page}`, authHeader);
+    return res.data;
+}
+
+export const approveNovel = async (id: string) => {
+    const authHeader = getAuthHeader();
+    const res = await API.patch(`/novels/admin/approve/${id}`, {}, authHeader);
+    return res.data;
+}
+
+export const rejectNovel = async (id: string) => {
+    const authHeader = getAuthHeader();
+    const res = await API.delete(`/novels/admin/reject/${id}`, authHeader);
+    return res.data;
+}

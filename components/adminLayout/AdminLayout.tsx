@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { AiFillHome, AiOutlineHome, AiOutlineMenu, AiOutlineUser, AiOutlineBook, AiOutlineTag, AiOutlineSetting } from 'react-icons/ai'
+import { AiFillHome, AiOutlineHome, AiOutlineMenu, AiOutlineUser, AiOutlineBook, AiOutlineTag, AiOutlineSetting, AiOutlineCheckCircle } from 'react-icons/ai'
 import { HiLogout } from 'react-icons/hi'
 import { IoMdClose } from 'react-icons/io'
 import { MdOutlineDashboard } from 'react-icons/md'
@@ -115,6 +115,13 @@ const AdminLayoutContent: React.FC<{ children: React.ReactNode }> = ({ children 
                                 <a className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all group ${router?.pathname === '/admin/novels' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
                                     <AiOutlineBook size={20} />
                                     <span className="font-semibold">Truyện tác phẩm</span>
+                                </a>
+                            </Link>
+
+                            <Link legacyBehavior passHref href="/admin/novel-approval">
+                                <a className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all group ${router?.pathname === '/admin/novel-approval' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
+                                    <AiOutlineCheckCircle size={20} className="group-hover:scale-110 transition-transform" />
+                                    <span className="font-semibold text-orange-500 dark:text-orange-400">Duyệt truyện</span>
                                 </a>
                             </Link>
 
