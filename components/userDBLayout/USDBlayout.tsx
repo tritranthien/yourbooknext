@@ -147,7 +147,7 @@ const USDBlayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
                          </div>
                     </div>
                 </div>
-                <div className="flex-1 p-6 md:p-8 overflow-x-hidden min-h-[calc(100vh-64px)]">
+                <div className="flex-1 p-4 md:p-6 overflow-x-hidden min-h-[calc(100vh-64px)]">
                     {children}
                 </div>
             </div>      

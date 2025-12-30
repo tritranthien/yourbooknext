@@ -28,8 +28,8 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
      return <div>Loading...</div>
   }
   return (
-    <div className="w-full space-y-12 animate-in fade-in duration-700">
-      <div className="relative w-full h-[300px] overflow-hidden group">
+    <div className="w-full space-y-6 animate-in fade-in duration-700 bg-slate-200/50 dark:bg-slate-950/60 pb-20">
+      <div className="relative w-full h-[140px] overflow-hidden group shadow-lg">
         <Image 
           layout='fill' 
           alt={cateName} 
@@ -39,29 +39,29 @@ const Tpage:React.FC<TpageProps> = ({novelsUpdated,novelsCompleted,novelsBestVie
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6">
-          <span className="text-primary-400 text-xs font-black uppercase tracking-[0.3em] mb-3 animate-in slide-in-from-top-4 duration-700">Thể loại</span>
-          <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight animate-in slide-in-from-bottom-4 duration-700 delay-100">{cateName}</h1>
-          <div className="mt-6 flex items-center gap-3 animate-in fade-in duration-700 delay-300">
-            <span className="h-[1px] w-8 bg-white/30"></span>
-            <span className="text-white/60 text-sm font-medium">{novelsUpdated.length} Tác phẩm</span>
-            <span className="h-[1px] w-8 bg-white/30"></span>
+          <span className="text-primary-400 text-[10px] font-black uppercase tracking-[0.3em] mb-2 animate-in slide-in-from-top-4 duration-700">Thể loại</span>
+          <h1 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight animate-in slide-in-from-bottom-4 duration-700 delay-100">{cateName}</h1>
+          <div className="mt-4 flex items-center gap-2 animate-in fade-in duration-700 delay-300">
+            <span className="h-[1px] w-6 bg-white/30"></span>
+            <span className="text-white/60 text-xs font-medium">{novelsUpdated.length} Tác phẩm</span>
+            <span className="h-[1px] w-6 bg-white/30"></span>
           </div>
         </div>
       </div>
 
       <div className="container px-4">
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Main List */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-2.5 mb-6">
               <span className="w-1.5 h-6 bg-primary-500 rounded-full"></span>
-              <h2 className="font-bold text-xl text-slate-800 dark:text-white uppercase tracking-wider">Vừa cập nhật</h2>
+              <h2 className="font-bold text-lg text-slate-800 dark:text-white uppercase tracking-wider">Vừa cập nhật</h2>
             </div>
 
             <ul className="space-y-1">
               {novelsUpdated.length > 0 ? (
                 novelsUpdated.map((item, index) => (
-                  <li key={index} className='group flex items-center gap-6 py-4 border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 dark:hover:bg-slate-900/40 px-4 rounded-2xl transition-all cursor-default'> 
+                  <li key={index} className='group flex items-center gap-4 py-2 border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 dark:hover:bg-slate-900/40 px-3 rounded-xl transition-all cursor-default'> 
                     <span className='hidden lg:flex items-center justify-center text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-800/50 w-24 py-1.5 rounded-full border border-slate-100 dark:border-slate-800 group-hover:border-primary-500/30 transition-colors'>
                       {item.category.cate}
                     </span>

@@ -113,12 +113,17 @@ export const bestViewsInCate = async (cateId: string) => {
     const res = await API.get<ServerNovelPaging>(`/novels/bestviews/${cateId}`);
     return res.data;
 }
-export const filterInCate = async (cateId: string,page:number = 1,stt:string,cnum: number,srt:string) => {
-    const res = await API.get<ServerNovelPaging>(`/novels/filterincate/${cateId}?page=${page}&stt=${stt}&cnum=${cnum}&srt=${srt}`);
+export const filterInCate = async (cateId:string,page:number=1,stt?:string,cnum?:number,srt?:string, search?:string) => {
+    const res = await API.get<ServerNovelPaging>(`/novels/filterincate/${cateId}?page=${page}&stt=${stt}&cnum=${cnum}&srt=${srt}&search=${search || ''}`);
     return res.data;
 }
-export const getByTurn = async (turn:string,page:number=1,) => {
-    const res = await API.get<ServerNovelPaging>(`/novels/turn/${turn}?page=${page}`);
+export const getByTurn = async (turn:string,page:number=1,stt?:string,cnum?:number,srt?:string, search?:string) => {
+    let url = `/novels/turn/${turn}?page=${page}`;
+    if(stt) url += `&stt=${stt}`;
+    if(cnum) url += `&cnum=${cnum}`;
+    if(srt) url += `&srt=${srt}`;
+    if(search) url += `&search=${search}`;
+    const res = await API.get<ServerNovelPaging>(url);
     return res.data;
 }
 export const getByAuthor = async (author:string) => {

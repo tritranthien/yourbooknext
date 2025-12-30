@@ -9,7 +9,7 @@ import { getByTurn } from '../../../libs/api/novelAPI'
 
 interface ContextProps {
     params: {
-        turn: string, page: string
+        turn: string
     }
 }
 
@@ -21,7 +21,7 @@ interface TurnProps {
     total: number
 }
 
-const Turn: React.FC<TurnProps> = ({ novels, heading, turn, page: initialPage, total: initialTotal }: TurnProps) => {
+const TurnIndex: React.FC<TurnProps> = ({ novels, heading, turn, page: initialPage, total: initialTotal }: TurnProps) => {
     const router = useRouter();
     const [statusNovel, setStatusNovel] = useState('all');
     const [totalFull, setTotal] = useState(initialTotal);
@@ -52,8 +52,6 @@ const Turn: React.FC<TurnProps> = ({ novels, heading, turn, page: initialPage, t
     );
 
     useEffect(() => {
-        // Skip refetch strictly on the very first render if props match default state,
-        // but since we want client-side interaction to trigger updates, use a check.
         if (page === initialPage && statusNovel === 'all' && chapNumNovel === 0 && sortNovel === 'updatedAt' && !searchNovel && novelList === novels) {
             return;
         }
@@ -61,12 +59,6 @@ const Turn: React.FC<TurnProps> = ({ novels, heading, turn, page: initialPage, t
          window.scrollTo(0, 0);
     }, [statusNovel, chapNumNovel, sortNovel, page, refetch, turn, searchNovel]);
 
-    // Update page state if URL param changes (e.g. back button impacting page param)
-    useEffect(() => {
-        if (router.query.page) {
-            setPage(Number(router.query.page));
-        }
-    }, [router.query.page]);
 
     return (
         <div className="min-h-screen bg-slate-200/50 dark:bg-slate-950/60 animate-in fade-in duration-700 pb-20">
@@ -122,7 +114,7 @@ const Turn: React.FC<TurnProps> = ({ novels, heading, turn, page: initialPage, t
                                 </div>
 
                                 <div>
-                                    <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
                                        <span className="w-1.5 h-1.5 rounded-full bg-primary-500"></span>
                                        Tình trạng
                                     </h3>
@@ -222,7 +214,7 @@ const Turn: React.FC<TurnProps> = ({ novels, heading, turn, page: initialPage, t
                                     previousLabel={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7"/></svg>}
                                     onPageChange={select => {
                                         setPage(select.selected + 1);
-                                        // Optional: Update URL shallowly for shareability without refresh
+                                        // Update URL query param casually to allow deep linking/back button
                                         router.push({
                                             pathname: router.pathname,
                                             query: { ...router.query, page: select.selected + 1 },
@@ -231,7 +223,6 @@ const Turn: React.FC<TurnProps> = ({ novels, heading, turn, page: initialPage, t
                                     pageRangeDisplayed={3}
                                     marginPagesDisplayed={2}
                                     pageCount={Math.ceil(totalFull / 20)}
-                                    // ReactPaginate is 0-indexed
                                     forcePage={page - 1}
                                     className="flex items-center gap-2"
                                     activeClassName="!bg-primary-600 !text-white !border-primary-600 shadow-lg shadow-primary-500/25 scale-110"
@@ -250,11 +241,8 @@ const Turn: React.FC<TurnProps> = ({ novels, heading, turn, page: initialPage, t
 }
 
 export const getServerSideProps = async ({ params }: ContextProps) => {
-    const { turn, page } = params;
-    
-    // Server side only fetches initial state without filters
-    const pageNum = page ? parseInt(page) : 1;
-    
+    const { turn } = params;
+    const pageNum = 1;
     let heading = 'lựa chọn';
     const novelData = await getByTurn(turn, pageNum);
     
@@ -283,4 +271,4 @@ export const getServerSideProps = async ({ params }: ContextProps) => {
     }
 }
 
-export default Turn
+export default TurnIndex

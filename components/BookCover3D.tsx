@@ -32,7 +32,7 @@ const BookCover3D: React.FC<BookCover3DProps> = ({ src, alt, className = "" }) =
                     }}
                 >
                     {/* 1. FRONT COVER */}
-                    <div className="absolute inset-0 bg-white shadow-xl overflow-hidden rounded-[1px] backface-hidden border-l-[1px] border-l-white/60 border-r-[1px] border-r-white/40">
+                    <div className="absolute inset-0 bg-white overflow-hidden rounded-[1px] backface-hidden border-l-[1px] border-l-white/60 border-r-[1px] border-r-white/40">
                         <Image
                             src={src}
                             alt={alt}
