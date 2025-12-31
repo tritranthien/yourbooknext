@@ -13,6 +13,14 @@ body {
   @apply bg-white text-slate-900 transition-colors duration-300;
 }
 
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .dark body {
   @apply bg-slate-950 text-slate-100;
 }
@@ -98,5 +106,29 @@ a {
       opacity: 1;
       transform: translateY(0);
     }
+  }
+
+  .font-reading-lora {
+    font-family: 'Lora', serif;
+  }
+  .font-reading-merriweather {
+    font-family: 'Merriweather', serif;
+  }
+  .font-outfit {
+    font-family: 'Outfit', sans-serif;
+  }
+  .font-space-grotesk {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .font-exo-2 {
+    font-family: 'Exo 2', sans-serif;
+  }
+  .book-content {
+    line-height: 1.8;
+    text-align: justify;
+    letter-spacing: 0.01em;
+  }
+  .book-page-shadow {
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
   }
 }

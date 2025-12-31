@@ -113,7 +113,7 @@ const Titlebanner: React.FC<TitlebannerProps> = ({novel}:TitlebannerProps) => {
                 <div className="flex-1 flex flex-col text-center md:text-left pt-2">
                   <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 mb-5">
                     <span className="text-[11px] uppercase font-semibold tracking-[0.15em] text-primary-600 dark:text-primary-400">
-                      {novel.category.cate}
+                      {novel?.category?.cate}
                     </span>
                     <span className="w-1 h-1 bg-slate-300 dark:bg-slate-700 rounded-full"></span>
                     <span className={`text-[11px] uppercase font-semibold tracking-[0.15em] ${novel.status === 'completed' ? 'text-emerald-500' : 'text-blue-500'}`}>

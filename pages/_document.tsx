@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&family=Exo+2:wght@300;400;500;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
         <meta name="description" content="YourBook - Nền tảng đọc truyện online miễn phí với hàng ngàn đầu truyện hấp dẫn." />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="YourBook" />
